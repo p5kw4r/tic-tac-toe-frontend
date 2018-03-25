@@ -5,7 +5,9 @@ const Cell = ({ address, player1, player2, noAddress, onPlaceMarker }) => (
     className={`Cell ${address === noAddress ? 'valid' : 'invalid'}`}
     onClick={() => onPlaceMarker()}
   >
-    {address === player1 ? 'X' : address === player2 ? 'O' : ''}
+    {
+      address === player1 ? 'X' : address === player2 ? 'O' : ''
+    }
   </div>
 );
 
