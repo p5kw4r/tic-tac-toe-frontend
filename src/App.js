@@ -9,7 +9,7 @@ const address = '0x9adbf80e55ed9cf4f5dc76e338665f91bbfa02c3';
 
 const contract = new web3.eth.Contract(abi, address);
 const { createGame, joinGame, getBoard, placeMark, BET_SIZE } = contract.methods;
-const { events } = contract;
+const { allEvents } = contract.events;
 
 const noAddress = '0x0000000000000000000000000000000000000000';
 
@@ -33,7 +33,7 @@ class App extends Component {
   }
 
   subscribeToEvents() {
-    events.allEvents({}, (error, event) => this.handleEvent(error, event));
+    allEvents({}, (error, event) => this.handleEvent(error, event));
   }
 
   handleEvent(error, event) {
