@@ -41,9 +41,9 @@ class App extends Component {
       case 'GameCreated':
         this.handleGameCreated(event);
         break;
-      case 'PlayerJoined':
-        this.handlePlayerJoined();
-        break;
+      // case 'PlayerJoined':
+      //   this.handlePlayerJoined();
+      //   break;
       case 'NextPlayer':
         this.handleNextPlayer(event);
         break;
@@ -54,9 +54,9 @@ class App extends Component {
       case 'GameOverWithDraw':
         this.handleGameOver('Game is over, ended with draw');
         break;
-      case 'PayoutSuccess':
-        this.handlePayoutSuccess(event);
-        break;
+      // case 'PayoutSuccess':
+      //   this.handlePayoutSuccess(event);
+      //   break;
       default:
         break;
     }
@@ -70,16 +70,16 @@ class App extends Component {
   async getBetSizeAsync() {
     const betSize = await BET_SIZE()
       .call();
-    const betSizeInEther = web3.utils.fromWei(betSize, 'ether');
+    // const betSizeInEther = web3.utils.fromWei(betSize, 'ether');
     this.setState({ betSize });
-    console.log(`Bet size is ${betSizeInEther} ether`);
+    // console.log(`Bet size is ${betSizeInEther} ether`);
   }
 
   async getAccountsAsync() {
     const accounts = await web3.eth.getAccounts();
     this.setState({ player1: accounts[0], player2: accounts[1] });
-    console.log(`Player 1 is ${accounts[0]}`);
-    console.log(`Player 2 is ${accounts[1]}`);
+    // console.log(`Player 1 is ${accounts[0]}`);
+    // console.log(`Player 2 is ${accounts[1]}`);
   }
 
   async updateBoardAsync() {
@@ -98,7 +98,7 @@ class App extends Component {
     const { gameId } = event.returnValues;
     this.setState({ gameId });
     this.handleJoinGame();
-    console.log(`Player 1 created new game with id ${gameId}`);
+    // console.log(`Player 1 created new game with id ${gameId}`);
   }
 
   handleJoinGame() {
@@ -107,9 +107,9 @@ class App extends Component {
       .send({ from: player2, value: betSize });
   }
 
-  handlePlayerJoined() {
-    console.log(`Player 2 has joined game`);
-  }
+  // handlePlayerJoined() {
+  //   console.log(`Player 2 has joined game`);
+  // }
 
   handleNextPlayer(event) {
     const { player } = event.returnValues;
@@ -128,16 +128,16 @@ class App extends Component {
 
   async handleGameOver(message) {
     await this.updateBoardAsync();
-    console.log(message);
+    // console.log(message);
     alert(message);
     this.handleCreateGame();
   }
 
-  handlePayoutSuccess(event) {
-    const { recipient, amountInWei } = event.returnValues;
-    const amountInEther = web3.utils.fromWei(amountInWei, 'ether');
-    console.log(`Transferred ${amountInEther} ether to ${recipient}`);
-  }
+  // handlePayoutSuccess(event) {
+  //   const { recipient, amountInWei } = event.returnValues;
+  //   const amountInEther = web3.utils.fromWei(amountInWei, 'ether');
+  //   console.log(`Transferred ${amountInEther} ether to ${recipient}`);
+  // }
 
   render() {
     const { board, player1, player2 } = this.state;
