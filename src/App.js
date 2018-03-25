@@ -95,10 +95,10 @@ class App extends Component {
   }
 
   handleGameCreated(event) {
-    const { returnValues: values } = event;
-    this.setState({ gameId: values.gameId });
+    const { gameId } = event.returnValues;
+    this.setState({ gameId });
     this.handleJoinGame();
-    console.log(`Player 1 created new game with id ${values.gameId}`);
+    console.log(`Player 1 created new game with id ${gameId}`);
   }
 
   handleJoinGame() {
@@ -114,10 +114,10 @@ class App extends Component {
   }
 
   handleNextPlayer(event) {
-    const { returnValues: values } = event;
-    this.setState({ activePlayer: values.player });
+    const { player } = event.returnValues;
+    this.setState({ activePlayer: player });
     this.updateBoardAsync();
-    console.log(`Active player is ${values.player}`);
+    console.log(`Active player is ${player}`);
   }
 
   handlePlaceMark(column, row) {
@@ -140,9 +140,8 @@ class App extends Component {
   }
 
   handlePayoutSuccess(event) {
-    const { returnValues: values } = event;
-    const { recipient } = values;
-    const amountInEther = web3.utils.fromWei(values.amountInWei, 'ether');
+    const { recipient, amountInWei } = event.returnValues;
+    const amountInEther = web3.utils.fromWei(amountInWei, 'ether');
     console.log(`Transferred ${amountInEther} ether to ${recipient}`);
   }
 
