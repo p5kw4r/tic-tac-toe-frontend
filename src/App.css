@@ -31,18 +31,18 @@ div#root {
   align-items: center;
 }
 
-/*.Cell:hover {*/
-  /*background-color: #a3be8c;*/
-/*}*/
+.Cell:hover {
+  background-color: #a3be8c;
+}
 
 .Cell.valid:hover {
   cursor: pointer;
-  background-color: #a3be8c;
+  /*background-color: #a3be8c;*/
 }
 
 .Cell.invalid:hover {
   cursor: not-allowed;
-  background-color: #bf616a;
+  /*background-color: #bf616a;*/
 }
 
 .noselect {
