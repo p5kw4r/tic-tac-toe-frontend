@@ -1,28 +1,33 @@
-.App {
-  text-align: center;
+.Board {
+  display: flex;
+  width: 600px;
+  height: 600px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.Cell {
+  height: 200px;
+  width: 200px;
+  box-sizing: border-box;
+  border: 5px solid black;
+  font-size: 5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.Cell:hover {
+  background-color: #a3be8c;
 }
 
-.App-title {
-  font-size: 1.5em;
+.Cell.valid:hover {
+  cursor: pointer;
+  /*background-color: #a3be8c;*/
 }
 
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.Cell.invalid:hover {
+  cursor: not-allowed;
+  /*background-color: #bf616a;*/
 }
