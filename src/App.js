@@ -65,8 +65,8 @@ class App extends Component {
 
   async getBetSizeAsync() {
     const betSize = await BET_SIZE().call();
-    this.setState({ betSize });
     const betSizeInEther = web3.utils.fromWei(betSize, 'ether');
+    this.setState({ betSize });
     console.log(`Bet size is ${betSizeInEther} ether`);
   }
 
