@@ -27,36 +27,38 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setupSubscriptions();
+    this.subscribeToEvents();
     this.initializeGame();
   }
 
-  setupSubscriptions() {
-    events.allEvents({}, (error, event) => {
-      const { event: name } = event;
-      switch (name) {
-        case 'GameCreated':
-          this.handleGameCreated(event);
-          break;
-        case 'PlayerJoined':
-          this.handlePlayerJoined();
-          break;
-        case 'NextPlayer':
-          this.handleNextPlayer(event);
-          break;
-        case 'GameOverWithWin':
-          this.handleGameOver(`Game is over, winner is ${event.returnValues.winner}`);
-          break;
-        case 'GameOverWithDraw':
-          this.handleGameOver('Game is over, ended with draw');
-          break;
-        case 'PayoutSuccess':
-          this.handlePayoutSuccess(event);
-          break;
-        default:
-          break;
-      }
-    });
+  subscribeToEvents() {
+    events.allEvents({}, (error, event) => this.handleEvent(error, event));
+  }
+
+  handleEvent(error, event) {
+    const { event: name } = event;
+    switch (name) {
+      case 'GameCreated':
+        this.handleGameCreated(event);
+        break;
+      case 'PlayerJoined':
+        this.handlePlayerJoined();
+        break;
+      case 'NextPlayer':
+        this.handleNextPlayer(event);
+        break;
+      case 'GameOverWithWin':
+        this.handleGameOver(`Game is over, winner is ${event.returnValues.winner}`);
+        break;
+      case 'GameOverWithDraw':
+        this.handleGameOver('Game is over, ended with draw');
+        break;
+      case 'PayoutSuccess':
+        this.handlePayoutSuccess(event);
+        break;
+      default:
+        break;
+    }
   }
 
   async initializeGame() {
