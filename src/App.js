@@ -147,7 +147,7 @@ class App extends Component {
           player1={player1}
           player2={player2}
           noAddress={noAddress}
-          onPlaceMarker={(column, row) => this.handlePlaceMark(column, row)}
+          onPlaceMark={(column, row) => this.handlePlaceMark(column, row)}
         />
       </div>
     );
