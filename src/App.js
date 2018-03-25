@@ -105,6 +105,7 @@ class App extends Component {
   handlePlaceMark(column, row) {
     const { board, gameId, activePlayer } = this.state;
     if (board[column][row] === noAddress) {
+      // transaction requires more gas than default value of 90000 wei
       placeMark(gameId, column, row)
         .send({ from: activePlayer, gas: 300000 });
     }
