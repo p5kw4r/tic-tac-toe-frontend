@@ -117,7 +117,7 @@ class App extends Component {
     const { player } = event.returnValues;
     this.setState({ activePlayer: player });
     this.updateBoardAsync();
-    console.log(`Active player is ${player}`);
+    // console.log(`Active player is ${player}`);
   }
 
   handlePlaceMark(column, row) {
@@ -132,9 +132,9 @@ class App extends Component {
 
   async handleGameOver(message) {
     await this.updateBoardAsync();
+    console.log(message);
     alert(message);
     this.handleCreateGame();
-    console.log(message);
   }
 
   handlePayoutSuccess(event) {
