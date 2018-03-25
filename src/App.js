@@ -59,9 +59,9 @@ class App extends Component {
     });
   }
 
-  initializeGame() {
-    Promise.all([this.getBetSizeAsync(), this.getAccountsAsync()])
-      .then(() => this.handleCreateGame());
+  async initializeGame() {
+    await Promise.all([this.getBetSizeAsync(), this.getAccountsAsync()]);
+    this.handleCreateGame();
   }
 
   async getBetSizeAsync() {
@@ -130,13 +130,11 @@ class App extends Component {
     }
   }
 
-  handleGameOver(message) {
-    this.updateBoardAsync()
-      .then(() => {
-        alert(message);
-        this.handleCreateGame();
-        console.log(message);
-      });
+  async handleGameOver(message) {
+    await this.updateBoardAsync();
+    alert(message);
+    this.handleCreateGame();
+    console.log(message);
   }
 
   handlePayoutSuccess(event) {
