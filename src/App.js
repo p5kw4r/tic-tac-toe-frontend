@@ -84,7 +84,8 @@ class App extends Component {
 
   async updateBoardAsync() {
     const { gameId } = this.state;
-    const board = await getBoard(gameId).call();
+    const board = await getBoard(gameId)
+      .call();
     this.setState({ board });
   }
 
