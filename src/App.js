@@ -27,6 +27,11 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.setupSubscriptions();
+    this.initializeGame();
+  }
+
+  setupSubscriptions() {
     events.allEvents({}, (error, event) => {
       switch (event.event) {
         case 'GameCreated':
@@ -51,10 +56,33 @@ class App extends Component {
           break;
       }
     });
+  }
+
+  initializeGame() {
     Promise.all([this.getBetSizeAsync(), this.getAccountsAsync()])
-      .then(() => {
-        this.handleCreateGame();
-      });
+      .then(() => this.handleCreateGame());
+  }
+
+  async getBetSizeAsync() {
+    const betSize = await BET_SIZE().call();
+    this.setState({ betSize });
+    const betSizeInEther = web3.utils.fromWei(betSize, 'ether');
+    console.log(`Bet size is ${betSizeInEther} ether`);
+  }
+
+  async getAccountsAsync() {
+    const accounts = await web3.eth.getAccounts();
+    this.setState({
+      player1: accounts[0],
+      player2: accounts[1]
+    });
+    console.log(`Player 1 is ${accounts[0]}`);
+    console.log(`Player 2 is ${accounts[1]}`);
+  }
+
+  async updateBoardAsync() {
+    const board = await getBoard(this.state.gameId).call();
+    this.setState({ board });
   }
 
   handleCreateGame() {
@@ -67,15 +95,17 @@ class App extends Component {
 
   handleGameCreated(event) {
     const values = event.returnValues;
-    this.setState({
-      gameId: values.gameId
-    });
+    this.setState({ gameId: values.gameId });
+    this.handleJoinGame();
+    console.log(`Player 1 created new game with id ${values.gameId}`);
+  }
+
+  handleJoinGame() {
     joinGame(this.state.gameId)
       .send({
         from: this.state.player2,
         value: this.state.betSize
       });
-    console.log(`Player 1 created new game with id ${values.gameId}`);
   }
 
   handlePlayerJoined() {
@@ -84,9 +114,7 @@ class App extends Component {
 
   handleNextPlayer(event) {
     const values = event.returnValues;
-    this.setState({
-      activePlayer: values.player
-    });
+    this.setState({ activePlayer: values.player });
     this.updateBoardAsync();
     console.log(`Active player is ${values.player}`);
   }
@@ -115,32 +143,6 @@ class App extends Component {
     const recipient = values.recipient;
     const amountInEther = web3.utils.fromWei(values.amountInWei, 'ether');
     console.log(`Transferred ${amountInEther} ether to ${recipient}`);
-  }
-
-  async getBetSizeAsync() {
-    const betSize = await BET_SIZE().call();
-    this.setState({
-      betSize
-    });
-    const betSizeInEther = web3.utils.fromWei(betSize, 'ether');
-    console.log(`Bet size is ${betSizeInEther} ether`);
-  }
-
-  async getAccountsAsync() {
-    const accounts = await web3.eth.getAccounts();
-    this.setState({
-      player1: accounts[0],
-      player2: accounts[1]
-    });
-    console.log(`Player 1 is ${accounts[0]}`);
-    console.log(`Player 2 is ${accounts[1]}`);
-  }
-
-  async updateBoardAsync() {
-    const board = await getBoard(this.state.gameId).call();
-    this.setState({
-      board
-    });
   }
 
   render() {
