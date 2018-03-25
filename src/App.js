@@ -124,7 +124,7 @@ class App extends Component {
           player1={this.state.player1}
           player2={this.state.player2}
           noAddress={noAddress}
-          onPlaceMarker={(i, j) => this.handlePlaceMark(i, j)}
+          onPlaceMarker={(column, row) => this.handlePlaceMark(column, row)}
         />
         <button onClick={() => this.handleCreateGame()}>
           New Game
