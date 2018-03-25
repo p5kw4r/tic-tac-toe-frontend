@@ -28,12 +28,12 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    this.subscribeToEvents();
-    await this.initializeGame();
+    this.handleSubscribeToEvents();
+    await this.handleInitializeGame();
     this.handleCreateGame();
   }
 
-  subscribeToEvents() {
+  handleSubscribeToEvents() {
     allEvents({}, (error, event) => this.handleEvent(error, event));
   }
 
@@ -58,22 +58,22 @@ class App extends Component {
     }
   }
 
-  async initializeGame() {
-    return Promise.all([this.getBetSizeAsync(), this.getAccountsAsync()]);
+  async handleInitializeGame() {
+    return Promise.all([this.handleGetBetSize(), this.handleGetAccounts()]);
   }
 
-  async getBetSizeAsync() {
+  async handleGetBetSize() {
     const betSize = await getBetSize()
       .call();
     this.setState({ betSize });
   }
 
-  async getAccountsAsync() {
+  async handleGetAccounts() {
     const accounts = await getAccounts();
     this.setState({ player1: accounts[0], player2: accounts[1] });
   }
 
-  async updateBoardAsync() {
+  async handleUpdateBoard() {
     const { gameId } = this.state;
     const board = await getBoard(gameId)
       .call();
@@ -99,7 +99,7 @@ class App extends Component {
 
   handleNextPlayer({ returnValues: { player } }) {
     this.setState({ activePlayer: player });
-    this.updateBoardAsync();
+    this.handleUpdateBoard();
   }
 
   handlePlaceMark(column, row) {
@@ -111,7 +111,7 @@ class App extends Component {
   }
 
   async handleGameOver(message) {
-    await this.updateBoardAsync();
+    await this.handleUpdateBoard();
     alert(message);
     this.handleCreateGame();
   }
