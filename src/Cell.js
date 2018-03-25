@@ -10,13 +10,16 @@ const resolveSymbol = (address, player1, player2) => {
   }
 };
 
-const Cell = ({ address, player1, player2, noAddress, onPlaceMarker }) => (
-  <div
-    className={`Cell noselect ${address === noAddress ? 'valid' : 'invalid'}`}
-    onClick={() => onPlaceMarker()}
-  >
-    {resolveSymbol(address, player1, player2)}
-  </div>
-);
+const Cell = ({ address, player1, player2, noAddress, onPlaceMarker }) => {
+  const status = address === noAddress ? 'valid' : 'invalid';
+  return (
+    <div
+      className={`Cell noselect ${status}`}
+      onClick={() => onPlaceMarker()}
+    >
+      {resolveSymbol(address, player1, player2)}
+    </div>
+  );
+};
 
 export default Cell;
