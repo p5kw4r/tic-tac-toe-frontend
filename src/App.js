@@ -5,7 +5,7 @@ import './App.css';
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 const abi = [{"constant":true,"inputs":[],"name":"BET_SIZE","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"gameId","type":"uint256"}],"name":"GameCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"player","type":"address"}],"name":"PlayerJoined","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"player","type":"address"}],"name":"NextPlayer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"winner","type":"address"}],"name":"GameOverWithWin","type":"event"},{"anonymous":false,"inputs":[],"name":"GameOverWithDraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"recipient","type":"address"},{"indexed":false,"name":"amountInWei","type":"uint256"}],"name":"PayoutSuccess","type":"event"},{"constant":false,"inputs":[],"name":"createGame","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"gameId","type":"uint256"}],"name":"joinGame","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"gameId","type":"uint256"}],"name":"getBoard","outputs":[{"name":"","type":"address[3][3]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"gameId","type":"uint256"},{"name":"row","type":"uint8"},{"name":"column","type":"uint8"}],"name":"placeMark","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}];
-const address = '0x7d1bf7e89c8e1972bd5416b1005e801ed10b21b4';
+const address = '0x9adbf80e55ed9cf4f5dc76e338665f91bbfa02c3';
 
 const contract = new web3.eth.Contract(abi, address);
 const { createGame, joinGame, getBoard, placeMark, BET_SIZE } = contract.methods;
@@ -48,7 +48,8 @@ class App extends Component {
         this.handleNextPlayer(event);
         break;
       case 'GameOverWithWin':
-        this.handleGameOver(`Game is over, winner is ${event.returnValues.winner}`);
+        const { winner } = event.returnValues;
+        this.handleGameOver(`Game is over, winner is ${winner}`);
         break;
       case 'GameOverWithDraw':
         this.handleGameOver('Game is over, ended with draw');
@@ -67,7 +68,8 @@ class App extends Component {
   }
 
   async getBetSizeAsync() {
-    const betSize = await BET_SIZE().call();
+    const betSize = await BET_SIZE()
+      .call();
     const betSizeInEther = web3.utils.fromWei(betSize, 'ether');
     this.setState({ betSize });
     console.log(`Bet size is ${betSizeInEther} ether`);
@@ -84,16 +86,15 @@ class App extends Component {
   }
 
   async updateBoardAsync() {
-    const board = await getBoard(this.state.gameId).call();
+    const { gameId } = this.state;
+    const board = await getBoard(gameId).call();
     this.setState({ board });
   }
 
   handleCreateGame() {
+    const { player1, betSize } = this.state;
     createGame()
-      .send({
-        from: this.state.player1,
-        value: this.state.betSize
-      });
+      .send({ from: player1, value: betSize });
   }
 
   handleGameCreated(event) {
@@ -104,11 +105,9 @@ class App extends Component {
   }
 
   handleJoinGame() {
-    joinGame(this.state.gameId)
-      .send({
-        from: this.state.player2,
-        value: this.state.betSize
-      });
+    const { gameId, player2, betSize } = this.state;
+    joinGame(gameId)
+      .send({ from: player2, value: betSize });
   }
 
   handlePlayerJoined() {
@@ -123,12 +122,10 @@ class App extends Component {
   }
 
   handlePlaceMark(column, row) {
-    if (this.state.board[column][row] === noAddress) {
-      placeMark(this.state.gameId, column, row)
-        .send({
-          from: this.state.activePlayer,
-          gas: 300000
-        });
+    const { board, gameId, activePlayer } = this.state;
+    if (board[column][row] === noAddress) {
+      placeMark(gameId, column, row)
+        .send({ from: activePlayer, gas: 300000 });
     }
   }
 
@@ -146,12 +143,13 @@ class App extends Component {
   }
 
   render() {
+    const { board, player1, player2 } = this.state;
     return (
       <div className="App">
         <Board
-          board={this.state.board}
-          player1={this.state.player1}
-          player2={this.state.player2}
+          board={board}
+          player1={player1}
+          player2={player2}
           noAddress={noAddress}
           onPlaceMarker={(column, row) => this.handlePlaceMark(column, row)}
         />
