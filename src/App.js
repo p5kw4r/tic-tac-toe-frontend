@@ -9,6 +9,7 @@ const address = '0x7d1bf7e89c8e1972bd5416b1005e801ed10b21b4';
 
 const contract = new web3.eth.Contract(abi, address);
 const { createGame, joinGame, getBoard, placeMark, BET_SIZE } = contract.methods;
+const events = contract.events;
 
 const noAddress = '0x0000000000000000000000000000000000000000';
 
@@ -26,7 +27,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    contract.events.allEvents({}, (error, event) => {
+    events.allEvents({}, (error, event) => {
       switch (event.event) {
         case 'GameCreated':
           this.handleGameCreated(event);
@@ -65,15 +66,16 @@ class App extends Component {
   }
 
   handleGameCreated(event) {
+    const values = event.returnValues;
     this.setState({
-      gameId: event.returnValues.gameId
+      gameId: values.gameId
     });
     joinGame(this.state.gameId)
       .send({
         from: this.state.player2,
         value: this.state.betSize
       });
-    console.log(`Player 1 created new game with id ${event.returnValues.gameId}`);
+    console.log(`Player 1 created new game with id ${values.gameId}`);
   }
 
   handlePlayerJoined() {
@@ -81,11 +83,12 @@ class App extends Component {
   }
 
   handleNextPlayer(event) {
+    const values = event.returnValues;
     this.setState({
-      activePlayer: event.returnValues.player
+      activePlayer: values.player
     });
     this.updateBoardAsync();
-    console.log(`Active player is ${event.returnValues.player}`);
+    console.log(`Active player is ${values.player}`);
   }
 
   handlePlaceMark(column, row) {
@@ -108,8 +111,9 @@ class App extends Component {
   }
 
   handlePayoutSuccess(event) {
-    const recipient = event.returnValues.recipient;
-    const amountInEther = web3.utils.fromWei(event.returnValues.amountInWei, 'ether');
+    const values = event.returnValues;
+    const recipient = values.recipient;
+    const amountInEther = web3.utils.fromWei(values.amountInWei, 'ether');
     console.log(`Transferred ${amountInEther} ether to ${recipient}`);
   }
 
