@@ -94,8 +94,7 @@ class App extends Component {
       .send({ from: player1, value: betSize });
   }
 
-  handleGameCreated(event) {
-    const { gameId } = event.returnValues;
+  handleGameCreated({ returnValues: { gameId } }) {
     this.setState({ gameId });
     this.handleJoinGame();
     // console.log(`Player 1 created new game with id ${gameId}`);
@@ -111,8 +110,7 @@ class App extends Component {
   //   console.log(`Player 2 has joined game`);
   // }
 
-  handleNextPlayer(event) {
-    const { player } = event.returnValues;
+  handleNextPlayer({ returnValues: { player } }) {
     this.setState({ activePlayer: player });
     this.updateBoardAsync();
     // console.log(`Active player is ${player}`);
