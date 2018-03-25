@@ -37,10 +37,10 @@ class App extends Component {
           this.handleNextPlayer(event);
           break;
         case 'GameOverWithWin':
-          this.handleGameOver(`Winner is ${event.returnValues.winner}.`);
+          this.handleGameOver(`Game is over, winner is ${event.returnValues.winner}.`);
           break;
         case 'GameOverWithDraw':
-          this.handleGameOver('Game ended with draw.');
+          this.handleGameOver('Game is over, ended with draw.');
           break;
         case 'PayoutSuccess':
           break;
@@ -51,11 +51,14 @@ class App extends Component {
     BET_SIZE()
       .call()
       .then((betSize) => {
+        console.log(`Bet size is ${betSize} wei.`);
         this.setState({
           betSize
         });
         web3.eth.getAccounts()
           .then((accounts) => {
+            console.log(`Player 1 is ${accounts[0]}.`);
+            console.log(`Player 2 is ${accounts[1]}.`);
             this.setState({
               player1: accounts[0],
               player2: accounts[1]
@@ -74,6 +77,7 @@ class App extends Component {
   }
 
   handleGameCreated(event) {
+    console.log(`Created new game with id ${event.returnValues.gameId}.`);
     this.setState({
       gameId: event.returnValues.gameId
     });
@@ -88,6 +92,7 @@ class App extends Component {
     getBoard(this.state.gameId)
       .call()
       .then((board) => {
+        console.log(`Active player is ${event.returnValues.player}.`);
         this.setState({
           activePlayer: event.returnValues.player,
           board
@@ -109,6 +114,7 @@ class App extends Component {
     getBoard(this.state.gameId)
       .call()
       .then((board) => {
+        console.log(message);
         this.setState({
           board
         });
