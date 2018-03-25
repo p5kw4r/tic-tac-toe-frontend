@@ -50,12 +50,9 @@ class App extends Component {
           break;
       }
     });
-    this.getBetSizeAsync()
+    Promise.all([this.getBetSizeAsync(), this.getAccountsAsync()])
       .then(() => {
-        this.getAccountsAsync()
-          .then(() => {
-            this.handleCreateGame();
-          });
+        this.handleCreateGame();
       });
   }
 
