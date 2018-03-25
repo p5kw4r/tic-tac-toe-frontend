@@ -33,7 +33,8 @@ class App extends Component {
 
   setupSubscriptions() {
     events.allEvents({}, (error, event) => {
-      switch (event.event) {
+      const name = event.event;
+      switch (name) {
         case 'GameCreated':
           this.handleGameCreated(event);
           break;
