@@ -31,3 +31,7 @@
   cursor: not-allowed;
   /*background-color: #bf616a;*/
 }
+
+.noselect {
+  user-select: none;
+}

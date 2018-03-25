@@ -12,7 +12,7 @@ const resolveSymbol = (address, player1, player2) => {
 
 const Cell = ({ address, player1, player2, noAddress, onPlaceMarker }) => (
   <div
-    className={`Cell ${address === noAddress ? 'valid' : 'invalid'}`}
+    className={`Cell noselect ${address === noAddress ? 'valid' : 'invalid'}`}
     onClick={() => onPlaceMarker()}
   >
     {resolveSymbol(address, player1, player2)}
