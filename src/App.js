@@ -32,6 +32,7 @@ class App extends Component {
           this.handleGameCreated(event);
           break;
         case 'PlayerJoined':
+          this.handlePlayerJoined(event);
           break;
         case 'NextPlayer':
           this.handleNextPlayer(event);
@@ -43,6 +44,7 @@ class App extends Component {
           this.handleGameOver('Game is over, ended with draw.');
           break;
         case 'PayoutSuccess':
+          this.handlePayoutSuccess(event);
           break;
         default:
           break;
@@ -77,7 +79,7 @@ class App extends Component {
   }
 
   handleGameCreated(event) {
-    console.log(`Created new game with id ${event.returnValues.gameId}.`);
+    console.log(`Player 1 created new game with id ${event.returnValues.gameId}.`);
     this.setState({
       gameId: event.returnValues.gameId
     });
@@ -86,6 +88,10 @@ class App extends Component {
         from: this.state.player2,
         value: this.state.betSize
       });
+  }
+
+  handlePlayerJoined(event) {
+    console.log(`Player 2 has joined game.`);
   }
 
   handleNextPlayer(event) {
@@ -121,6 +127,10 @@ class App extends Component {
         alert(message);
         this.handleCreateGame();
       });
+  }
+
+  handlePayoutSuccess(event) {
+    console.log(`Transferred ${event.returnValues.amountInWei} wei to ${event.returnValues.recipient}.`);
   }
 
   render() {
