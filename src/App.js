@@ -32,7 +32,7 @@ class App extends Component {
           this.handleGameCreated(event);
           break;
         case 'PlayerJoined':
-          this.handlePlayerJoined(event);
+          this.handlePlayerJoined();
           break;
         case 'NextPlayer':
           this.handleNextPlayer(event);
@@ -50,21 +50,10 @@ class App extends Component {
           break;
       }
     });
-    BET_SIZE()
-      .call()
-      .then((betSize) => {
-        console.log(`Bet size is ${web3.utils.fromWei(betSize, 'ether')} ether`);
-        this.setState({
-          betSize
-        });
-        web3.eth.getAccounts()
-          .then((accounts) => {
-            console.log(`Player 1 is ${accounts[0]}`);
-            console.log(`Player 2 is ${accounts[1]}`);
-            this.setState({
-              player1: accounts[0],
-              player2: accounts[1]
-            });
+    this.getBetSizeAsync()
+      .then(() => {
+        this.getAccountsAsync()
+          .then(() => {
             this.handleCreateGame();
           });
       });
@@ -79,7 +68,6 @@ class App extends Component {
   }
 
   handleGameCreated(event) {
-    console.log(`Player 1 created new game with id ${event.returnValues.gameId}`);
     this.setState({
       gameId: event.returnValues.gameId
     });
@@ -88,22 +76,19 @@ class App extends Component {
         from: this.state.player2,
         value: this.state.betSize
       });
+    console.log(`Player 1 created new game with id ${event.returnValues.gameId}`);
   }
 
-  handlePlayerJoined(event) {
+  handlePlayerJoined() {
     console.log(`Player 2 has joined game`);
   }
 
   handleNextPlayer(event) {
-    getBoard(this.state.gameId)
-      .call()
-      .then((board) => {
-        console.log(`Active player is ${event.returnValues.player}`);
-        this.setState({
-          activePlayer: event.returnValues.player,
-          board
-        });
-      });
+    this.setState({
+      activePlayer: event.returnValues.player
+    });
+    this.updateBoardAsync();
+    console.log(`Active player is ${event.returnValues.player}`);
   }
 
   handlePlaceMark(column, row) {
@@ -117,20 +102,44 @@ class App extends Component {
   }
 
   handleGameOver(message) {
-    getBoard(this.state.gameId)
-      .call()
-      .then((board) => {
-        console.log(message);
-        this.setState({
-          board
-        });
+    this.updateBoardAsync()
+      .then(() => {
         alert(message);
         this.handleCreateGame();
+        console.log(message);
       });
   }
 
   handlePayoutSuccess(event) {
-    console.log(`Transferred ${web3.utils.fromWei(event.returnValues.amountInWei, 'ether')} ether to ${event.returnValues.recipient}`);
+    const recipient = event.returnValues.recipient;
+    const amountInEther = web3.utils.fromWei(event.returnValues.amountInWei, 'ether');
+    console.log(`Transferred ${amountInEther} ether to ${recipient}`);
+  }
+
+  async getBetSizeAsync() {
+    const betSize = await BET_SIZE().call();
+    this.setState({
+      betSize
+    });
+    const betSizeInEther = web3.utils.fromWei(betSize, 'ether');
+    console.log(`Bet size is ${betSizeInEther} ether`);
+  }
+
+  async getAccountsAsync() {
+    const accounts = await web3.eth.getAccounts();
+    this.setState({
+      player1: accounts[0],
+      player2: accounts[1]
+    });
+    console.log(`Player 1 is ${accounts[0]}`);
+    console.log(`Player 2 is ${accounts[1]}`);
+  }
+
+  async updateBoardAsync() {
+    const board = await getBoard(this.state.gameId).call();
+    this.setState({
+      board
+    });
   }
 
   render() {
