@@ -26,9 +26,10 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.subscribeToEvents();
-    this.initializeGame();
+    await this.initializeGame();
+    this.handleCreateGame();
   }
 
   subscribeToEvents() {
@@ -63,8 +64,7 @@ class App extends Component {
   }
 
   async initializeGame() {
-    await Promise.all([this.getBetSizeAsync(), this.getAccountsAsync()]);
-    this.handleCreateGame();
+    return Promise.all([this.getBetSizeAsync(), this.getAccountsAsync()]);
   }
 
   async getBetSizeAsync() {
