@@ -77,10 +77,7 @@ class App extends Component {
 
   async getAccountsAsync() {
     const accounts = await web3.eth.getAccounts();
-    this.setState({
-      player1: accounts[0],
-      player2: accounts[1]
-    });
+    this.setState({ player1: accounts[0], player2: accounts[1] });
     console.log(`Player 1 is ${accounts[0]}`);
     console.log(`Player 2 is ${accounts[1]}`);
   }
