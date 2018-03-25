@@ -8,8 +8,9 @@ const abi = [{"constant":true,"inputs":[],"name":"BET_SIZE","outputs":[{"name":"
 const address = '0x9adbf80e55ed9cf4f5dc76e338665f91bbfa02c3';
 
 const contract = new web3.eth.Contract(abi, address);
-const { createGame, joinGame, getBoard, placeMark, BET_SIZE } = contract.methods;
+const { createGame, joinGame, getBoard, placeMark, BET_SIZE: getBetSize } = contract.methods;
 const { allEvents } = contract.events;
+const { getAccounts } = web3.eth;
 
 const noAddress = '0x0000000000000000000000000000000000000000';
 
@@ -62,13 +63,13 @@ class App extends Component {
   }
 
   async getBetSizeAsync() {
-    const betSize = await BET_SIZE()
+    const betSize = await getBetSize()
       .call();
     this.setState({ betSize });
   }
 
   async getAccountsAsync() {
-    const accounts = await web3.eth.getAccounts();
+    const accounts = await getAccounts();
     this.setState({ player1: accounts[0], player2: accounts[1] });
   }
 
