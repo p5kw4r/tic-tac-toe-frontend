@@ -3,37 +3,45 @@ import Web3 from 'web3';
 import Board from './Board';
 import './App.css';
 
-const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 const abi = [{"constant":true,"inputs":[],"name":"BET_SIZE","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"gameId","type":"uint256"}],"name":"GameCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"player","type":"address"}],"name":"PlayerJoined","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"player","type":"address"}],"name":"NextPlayer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"winner","type":"address"}],"name":"GameOverWithWin","type":"event"},{"anonymous":false,"inputs":[],"name":"GameOverWithDraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"recipient","type":"address"},{"indexed":false,"name":"amountInWei","type":"uint256"}],"name":"PayoutSuccess","type":"event"},{"constant":false,"inputs":[],"name":"createGame","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"gameId","type":"uint256"}],"name":"joinGame","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"gameId","type":"uint256"}],"name":"getBoard","outputs":[{"name":"","type":"address[3][3]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"gameId","type":"uint256"},{"name":"row","type":"uint8"},{"name":"column","type":"uint8"}],"name":"placeMark","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}];
-const address = '0x9adbf80e55ed9cf4f5dc76e338665f91bbfa02c3';
-
-const contract = new web3.eth.Contract(abi, address);
-const { createGame, joinGame, getBoard, placeMark, BET_SIZE: getBetSize } = contract.methods;
-const { allEvents } = contract.events;
-const { getAccounts } = web3.eth;
-
+const address = '0x26b586a5299285c5c42a522bb66c1c4d05085e37';
 const noAddress = '0x0000000000000000000000000000000000000000';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      web3: {},
+      contract: {},
       board: [],
-      activePlayer: '',
-      player1: '',
-      player2: '',
+      activePlayer: '0x0',
+      player1: '0x0',
+      player2: '0x0',
       gameId: 0,
       betSize: 0
     };
   }
 
   async componentDidMount() {
-    this.handleSubscribeToEvents();
-    await this.handleInitializeGame();
+    await this.initializeContract();
+    this.subscribeToEvents();
+    await this.initializeGame();
     this.handleCreateGame();
   }
 
-  handleSubscribeToEvents() {
+  async initializeContract() {
+    const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+    const contract = new web3.eth.Contract(abi, address);
+    this.setState({
+      web3: await web3,
+      contract: await contract,
+      methods: await contract.methods,
+      events: await contract.events
+    });
+  }
+
+  subscribeToEvents() {
+    const { allEvents } = this.state.events;
     allEvents({}, (error, event) => this.handleEvent(error, event));
   }
 
@@ -58,29 +66,32 @@ class App extends Component {
     }
   }
 
-  handleInitializeGame() {
+  initializeGame() {
     return Promise.all([this.handleGetBetSize(), this.handleGetAccounts()]);
   }
 
   async handleGetBetSize() {
+    const { BET_SIZE: getBetSize } = this.state.methods;
     const betSize = await getBetSize()
       .call();
     this.setState({ betSize });
   }
 
   async handleGetAccounts() {
+    const { getAccounts } = this.state.web3.eth;
     const accounts = await getAccounts();
     this.setState({ player1: accounts[0], player2: accounts[1] });
   }
 
   async handleUpdateBoard() {
-    const { gameId } = this.state;
+    const { gameId, methods: { getBoard } } = this.state;
     const board = await getBoard(gameId)
       .call();
     this.setState({ board });
   }
 
   handleCreateGame() {
+    const { createGame } = this.state.methods;
     const { player1, betSize } = this.state;
     createGame()
       .send({ from: player1, value: betSize });
@@ -92,7 +103,7 @@ class App extends Component {
   }
 
   handleJoinGame() {
-    const { gameId, player2, betSize } = this.state;
+    const { gameId, player2, betSize, methods: { joinGame } } = this.state;
     joinGame(gameId)
       .send({ from: player2, value: betSize });
   }
@@ -103,7 +114,7 @@ class App extends Component {
   }
 
   handlePlaceMark(column, row) {
-    const { board, gameId, activePlayer } = this.state;
+    const { board, gameId, activePlayer, methods: { placeMark } } = this.state;
     if (board[column][row] === noAddress) {
       // transaction requires more gas than default value of 90000 wei
       placeMark(gameId, column, row)
