@@ -32,16 +32,16 @@ class App extends Component {
   async initializeContract() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
     const contract = new web3.eth.Contract(abi, address);
+    // not sure, if await really required
+    // this.setState({ web3, contract });
     this.setState({
       web3: await web3,
-      contract: await contract,
-      methods: await contract.methods,
-      events: await contract.events
+      contract: await contract
     });
   }
 
   subscribeToEvents() {
-    const { allEvents } = this.state.events;
+    const { allEvents } = this.state.contract.events;
     allEvents({}, (error, event) => this.handleEvent(error, event));
   }
 
@@ -67,11 +67,14 @@ class App extends Component {
   }
 
   async initializeGame() {
-    await Promise.all([this.handleGetBetSize(), this.handleGetAccounts()]);
+    await Promise.all([
+      this.handleGetBetSize(),
+      this.handleGetAccounts()
+    ]);
   }
 
   async handleGetBetSize() {
-    const { BET_SIZE: getBetSize } = this.state.methods;
+    const { BET_SIZE: getBetSize } = this.state.contract.methods;
     const betSize = await getBetSize()
       .call();
     this.setState({ betSize });
@@ -84,14 +87,14 @@ class App extends Component {
   }
 
   async handleUpdateBoard() {
-    const { gameId, methods: { getBoard } } = this.state;
+    const { gameId, contract: { methods: { getBoard } } } = this.state;
     const board = await getBoard(gameId)
       .call();
     this.setState({ board });
   }
 
   handleCreateGame() {
-    const { player1, betSize, methods: { createGame } } = this.state;
+    const { player1, betSize, contract: { methods: { createGame } } } = this.state;
     createGame()
       .send({ from: player1, value: betSize });
   }
@@ -102,7 +105,7 @@ class App extends Component {
   }
 
   handleJoinGame() {
-    const { gameId, player2, betSize, methods: { joinGame } } = this.state;
+    const { gameId, player2, betSize, contract: { methods: { joinGame } } } = this.state;
     joinGame(gameId)
       .send({ from: player2, value: betSize });
   }
@@ -113,7 +116,7 @@ class App extends Component {
   }
 
   handlePlaceMark(column, row) {
-    const { board, gameId, activePlayer, methods: { placeMark } } = this.state;
+    const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
     if (board[column][row] === noAddress) {
       // transaction requires more gas than default value of 90000 wei
       placeMark(gameId, column, row)
