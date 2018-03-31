@@ -1,5 +1,5 @@
-html, 
-body, 
+html,
+body,
 #root {
   height: 100%;
 }
@@ -12,23 +12,22 @@ body,
 }
 
 .Board {
-  display: flex;
   width: 600px;
   height: 600px;
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
 }
 
 .Cell {
   height: 200px;
   width: 200px;
-  box-sizing: border-box;
-  border: 5px solid black;
-  font-size: 5em;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  border: 5px solid black;
+  font-size: 5em;
 }
 
 .Cell:hover {
