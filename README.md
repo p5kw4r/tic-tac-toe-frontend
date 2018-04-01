@@ -4,8 +4,8 @@
 
 This project is built with:
 
-- React
-- Web3.js
+- [React](https://reactjs.org/)
+- [Web3.js](https://web3js.readthedocs.io/en/1.0/index.html)
 
 ## Setup
 
