@@ -1,19 +1,17 @@
 # Tic Tac Toe DApp
 
-## Run
+## Setup
 
 ```
+# install dependencies
+npm install
+
+# serve on localhost:3000 
 npm start
-```
 
-## Test
-
-```
+# run tests
 npm test
-```
 
-## Build
-
-```
+# build for production
 npm run build
 ```
