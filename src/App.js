@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
-import TicTacToe from './TicTacToe.json';
+import { abi } from './TicTacToe.json';
 import Board from './Board';
 import './App.css';
 
@@ -31,7 +31,7 @@ class App extends Component {
 
   async initializeContract() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
-    const contract = new web3.eth.Contract(TicTacToe.abi, address);
+    const contract = new web3.eth.Contract(abi, address);
     // not sure, if await really required
     // this.setState({ web3, contract });
     this.setState({ web3: await web3, contract: await contract });
