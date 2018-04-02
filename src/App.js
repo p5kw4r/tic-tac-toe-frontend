@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
-import { abi } from './TicTacToe.json';
+import { abi, networks } from './TicTacToe.json';
 import Board from './Board';
 import './App.css';
 
-const address = '0x3fe0c9c54a907c9077d183bee75513ad46131d3f';
 const noAddress = '0x0000000000000000000000000000000000000000';
+
+// workaround to extract contract address from json interface without running
+// `npm run eject` and removing `ModuleScopePlugin` from webpack config
+const networkIds = Object.keys(networks);
+const last = networkIds.length - 1;
+const address = networks[networkIds[last]].address;
 
 class App extends Component {
   constructor(props) {
