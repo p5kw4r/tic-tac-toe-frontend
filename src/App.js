@@ -19,9 +19,9 @@ class App extends Component {
       web3: {},
       contract: {},
       board: [],
-      activePlayer: '0x0',
-      player1: '0x0',
-      player2: '0x0',
+      activePlayer: noAddress,
+      player1: noAddress,
+      player2: noAddress,
       gameId: 0,
       betSize: 0
     };
