@@ -77,8 +77,7 @@ class App extends Component {
 
   async handleGetBetSize() {
     const { BET_SIZE: getBetSize } = this.state.contract.methods;
-    const betSize = await getBetSize()
-      .call();
+    const betSize = await getBetSize().call();
     this.setState({ betSize });
   }
 
@@ -90,15 +89,13 @@ class App extends Component {
 
   async handleUpdateBoard() {
     const { gameId, contract: { methods: { getBoard } } } = this.state;
-    const board = await getBoard(gameId)
-      .call();
+    const board = await getBoard(gameId).call();
     this.setState({ board });
   }
 
   handleCreateGame() {
     const { player1, betSize, contract: { methods: { createGame } } } = this.state;
-    createGame()
-      .send({ from: player1, value: betSize });
+    createGame().send({ from: player1, value: betSize });
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
@@ -108,8 +105,7 @@ class App extends Component {
 
   handleJoinGame() {
     const { gameId, player2, betSize, contract: { methods: { joinGame } } } = this.state;
-    joinGame(gameId)
-      .send({ from: player2, value: betSize });
+    joinGame(gameId).send({ from: player2, value: betSize });
   }
 
   handleNextPlayer({ returnValues: { player } }) {
@@ -121,8 +117,7 @@ class App extends Component {
     const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
     if (board[column][row] === noAddress) {
       // transaction requires more gas than default value of 90000 wei
-      placeMark(gameId, column, row)
-        .send({ from: activePlayer, gas: 300000 });
+      placeMark(gameId, column, row).send({ from: activePlayer, gas: 300000 });
     }
   }
 
