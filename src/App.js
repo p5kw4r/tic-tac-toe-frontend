@@ -84,14 +84,29 @@ class App extends Component {
   }
 
   async handleUpdateBoard() {
-    const { gameId, contract: { methods: { getBoard } } } = this.state;
+    const {
+      gameId,
+      contract: {
+        methods: {
+          getBoard
+        }
+      }
+    } = this.state;
     const board = await getBoard(gameId)
       .call();
     this.setState({ board });
   }
 
   handleCreateGame() {
-    const { player1, betSize, contract: { methods: { createGame } } } = this.state;
+    const {
+      player1,
+      betSize,
+      contract: {
+        methods: {
+          createGame
+        }
+      }
+    } = this.state;
     createGame()
       .send({ from: player1, value: betSize });
   }
@@ -102,7 +117,16 @@ class App extends Component {
   }
 
   handleJoinGame() {
-    const { gameId, player2, betSize, contract: { methods: { joinGame } } } = this.state;
+    const {
+      gameId,
+      player2,
+      betSize,
+      contract: {
+        methods: {
+          joinGame
+        }
+      }
+    } = this.state;
     joinGame(gameId)
       .send({ from: player2, value: betSize });
   }
@@ -113,7 +137,16 @@ class App extends Component {
   }
 
   handlePlaceMark(column, row) {
-    const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
+    const {
+      board,
+      gameId,
+      activePlayer,
+      contract: {
+        methods: {
+          placeMark
+        }
+      }
+    } = this.state;
     if (board[column][row] === noAddress) {
       // transaction requires more gas than default value of 90000 wei
       placeMark(gameId, column, row)
