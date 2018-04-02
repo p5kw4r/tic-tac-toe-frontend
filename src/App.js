@@ -10,8 +10,8 @@ const noAddress = '0x0000000000000000000000000000000000000000';
 // workaround to extract contract address from json interface without running
 // `npm run eject` and removing `ModuleScopePlugin` from webpack config
 const networkIds = Object.keys(networks);
-const last = networkIds.length - 1;
-const address = networks[networkIds[last]].address;
+const lastIndex = networkIds.length - 1;
+const address = networks[networkIds[lastIndex]].address;
 
 class App extends Component {
   constructor(props) {
