@@ -69,10 +69,7 @@ class App extends Component {
   }
 
   async initializeGame() {
-    await Promise.all([
-      this.handleGetBetSize(),
-      this.handleGetAccounts()
-    ]);
+    await Promise.all([this.handleGetBetSize(), this.handleGetAccounts()]);
   }
 
   async handleGetBetSize() {
