@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
+import TicTacToe from './TicTacToe.json';
 import Board from './Board';
 import './App.css';
 
-const abi = [{"constant":true,"inputs":[],"name":"BET_SIZE","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"gameId","type":"uint256"}],"name":"GameCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"player","type":"address"}],"name":"PlayerJoined","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"player","type":"address"}],"name":"NextPlayer","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"winner","type":"address"}],"name":"GameOverWithWin","type":"event"},{"anonymous":false,"inputs":[],"name":"GameOverWithDraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"recipient","type":"address"},{"indexed":false,"name":"amountInWei","type":"uint256"}],"name":"PayoutSuccess","type":"event"},{"constant":false,"inputs":[],"name":"createGame","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"gameId","type":"uint256"}],"name":"joinGame","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"gameId","type":"uint256"}],"name":"getBoard","outputs":[{"name":"","type":"address[3][3]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"gameId","type":"uint256"},{"name":"row","type":"uint8"},{"name":"column","type":"uint8"}],"name":"placeMark","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"}];
-const address = '0x26b586a5299285c5c42a522bb66c1c4d05085e37';
+const address = '0x3fe0c9c54a907c9077d183bee75513ad46131d3f';
 const noAddress = '0x0000000000000000000000000000000000000000';
 
 class App extends Component {
@@ -31,7 +31,7 @@ class App extends Component {
 
   async initializeContract() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
-    const contract = new web3.eth.Contract(abi, address);
+    const contract = new web3.eth.Contract(TicTacToe.abi, address);
     // not sure, if await really required
     // this.setState({ web3, contract });
     this.setState({ web3: await web3, contract: await contract });
