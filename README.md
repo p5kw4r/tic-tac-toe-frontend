@@ -1,6 +1,6 @@
 # Tic Tac Toe DApp
 
-## General
+## Dependencies
 
 This project is built with:
 
