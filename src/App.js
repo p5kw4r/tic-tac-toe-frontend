@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
 import { abi, networks } from './TicTacToe.json';
+import AlertDialog from './AlertDialog';
 import Board from './Board';
 import './App.css';
 
@@ -23,7 +24,9 @@ class App extends Component {
       player1: noAddress,
       player2: noAddress,
       gameId: 0,
-      betSize: 0
+      betSize: 0,
+      message: '',
+      open: false
     };
   }
 
@@ -58,10 +61,10 @@ class App extends Component {
         break;
       case 'GameOverWithWin':
         const { winner } = event.returnValues;
-        this.handleGameOver(`Game is over, winner is ${winner}`);
+        this.handleGameOver(`Winner is ${winner}.`);
         break;
       case 'GameOverWithDraw':
-        this.handleGameOver('Game is over, ended with draw');
+        this.handleGameOver('Game ended with draw.');
         break;
       default:
         break;
@@ -120,14 +123,23 @@ class App extends Component {
 
   async handleGameOver(message) {
     await this.handleUpdateBoard();
-    alert(message);
+    this.setState({ message, open: true });
+  }
+
+  handleClose() {
+    this.setState({ open: false });
     this.handleCreateGame();
   }
 
   render() {
-    const { board, player1, player2 } = this.state;
+    const { board, player1, player2, message, open } = this.state;
     return (
       <div className="App">
+        <AlertDialog
+          message={message}
+          open={open}
+          onClose={() => this.handleClose()}
+        />
         <Board
           board={board}
           player1={player1}
