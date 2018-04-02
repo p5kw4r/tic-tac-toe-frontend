@@ -39,7 +39,10 @@ class App extends Component {
     const contract = new web3.eth.Contract(abi, address);
     // not sure, if await really required
     // this.setState({ web3: await web3, contract: await contract });
-    this.setState({ web3, contract });
+    this.setState({
+      web3,
+      contract
+    });
   }
 
   subscribeToEvents() {
@@ -85,7 +88,10 @@ class App extends Component {
   async handleGetAccounts() {
     const { getAccounts } = this.state.web3.eth;
     const accounts = await getAccounts();
-    this.setState({ player1: accounts[0], player2: accounts[1] });
+    this.setState({
+      player1: accounts[0],
+      player2: accounts[1]
+    });
   }
 
   async handleUpdateBoard() {
@@ -113,7 +119,10 @@ class App extends Component {
       }
     } = this.state;
     createGame()
-      .send({ from: player1, value: betSize });
+      .send({
+        from: player1,
+        value: betSize
+      });
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
@@ -133,7 +142,10 @@ class App extends Component {
       }
     } = this.state;
     joinGame(gameId)
-      .send({ from: player2, value: betSize });
+      .send({
+        from: player2,
+        value: betSize
+      });
   }
 
   handleNextPlayer({ returnValues: { player } }) {
@@ -155,7 +167,10 @@ class App extends Component {
     if (board[column][row] === noAddress) {
       // transaction requires more gas than default value of 90000 wei
       placeMark(gameId, column, row)
-        .send({ from: activePlayer, gas: 300000 });
+        .send({
+          from: activePlayer,
+          gas: 300000
+        });
     }
   }
 
