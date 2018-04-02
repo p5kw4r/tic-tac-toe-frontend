@@ -64,7 +64,7 @@ class App extends Component {
         this.handleGameOver(`Winner is ${winner}.`);
         break;
       case 'GameOverWithDraw':
-        this.handleGameOver('Game ended with draw.');
+        this.handleGameOver('There is no winner. Game ended with draw.');
         break;
       default:
         break;
