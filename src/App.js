@@ -34,10 +34,7 @@ class App extends Component {
     const contract = new web3.eth.Contract(abi, address);
     // not sure, if await really required
     // this.setState({ web3, contract });
-    this.setState({
-      web3: await web3,
-      contract: await contract
-    });
+    this.setState({ web3: await web3, contract: await contract });
   }
 
   subscribeToEvents() {
