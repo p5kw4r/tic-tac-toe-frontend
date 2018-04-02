@@ -30,7 +30,7 @@ class App extends Component {
   }
 
   async initializeContract() {
-    const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+    const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider('ws://localhost:8545'));
     const contract = new web3.eth.Contract(abi, address);
     // not sure, if await really required
     // this.setState({ web3, contract });
