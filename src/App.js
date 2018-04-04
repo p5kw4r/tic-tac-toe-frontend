@@ -25,6 +25,8 @@ class App extends Component {
       activePlayer: NO_ADDRESS,
       player1: NO_ADDRESS,
       player2: NO_ADDRESS,
+      balancePlayer1: 0,
+      balancePlayer2: 0,
       gameId: 0,
       betSize: 0,
       dialogMessage: '',
@@ -39,6 +41,7 @@ class App extends Component {
     this.subscribeToEvents();
     await this.initializeGame();
     this.handleCreateGame();
+    this.handleGetBalances();
   }
 
   async initializeContract() {
@@ -133,11 +136,22 @@ class App extends Component {
     this.setState({ dialogMessage, dialogOpen: true });
   }
 
+  async handleGetBalances() {
+    const { player1, player2, web3: { utils: { fromWei }, eth: { getBalance } } } = this.state;
+    const balance1 = getBalance(player1);
+    const balance2 = getBalance(player2);
+    this.setState({
+      balancePlayer1: fromWei(await balance1),
+      balancePlayer2: fromWei(await balance2)
+    });
+  }
+
   handlePayoutSuccess({ returnValues: { recipient, amountInWei }}) {
-    const { web3 } = this.state;
-    const amount = web3.utils.fromWei(amountInWei, 'ether');
+    const { web3: { utils: { fromWei } } } = this.state;
+    const amount = fromWei(amountInWei, 'ether');
     const notificationMessage = `Successfully transferred ${amount} ether to ${recipient}.`;
     this.setState({ notificationMessage, notificationOpen: true });
+    this.handleGetBalances();
   }
 
   handleDialogClose() {
@@ -157,6 +171,8 @@ class App extends Component {
       player1,
       player2,
       activePlayer,
+      balancePlayer1,
+      balancePlayer2,
       dialogMessage,
       dialogOpen,
       notificationMessage,
@@ -181,6 +197,8 @@ class App extends Component {
           player1={player1}
           player2={player2}
           activePlayer={activePlayer}
+          balancePlayer1={balancePlayer1}
+          balancePlayer2={balancePlayer2}
           noAddress={NO_ADDRESS}
         />
         <Snackbar
