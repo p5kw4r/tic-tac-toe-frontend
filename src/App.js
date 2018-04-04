@@ -116,6 +116,7 @@ class App extends Component {
   handleJoinGame() {
     const { gameId, player2, betSize, contract: { methods: { joinGame } } } = this.state;
     joinGame(gameId).send({ from: player2, value: betSize });
+    this.handleGetBalances();
   }
 
   handleNextPlayer({ returnValues: { player } }) {
