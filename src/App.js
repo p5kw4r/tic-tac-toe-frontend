@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import { abi, networks } from './TicTacToe.json';
 import AlertDialog from './AlertDialog';
 import Board from './Board';
+import Info from './Info';
 import './App.css';
 
 const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -25,8 +26,8 @@ class App extends Component {
       player2: NO_ADDRESS,
       gameId: 0,
       betSize: 0,
-      message: '',
-      open: false
+      dialogMessage: '',
+      dialogOpen: false
     };
   }
 
@@ -121,23 +122,23 @@ class App extends Component {
     }
   }
 
-  async handleGameOver(message) {
+  async handleGameOver(dialogMessage) {
     await this.handleUpdateBoard();
-    this.setState({ message, open: true });
+    this.setState({ dialogMessage, dialogOpen: true });
   }
 
   handleClose() {
-    this.setState({ open: false });
+    this.setState({ dialogOpen: false });
     this.handleCreateGame();
   }
 
   render() {
-    const { board, player1, player2, message, open } = this.state;
+    const { board, player1, player2, activePlayer, dialogMessage, dialogOpen } = this.state;
     return (
       <div className="App">
         <AlertDialog
-          message={message}
-          open={open}
+          message={dialogMessage}
+          open={dialogOpen}
           onClose={() => this.handleClose()}
         />
         <Board
@@ -146,6 +147,12 @@ class App extends Component {
           player2={player2}
           noAddress={NO_ADDRESS}
           onPlaceMark={(column, row) => this.handlePlaceMark(column, row)}
+        />
+        <Info
+          player1={player1}
+          player2={player2}
+          activePlayer={activePlayer}
+          noAddress={NO_ADDRESS}
         />
       </div>
     );
