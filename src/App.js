@@ -5,13 +5,13 @@ import AlertDialog from './AlertDialog';
 import Board from './Board';
 import './App.css';
 
-const noAddress = '0x0000000000000000000000000000000000000000';
+const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 // workaround to extract contract address from json interface without running
 // `npm run eject` and removing `ModuleScopePlugin` from webpack config
-const networkIds = Object.keys(networks);
-const lastIndex = networkIds.length - 1;
-const address = networks[networkIds[lastIndex]].address;
+const NETWORK_IDS = Object.keys(networks);
+const LAST_INDEX = NETWORK_IDS.length - 1;
+const ADDRESS = networks[NETWORK_IDS[LAST_INDEX]].address;
 
 class App extends Component {
   constructor(props) {
@@ -20,9 +20,9 @@ class App extends Component {
       web3: {},
       contract: {},
       board: [],
-      activePlayer: noAddress,
-      player1: noAddress,
-      player2: noAddress,
+      activePlayer: NO_ADDRESS,
+      player1: NO_ADDRESS,
+      player2: NO_ADDRESS,
       gameId: 0,
       betSize: 0,
       message: '',
@@ -39,7 +39,7 @@ class App extends Component {
 
   async initializeContract() {
     const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider('ws://localhost:8545'));
-    const contract = new web3.eth.Contract(abi, address);
+    const contract = new web3.eth.Contract(abi, ADDRESS);
     // not sure, if await really required
     // this.setState({ web3: await web3, contract: await contract });
     this.setState({ web3, contract });
@@ -115,7 +115,7 @@ class App extends Component {
 
   handlePlaceMark(column, row) {
     const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
-    if (board[column][row] === noAddress) {
+    if (board[column][row] === NO_ADDRESS) {
       // transaction requires more gas than default value of 90000 wei
       placeMark(gameId, column, row).send({ from: activePlayer, gas: 300000 });
     }
@@ -144,7 +144,7 @@ class App extends Component {
           board={board}
           player1={player1}
           player2={player2}
-          noAddress={noAddress}
+          noAddress={NO_ADDRESS}
           onPlaceMark={(column, row) => this.handlePlaceMark(column, row)}
         />
       </div>
