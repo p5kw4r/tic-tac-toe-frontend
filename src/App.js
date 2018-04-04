@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Snackbar from 'material-ui/Snackbar';
 import Web3 from 'web3';
 import { abi, networks } from './TicTacToe.json';
 import AlertDialog from './AlertDialog';
@@ -27,7 +28,9 @@ class App extends Component {
       gameId: 0,
       betSize: 0,
       dialogMessage: '',
-      dialogOpen: false
+      dialogOpen: false,
+      notificationMessage: '',
+      notificationOpen: false
     };
   }
 
@@ -66,6 +69,9 @@ class App extends Component {
         break;
       case 'GameOverWithDraw':
         this.handleGameOver('There is no winner. Game ended with draw.');
+        break;
+      case 'PayoutSuccess':
+        this.handlePayoutSuccess(event);
         break;
       default:
         break;
@@ -127,19 +133,42 @@ class App extends Component {
     this.setState({ dialogMessage, dialogOpen: true });
   }
 
-  handleClose() {
+  handlePayoutSuccess({ returnValues: { recipient, amountInWei }}) {
+    const { web3 } = this.state;
+    const amount = web3.utils.fromWei(amountInWei, 'ether');
+    const notificationMessage = `Successfully transferred ${amount} ether to ${recipient}.`;
+    this.setState({ notificationMessage, notificationOpen: true });
+  }
+
+  handleDialogClose() {
     this.setState({ dialogOpen: false });
     this.handleCreateGame();
   }
 
+  handleNotificationClose(reason) {
+    if (reason !== 'clickaway') {
+      this.setState({ notificationOpen: false });
+    }
+  }
+
   render() {
-    const { board, player1, player2, activePlayer, dialogMessage, dialogOpen } = this.state;
+    const {
+      board,
+      player1,
+      player2,
+      activePlayer,
+      dialogMessage,
+      dialogOpen,
+      notificationMessage,
+      notificationOpen
+    } = this.state;
+
     return (
       <div className="App">
         <AlertDialog
           message={dialogMessage}
           open={dialogOpen}
-          onClose={() => this.handleClose()}
+          onClose={() => this.handleDialogClose()}
         />
         <Board
           board={board}
@@ -153,6 +182,13 @@ class App extends Component {
           player2={player2}
           activePlayer={activePlayer}
           noAddress={NO_ADDRESS}
+        />
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          open={notificationOpen}
+          autoHideDuration={5000}
+          message={notificationMessage}
+          onClose={(event, reason) => this.handleNotificationClose(reason)}
         />
       </div>
     );
