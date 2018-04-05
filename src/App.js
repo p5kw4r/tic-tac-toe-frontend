@@ -129,7 +129,9 @@ class App extends Component {
 
   async handleGetBalances() {
     const { players, web3: { eth: { getBalance } } } = this.state;
-    this.setState({ balances: [await getBalance(players[0]), await getBalance(players[1])] });
+    const balance1 = getBalance(players[0]);
+    const balance2 = getBalance(players[1]);
+    this.setState({ balances: [await balance1, await balance2] });
   }
 
   handlePayoutSuccess({ returnValues: { recipient, amountInWei } }) {
