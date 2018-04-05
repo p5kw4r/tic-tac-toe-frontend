@@ -21,10 +21,8 @@ class App extends Component {
       contract: {},
       board: [],
       activePlayer: NO_ADDRESS,
-      player1: NO_ADDRESS,
-      player2: NO_ADDRESS,
-      balance1: 0,
-      balance2: 0,
+      players: [],
+      balances: [],
       gameId: 0,
       betSize: 0
     };
@@ -35,7 +33,6 @@ class App extends Component {
     this.subscribeToEvents();
     await this.initializeGame();
     this.handleCreateGame();
-    this.handleGetBalances();
   }
 
   async initializeContract() {
@@ -76,7 +73,7 @@ class App extends Component {
   }
 
   async initializeGame() {
-    await Promise.all([ this.handleGetBetSize(), this.handleGetAccounts() ]);
+    await Promise.all([this.handleGetBetSize(), this.handleGetAccounts()]);
   }
 
   async handleGetBetSize() {
@@ -87,7 +84,7 @@ class App extends Component {
   async handleGetAccounts() {
     const { getAccounts } = this.state.web3.eth;
     const accounts = await getAccounts();
-    this.setState({ player1: accounts[0], player2: accounts[1] });
+    this.setState({ players: [accounts[0], accounts[1]] });
   }
 
   async handleUpdateBoard() {
@@ -96,8 +93,8 @@ class App extends Component {
   }
 
   handleCreateGame() {
-    const { player1, betSize, contract: { methods: { createGame } } } = this.state;
-    createGame().send({ from: player1, value: betSize });
+    const { players, betSize, contract: { methods: { createGame } } } = this.state;
+    createGame().send({ from: players[0] , value: betSize });
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
@@ -106,8 +103,8 @@ class App extends Component {
   }
 
   handleJoinGame() {
-    const { gameId, player2, betSize, contract: { methods: { joinGame } } } = this.state;
-    joinGame(gameId).send({ from: player2, value: betSize });
+    const { gameId, players, betSize, contract: { methods: { joinGame } } } = this.state;
+    joinGame(gameId).send({ from: players[1], value: betSize });
     this.handleGetBalances();
   }
 
@@ -117,7 +114,7 @@ class App extends Component {
   }
 
   handlePlaceMark(column, row) {
-    const { board, gameId, activePlayer,contract: { methods: { placeMark } } } = this.state;
+    const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
     if (board[column][row] === NO_ADDRESS) {
       // transaction requires more gas than default value of 90000 wei
       placeMark(gameId, column, row).send({ from: activePlayer, gas: 300000 });
@@ -131,8 +128,8 @@ class App extends Component {
   }
 
   async handleGetBalances() {
-    const { player1, player2, web3: { eth: { getBalance } } } = this.state;
-    this.setState({ balance1: await getBalance(player1), balance2: await getBalance(player2) });
+    const { players, web3: { eth: { getBalance } } } = this.state;
+    this.setState({ balances: [await getBalance(players[0]), await getBalance(players[1])] });
   }
 
   handlePayoutSuccess({ returnValues: { recipient, amountInWei } }) {
@@ -147,23 +144,20 @@ class App extends Component {
   }
 
   render() {
-    const { board, betSize, player1, player2, activePlayer, balance1, balance2 } = this.state;
+    const { board, betSize, players, activePlayer, balances } = this.state;
     return (
       <div className="App">
         <Board
           board={board}
-          player1={player1}
-          player2={player2}
+          players={players}
           noAddress={NO_ADDRESS}
           onPlaceMark={(column, row) => this.handlePlaceMark(column, row)}
         />
         <Info
           betSize={betSize}
-          player1={player1}
-          player2={player2}
+          players={players}
           activePlayer={activePlayer}
-          balance1={balance1}
-          balance2={balance2}
+          balances={balances}
           noAddress={NO_ADDRESS}
           onFromWei={(amount) => this.handleFromWei(amount)}
         />
