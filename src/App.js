@@ -25,14 +25,14 @@ class App extends Component {
       activePlayer: NO_ADDRESS,
       player1: NO_ADDRESS,
       player2: NO_ADDRESS,
-      balancePlayer1: 0,
-      balancePlayer2: 0,
+      balance1: 0,
+      balance2: 0,
       gameId: 0,
       betSize: 0,
       dialogMessage: '',
       dialogOpen: false,
-      notificationMessage: '',
-      notificationOpen: false
+      snackMessage: '',
+      snackOpen: false
     };
   }
 
@@ -142,16 +142,16 @@ class App extends Component {
     const balance1 = getBalance(player1);
     const balance2 = getBalance(player2);
     this.setState({
-      balancePlayer1: fromWei(await balance1, 'ether'),
-      balancePlayer2: fromWei(await balance2, 'ether')
+      balance1: fromWei(await balance1, 'ether'),
+      balance2: fromWei(await balance2, 'ether')
     });
   }
 
   handlePayoutSuccess({ returnValues: { recipient, amountInWei }}) {
     const { web3: { utils: { fromWei } } } = this.state;
     const amount = fromWei(amountInWei, 'ether');
-    const notificationMessage = `Successfully transferred ${amount} ether to ${recipient}.`;
-    this.setState({ notificationMessage, notificationOpen: true });
+    const snackMessage = `Successfully transferred ${amount} ether to ${recipient}.`;
+    this.setState({ snackMessage, snackOpen: true });
     this.handleGetBalances();
   }
 
@@ -160,9 +160,9 @@ class App extends Component {
     this.handleCreateGame();
   }
 
-  handleNotificationClose(reason) {
+  handleSnackClose(reason) {
     if (reason !== 'clickaway') {
-      this.setState({ notificationOpen: false });
+      this.setState({ snackOpen: false });
     }
   }
 
@@ -178,12 +178,12 @@ class App extends Component {
       player1,
       player2,
       activePlayer,
-      balancePlayer1,
-      balancePlayer2,
+      balance1,
+      balance2,
       dialogMessage,
       dialogOpen,
-      notificationMessage,
-      notificationOpen
+      snackMessage,
+      snackOpen
     } = this.state;
 
     return (
@@ -205,17 +205,17 @@ class App extends Component {
           player1={player1}
           player2={player2}
           activePlayer={activePlayer}
-          balancePlayer1={balancePlayer1}
-          balancePlayer2={balancePlayer2}
+          balance1={balance1}
+          balance2={balance2}
           noAddress={NO_ADDRESS}
           onFromWei={(amount) => this.handleFromWei(amount)}
         />
         <Snackbar
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          open={notificationOpen}
+          open={snackOpen}
           autoHideDuration={5000}
-          message={notificationMessage}
-          onClose={(event, reason) => this.handleNotificationClose(reason)}
+          message={snackMessage}
+          onClose={(event, reason) => this.handleSnackClose(reason)}
         />
       </div>
     );
