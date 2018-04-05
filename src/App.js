@@ -74,28 +74,45 @@ class App extends Component {
   }
 
   async initializeGame() {
-    await Promise.all([this.handleGetBetSize(), this.handleGetAccounts()]);
+    await Promise.all([
+      this.handleGetBetSize(),
+      this.handleGetAccounts()
+    ]);
   }
 
   async handleGetBetSize() {
     const { BET_SIZE: getBetSize } = this.state.contract.methods;
-    this.setState({ betSize: await getBetSize().call({ gas: GAS_LIMIT }) });
+    this.setState({
+      betSize: await getBetSize().call({
+        gas: GAS_LIMIT
+      })
+    });
   }
 
   async handleGetAccounts() {
     const { getAccounts } = this.state.web3.eth;
     const accounts = await getAccounts();
-    this.setState({ players: [accounts[0], accounts[1]] });
+    this.setState({
+      players: [accounts[0], accounts[1]]
+    });
   }
 
   async handleUpdateBoard() {
     const { gameId, contract: { methods: { getBoard } } } = this.state;
-    this.setState({ board: await getBoard(gameId).call({ gas: GAS_LIMIT }) });
+    this.setState({
+      board: await getBoard(gameId).call({
+        gas: GAS_LIMIT
+      })
+    });
   }
 
   handleCreateGame() {
     const { players, betSize, contract: { methods: { createGame } } } = this.state;
-    createGame().send({ from: players[0], value: betSize, gas: GAS_LIMIT });
+    createGame().send({
+      from: players[0],
+      value: betSize,
+      gas: GAS_LIMIT
+    });
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
@@ -105,19 +122,28 @@ class App extends Component {
 
   handleJoinGame() {
     const { gameId, players, betSize, contract: { methods: { joinGame } } } = this.state;
-    joinGame(gameId).send({ from: players[1], value: betSize, gas: GAS_LIMIT });
+    joinGame(gameId).send({
+      from: players[1],
+      value: betSize,
+      gas: GAS_LIMIT
+    });
     this.handleGetBalances();
   }
 
   handleNextPlayer({ returnValues: { player } }) {
-    this.setState({ activePlayer: player });
+    this.setState({
+      activePlayer: player
+    });
     this.handleUpdateBoard();
   }
 
   handlePlaceMark(column, row) {
     const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
     if (board[column][row] === NO_ADDRESS) {
-      placeMark(gameId, column, row).send({ from: activePlayer, gas: GAS_LIMIT });
+      placeMark(gameId, column, row).send({
+        from: activePlayer,
+        gas: GAS_LIMIT
+      });
     }
   }
 
@@ -131,7 +157,9 @@ class App extends Component {
     const { players, web3: { eth: { getBalance } } } = this.state;
     const balance1 = getBalance(players[0]);
     const balance2 = getBalance(players[1]);
-    this.setState({ balances: [await balance1, await balance2] });
+    this.setState({
+      balances: [await balance1, await balance2]
+    });
   }
 
   handlePayoutSuccess({ returnValues: { recipient, amountInWei } }) {
