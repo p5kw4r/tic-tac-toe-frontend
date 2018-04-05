@@ -2,7 +2,7 @@ import React from 'react';
 import './Info.css';
 
 const Info = ({ betSize, players, activePlayer, balances, noAddress, onFromWei }) => (
-  activePlayer !== noAddress && balances.length === 2 && (
+  activePlayer !== noAddress && (
     <div className="Info">
       <div>{`Bet Size: ${onFromWei(betSize)} ether`}</div>
       <div>{`Player 1: ${players[0]} - ${onFromWei(balances[0])} ether`}</div>
