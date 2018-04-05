@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import Snackbar from 'material-ui/Snackbar';
 import Web3 from 'web3';
 import { abi, networks } from './TicTacToe.json';
-import AlertDialog from './AlertDialog';
 import Board from './Board';
 import Info from './Info';
 import './App.css';
@@ -28,11 +26,7 @@ class App extends Component {
       balance1: 0,
       balance2: 0,
       gameId: 0,
-      betSize: 0,
-      dialogMessage: '',
-      dialogOpen: false,
-      snackMessage: '',
-      snackOpen: false
+      betSize: 0
     };
   }
 
@@ -49,7 +43,10 @@ class App extends Component {
     const contract = new web3.eth.Contract(abi, ADDRESS);
     // not sure, if await really required
     // this.setState({ web3: await web3, contract: await contract });
-    this.setState({ web3, contract });
+    this.setState({
+      web3,
+      contract
+    });
   }
 
   subscribeToEvents() {
@@ -82,30 +79,63 @@ class App extends Component {
   }
 
   async initializeGame() {
-    await Promise.all([this.handleGetBetSize(), this.handleGetAccounts()]);
+    await Promise.all([
+      this.handleGetBetSize(),
+      this.handleGetAccounts()
+    ]);
   }
 
   async handleGetBetSize() {
     const { BET_SIZE: getBetSize } = this.state.contract.methods;
-    const betSize = await getBetSize().call();
-    this.setState({ betSize });
+
+    this.setState({
+      betSize: await getBetSize()
+        .call()
+    });
   }
 
   async handleGetAccounts() {
     const { getAccounts } = this.state.web3.eth;
+
     const accounts = await getAccounts();
-    this.setState({ player1: accounts[0], player2: accounts[1] });
+    this.setState({
+      player1: accounts[0],
+      player2: accounts[1]
+    });
   }
 
   async handleUpdateBoard() {
-    const { gameId, contract: { methods: { getBoard } } } = this.state;
-    const board = await getBoard(gameId).call();
-    this.setState({ board });
+    const {
+      gameId,
+      contract: {
+        methods: {
+          getBoard
+        }
+      }
+    } = this.state;
+
+    this.setState({
+      board: await getBoard(gameId)
+        .call()
+    });
   }
 
   handleCreateGame() {
-    const { player1, betSize, contract: { methods: { createGame } } } = this.state;
-    createGame().send({ from: player1, value: betSize });
+    const {
+      player1,
+      betSize,
+      contract: {
+        methods: {
+          createGame
+        }
+      }
+    } = this.state;
+
+    createGame()
+      .send({
+        from: player1,
+        value: betSize
+      });
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
@@ -114,8 +144,22 @@ class App extends Component {
   }
 
   handleJoinGame() {
-    const { gameId, player2, betSize, contract: { methods: { joinGame } } } = this.state;
-    joinGame(gameId).send({ from: player2, value: betSize });
+    const {
+      gameId,
+      player2,
+      betSize,
+      contract: {
+        methods: {
+          joinGame
+        }
+      }
+    } = this.state;
+
+    joinGame(gameId)
+      .send({
+        from: player2,
+        value: betSize
+      });
     this.handleGetBalances();
   }
 
@@ -125,48 +169,65 @@ class App extends Component {
   }
 
   handlePlaceMark(column, row) {
-    const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
+    const {
+      board,
+      gameId,
+      activePlayer,
+      contract: {
+        methods: {
+          placeMark
+        }
+      }
+    } = this.state;
+
     if (board[column][row] === NO_ADDRESS) {
       // transaction requires more gas than default value of 90000 wei
-      placeMark(gameId, column, row).send({ from: activePlayer, gas: 300000 });
+      placeMark(gameId, column, row)
+        .send({
+          from: activePlayer,
+          gas: 300000
+        });
     }
   }
 
-  async handleGameOver(dialogMessage) {
+  async handleGameOver(message) {
     await this.handleUpdateBoard();
-    this.setState({ dialogMessage, dialogOpen: true });
-  }
-
-  async handleGetBalances() {
-    const { player1, player2, web3: { eth: { getBalance } } } = this.state;
-    const balance1 = getBalance(player1);
-    const balance2 = getBalance(player2);
-    this.setState({
-      balance1: this.handleFromWei(await balance1),
-      balance2: this.handleFromWei(await balance2)
-    });
-  }
-
-  handlePayoutSuccess({ returnValues: { recipient, amountInWei }}) {
-    const amount = this.handleFromWei(amountInWei);
-    const snackMessage = `Successfully transferred ${amount} ether to ${recipient}.`;
-    this.setState({ snackMessage, snackOpen: true });
-    this.handleGetBalances();
-  }
-
-  handleDialogClose() {
-    this.setState({ dialogOpen: false });
+    alert(message);
     this.handleCreateGame();
   }
 
-  handleSnackClose(reason) {
-    if (reason !== 'clickaway') {
-      this.setState({ snackOpen: false });
-    }
+  async handleGetBalances() {
+    const {
+      player1,
+      player2,
+      web3: {
+        eth: {
+          getBalance
+        }
+      }
+    } = this.state;
+
+    this.setState({
+      balance1: await getBalance(player1),
+      balance2: await getBalance(player2)
+    });
+  }
+
+  handlePayoutSuccess({ returnValues: { recipient, amountInWei } }) {
+    const amount = this.handleFromWei(amountInWei);
+    console.log(`Successfully transferred ${amount} ether to ${recipient}.`);
+    this.handleGetBalances();
   }
 
   handleFromWei(amount) {
-    const { web3: { utils: { fromWei } } } = this.state;
+    const {
+      web3: {
+        utils: {
+          fromWei
+        }
+      }
+    } = this.state;
+
     return fromWei(amount, 'ether');
   }
 
@@ -178,20 +239,11 @@ class App extends Component {
       player2,
       activePlayer,
       balance1,
-      balance2,
-      dialogMessage,
-      dialogOpen,
-      snackMessage,
-      snackOpen
+      balance2
     } = this.state;
 
     return (
       <div className="App">
-        <AlertDialog
-          message={dialogMessage}
-          open={dialogOpen}
-          onClose={() => this.handleDialogClose()}
-        />
         <Board
           board={board}
           player1={player1}
@@ -208,13 +260,6 @@ class App extends Component {
           balance2={balance2}
           noAddress={NO_ADDRESS}
           onFromWei={(amount) => this.handleFromWei(amount)}
-        />
-        <Snackbar
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          open={snackOpen}
-          autoHideDuration={5000}
-          message={snackMessage}
-          onClose={(event, reason) => this.handleSnackClose(reason)}
         />
       </div>
     );
