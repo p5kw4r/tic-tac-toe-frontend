@@ -43,10 +43,7 @@ class App extends Component {
     const contract = new web3.eth.Contract(abi, ADDRESS);
     // not sure, if await really required
     // this.setState({ web3: await web3, contract: await contract });
-    this.setState({
-      web3,
-      contract
-    });
+    this.setState({ web3, contract });
   }
 
   subscribeToEvents() {
@@ -79,62 +76,28 @@ class App extends Component {
   }
 
   async initializeGame() {
-    await Promise.all([
-      this.handleGetBetSize(),
-      this.handleGetAccounts()
-    ]);
+    await Promise.all([ this.handleGetBetSize(), this.handleGetAccounts() ]);
   }
 
   async handleGetBetSize() {
     const { BET_SIZE: getBetSize } = this.state.contract.methods;
-
-    this.setState({
-      betSize: await getBetSize()
-        .call()
-    });
+    this.setState({ betSize: await getBetSize().call() });
   }
 
   async handleGetAccounts() {
     const { getAccounts } = this.state.web3.eth;
     const accounts = await getAccounts();
-    this.setState({
-      player1: accounts[0],
-      player2: accounts[1]
-    });
+    this.setState({ player1: accounts[0], player2: accounts[1] });
   }
 
   async handleUpdateBoard() {
-    const {
-      gameId,
-      contract: {
-        methods: {
-          getBoard
-        }
-      }
-    } = this.state;
-
-    this.setState({
-      board: await getBoard(gameId)
-        .call()
-    });
+    const { gameId, contract: { methods: { getBoard } } } = this.state;
+    this.setState({ board: await getBoard(gameId).call() });
   }
 
   handleCreateGame() {
-    const {
-      player1,
-      betSize,
-      contract: {
-        methods: {
-          createGame
-        }
-      }
-    } = this.state;
-
-    createGame()
-      .send({
-        from: player1,
-        value: betSize
-      });
+    const { player1, betSize, contract: { methods: { createGame } } } = this.state;
+    createGame().send({ from: player1, value: betSize });
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
@@ -143,22 +106,8 @@ class App extends Component {
   }
 
   handleJoinGame() {
-    const {
-      gameId,
-      player2,
-      betSize,
-      contract: {
-        methods: {
-          joinGame
-        }
-      }
-    } = this.state;
-
-    joinGame(gameId)
-      .send({
-        from: player2,
-        value: betSize
-      });
+    const { gameId, player2, betSize, contract: { methods: { joinGame } } } = this.state;
+    joinGame(gameId).send({ from: player2, value: betSize });
     this.handleGetBalances();
   }
 
@@ -168,24 +117,10 @@ class App extends Component {
   }
 
   handlePlaceMark(column, row) {
-    const {
-      board,
-      gameId,
-      activePlayer,
-      contract: {
-        methods: {
-          placeMark
-        }
-      }
-    } = this.state;
-
+    const { board, gameId, activePlayer,contract: { methods: { placeMark } } } = this.state;
     if (board[column][row] === NO_ADDRESS) {
       // transaction requires more gas than default value of 90000 wei
-      placeMark(gameId, column, row)
-        .send({
-          from: activePlayer,
-          gas: 300000
-        });
+      placeMark(gameId, column, row).send({ from: activePlayer, gas: 300000 });
     }
   }
 
@@ -196,20 +131,8 @@ class App extends Component {
   }
 
   async handleGetBalances() {
-    const {
-      player1,
-      player2,
-      web3: {
-        eth: {
-          getBalance
-        }
-      }
-    } = this.state;
-
-    this.setState({
-      balance1: await getBalance(player1),
-      balance2: await getBalance(player2)
-    });
+    const { player1, player2, web3: { eth: { getBalance } } } = this.state;
+    this.setState({ balance1: await getBalance(player1), balance2: await getBalance(player2) });
   }
 
   handlePayoutSuccess({ returnValues: { recipient, amountInWei } }) {
@@ -219,28 +142,12 @@ class App extends Component {
   }
 
   handleFromWei(amount) {
-    const {
-      web3: {
-        utils: {
-          fromWei
-        }
-      }
-    } = this.state;
-
+    const { web3: { utils: { fromWei } } } = this.state;
     return fromWei(amount, 'ether');
   }
 
   render() {
-    const {
-      board,
-      betSize,
-      player1,
-      player2,
-      activePlayer,
-      balance1,
-      balance2
-    } = this.state;
-
+    const { board, betSize, player1, player2, activePlayer, balance1, balance2 } = this.state;
     return (
       <div className="App">
         <Board
