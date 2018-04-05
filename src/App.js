@@ -6,6 +6,7 @@ import Info from './Info';
 import './App.css';
 
 const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const GAS_LIMIT = 300000;
 
 // workaround to extract contract address from json interface without running
 // `npm run eject` and removing `ModuleScopePlugin` from webpack config
@@ -37,7 +38,7 @@ class App extends Component {
 
   async initializeContract() {
     const web3 = new Web3(Web3.givenProvider || new Web3.providers.WebsocketProvider('ws://localhost:8545'));
-    const contract = new web3.eth.Contract(abi, ADDRESS);
+    const contract = new web3.eth.Contract(abi, ADDRESS, { gas: GAS_LIMIT });
     // not sure, if await really required
     // this.setState({ web3: await web3, contract: await contract });
     this.setState({ web3, contract });
@@ -78,7 +79,7 @@ class App extends Component {
 
   async handleGetBetSize() {
     const { BET_SIZE: getBetSize } = this.state.contract.methods;
-    this.setState({ betSize: await getBetSize().call() });
+    this.setState({ betSize: await getBetSize().call({ gas: GAS_LIMIT }) });
   }
 
   async handleGetAccounts() {
@@ -89,12 +90,12 @@ class App extends Component {
 
   async handleUpdateBoard() {
     const { gameId, contract: { methods: { getBoard } } } = this.state;
-    this.setState({ board: await getBoard(gameId).call() });
+    this.setState({ board: await getBoard(gameId).call({ gas: GAS_LIMIT }) });
   }
 
   handleCreateGame() {
     const { players, betSize, contract: { methods: { createGame } } } = this.state;
-    createGame().send({ from: players[0], value: betSize });
+    createGame().send({ from: players[0], value: betSize, gas: GAS_LIMIT });
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
@@ -104,7 +105,7 @@ class App extends Component {
 
   handleJoinGame() {
     const { gameId, players, betSize, contract: { methods: { joinGame } } } = this.state;
-    joinGame(gameId).send({ from: players[1], value: betSize });
+    joinGame(gameId).send({ from: players[1], value: betSize, gas: GAS_LIMIT });
     this.handleGetBalances();
   }
 
@@ -116,8 +117,7 @@ class App extends Component {
   handlePlaceMark(column, row) {
     const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
     if (board[column][row] === NO_ADDRESS) {
-      // transaction requires more gas than default value of 90000 wei
-      placeMark(gameId, column, row).send({ from: activePlayer, gas: 300000 });
+      placeMark(gameId, column, row).send({ from: activePlayer, gas: GAS_LIMIT });
     }
   }
 
@@ -151,6 +151,7 @@ class App extends Component {
       <div className="App">
         <Board
           board={board}
+          activePlayer={activePlayer}
           players={players}
           noAddress={NO_ADDRESS}
           onPlaceMark={(column, row) => this.handlePlaceMark(column, row)}
