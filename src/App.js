@@ -142,8 +142,8 @@ class App extends Component {
     const balance1 = getBalance(player1);
     const balance2 = getBalance(player2);
     this.setState({
-      balancePlayer1: fromWei(await balance1),
-      balancePlayer2: fromWei(await balance2)
+      balancePlayer1: fromWei(await balance1, 'ether'),
+      balancePlayer2: fromWei(await balance2, 'ether')
     });
   }
 
@@ -166,9 +166,15 @@ class App extends Component {
     }
   }
 
+  handleFromWei(amount) {
+    const { web3: { utils: { fromWei } } } = this.state;
+    return fromWei(amount, 'ether');
+  }
+
   render() {
     const {
       board,
+      betSize,
       player1,
       player2,
       activePlayer,
@@ -195,12 +201,14 @@ class App extends Component {
           onPlaceMark={(column, row) => this.handlePlaceMark(column, row)}
         />
         <Info
+          betSize={betSize}
           player1={player1}
           player2={player2}
           activePlayer={activePlayer}
           balancePlayer1={balancePlayer1}
           balancePlayer2={balancePlayer2}
           noAddress={NO_ADDRESS}
+          onFromWei={(amount) => this.handleFromWei(amount)}
         />
         <Snackbar
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
