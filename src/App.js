@@ -94,7 +94,7 @@ class App extends Component {
 
   handleCreateGame() {
     const { players, betSize, contract: { methods: { createGame } } } = this.state;
-    createGame().send({ from: players[0] , value: betSize });
+    createGame().send({ from: players[0], value: betSize });
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
