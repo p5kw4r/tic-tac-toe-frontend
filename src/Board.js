@@ -1,7 +1,7 @@
 import React from 'react';
 import Cell from './Cell';
 
-const Board = ({ board, players, noAddress, onPlaceMark }) => (
+const Board = ({ board, players, noAddress: NO_ADDRESS, onPlaceMark }) => (
   <div className="Board">
     {board.map((column, i) => (
       column.map((address, j) => (
@@ -9,7 +9,7 @@ const Board = ({ board, players, noAddress, onPlaceMark }) => (
           key={j}
           address={address}
           players={players}
-          noAddress={noAddress}
+          noAddress={NO_ADDRESS}
           onPlaceMark={() => onPlaceMark(i, j)}
         />
       ))

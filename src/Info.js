@@ -1,8 +1,8 @@
 import React from 'react';
 import './Info.css';
 
-const Info = ({ betSize, players, activePlayer, balances, noAddress, onFromWei }) => {
-  if (activePlayer === noAddress) {
+const Info = ({ betSize, players, activePlayer, balances, noAddress: NO_ADDRESS, onFromWei }) => {
+  if (activePlayer === NO_ADDRESS) {
     return <div className="Info">Loading, please wait...</div>;
   }
 
