@@ -96,7 +96,6 @@ class App extends Component {
 
   async handleGetAccounts() {
     const { getAccounts } = this.state.web3.eth;
-
     const accounts = await getAccounts();
     this.setState({
       player1: accounts[0],
