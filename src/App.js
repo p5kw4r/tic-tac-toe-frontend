@@ -41,7 +41,10 @@ class App extends Component {
     const contract = new web3.eth.Contract(abi, ADDRESS, { gas: GAS_LIMIT });
     // not sure, if await really required
     // this.setState({ web3: await web3, contract: await contract });
-    this.setState({ web3, contract });
+    this.setState({
+      web3,
+      contract
+    });
   }
 
   subscribeToEvents() {
@@ -116,7 +119,9 @@ class App extends Component {
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
-    this.setState({ gameId });
+    this.setState({
+      gameId
+    });
     this.handleJoinGame();
   }
 
