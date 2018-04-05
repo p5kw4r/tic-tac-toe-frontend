@@ -138,18 +138,17 @@ class App extends Component {
   }
 
   async handleGetBalances() {
-    const { player1, player2, web3: { utils: { fromWei }, eth: { getBalance } } } = this.state;
+    const { player1, player2, web3: { eth: { getBalance } } } = this.state;
     const balance1 = getBalance(player1);
     const balance2 = getBalance(player2);
     this.setState({
-      balance1: fromWei(await balance1, 'ether'),
-      balance2: fromWei(await balance2, 'ether')
+      balance1: this.handleFromWei(await balance1),
+      balance2: this.handleFromWei(await balance2)
     });
   }
 
   handlePayoutSuccess({ returnValues: { recipient, amountInWei }}) {
-    const { web3: { utils: { fromWei } } } = this.state;
-    const amount = fromWei(amountInWei, 'ether');
+    const amount = this.handleFromWei(amountInWei);
     const snackMessage = `Successfully transferred ${amount} ether to ${recipient}.`;
     this.setState({ snackMessage, snackOpen: true });
     this.handleGetBalances();
