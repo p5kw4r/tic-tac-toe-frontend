@@ -86,9 +86,7 @@ class App extends Component {
   async handleGetBetSize() {
     const { BET_SIZE: getBetSize } = this.state.contract.methods;
     this.setState({
-      betSize: await getBetSize().call({
-        gas: GAS_LIMIT
-      })
+      betSize: await getBetSize().call()
     });
   }
 
@@ -103,9 +101,7 @@ class App extends Component {
   async handleUpdateBoard() {
     const { gameId, contract: { methods: { getBoard } } } = this.state;
     this.setState({
-      board: await getBoard(gameId).call({
-        gas: GAS_LIMIT
-      })
+      board: await getBoard(gameId).call()
     });
   }
 
@@ -113,8 +109,7 @@ class App extends Component {
     const { players, betSize, contract: { methods: { createGame } } } = this.state;
     createGame().send({
       from: players[0],
-      value: betSize,
-      gas: GAS_LIMIT
+      value: betSize
     });
   }
 
@@ -129,8 +124,7 @@ class App extends Component {
     const { gameId, players, betSize, contract: { methods: { joinGame } } } = this.state;
     joinGame(gameId).send({
       from: players[1],
-      value: betSize,
-      gas: GAS_LIMIT
+      value: betSize
     });
     this.handleGetBalances();
   }
@@ -146,8 +140,7 @@ class App extends Component {
     const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
     if (board[column][row] === NO_ADDRESS) {
       placeMark(gameId, column, row).send({
-        from: activePlayer,
-        gas: GAS_LIMIT
+        from: activePlayer
       });
     }
   }
