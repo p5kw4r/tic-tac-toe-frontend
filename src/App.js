@@ -25,7 +25,7 @@ class App extends Component {
       players: [],
       balances: [],
       betSize: 0,
-      active: 0
+      activeGame: 0
     };
   }
 
@@ -146,7 +146,7 @@ class App extends Component {
     });
     this.props.history.push(`/${gameId}`);
     this.setState({
-      active: gameId
+      activeGame: gameId
     });
     this.handleGetBalances();
   }
@@ -215,17 +215,17 @@ class App extends Component {
   handleNavigateTo({ currentTarget: { value: gameId } }) {
     this.props.history.push(`/${gameId}`);
     this.setState({
-      active: gameId
+      activeGame: gameId
     });
   }
 
   render() {
-    const { active, games, players } = this.state;
+    const { activeGame, games, players } = this.state;
     const gameIds = Object.keys(games);
     return (
       <div className="App">
         <Controls
-          active={active}
+          activeGame={activeGame}
           gameIds={gameIds}
           games={games}
           onNavigateTo={(e) => this.handleNavigateTo(e)}

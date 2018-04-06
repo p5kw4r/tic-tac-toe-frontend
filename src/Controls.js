@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Controls = ({ active, gameIds, games, onNavigateTo, onCreateGame }) => (
+const Controls = ({ active: activeGame, gameIds, games, onNavigateTo, onCreateGame }) => (
   <div className="Controls">
-    <select value={active} onChange={(e) => onNavigateTo(e)}>
+    <select value={activeGame} onChange={(e) => onNavigateTo(e)}>
       {gameIds.map((gameId) => (
         games[gameId].active && (
           <option key={gameId} value={gameId}>
