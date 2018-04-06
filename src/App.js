@@ -36,13 +36,11 @@ class App extends Component {
     this.createGame();
   }
 
-  subscribeToEvents(contract) {
-    const { events: { allEvents } } = contract;
+  subscribeToEvents({ events: { allEvents } }) {
     allEvents({}, (error, event) => this.handleEvent(event));
   }
 
-  handleEvent(event) {
-    const { event: name, returnValues } = event;
+  handleEvent({ event: name, returnValues }) {
     switch (name) {
       case 'GameCreated':
         this.handleGameCreated(returnValues);
@@ -125,13 +123,11 @@ class App extends Component {
     }));
   }
 
-  async joinGame(contract, account) {
-    const { methods: { joinGame } } = contract;
+  async joinGame({ methods: { joinGame } }, account) {
     await joinGame().send({ from: account, value: BET_SIZE });
   }
 
-  async getBoard(contract) {
-    const { methods: { getBoard } } = contract;
+  async getBoard({ methods: { getBoard } }) {
     return await getBoard().call();
   }
 
