@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { Route, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
 import { abi, networks } from './TicTacToe.json';
+import Controls from './Controls';
 import Board from './Board';
-import Info from './Info';
 import './App.css';
 
 const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -20,12 +21,11 @@ class App extends Component {
     this.state = {
       web3: {},
       contract: {},
-      board: [],
-      activePlayer: NO_ADDRESS,
+      games: {},
       players: [],
       balances: [],
-      gameId: 0,
-      betSize: 0
+      betSize: 0,
+      active: 0
     };
   }
 
@@ -63,10 +63,10 @@ class App extends Component {
         break;
       case 'GameOverWithWin':
         const { winner } = event.returnValues;
-        this.handleGameOver(`Game over, winner is ${winner}.`);
+        this.handleGameOver(event, `Game over, winner is ${winner}.`);
         break;
       case 'GameOverWithDraw':
-        this.handleGameOver('Game over, there is no winner.');
+        this.handleGameOver(event, 'Game over, there is no winner.');
         break;
       case 'PayoutSuccess':
         this.handlePayoutSuccess(event);
@@ -101,11 +101,19 @@ class App extends Component {
     });
   }
 
-  async handleUpdateBoard() {
-    const { gameId, contract: { methods: { getBoard } } } = this.state;
-    this.setState({
-      board: await getBoard(gameId).call()
-    });
+  async handleUpdateBoard(gameId) {
+    const { contract: { methods: { getBoard } } } = this.state;
+    // fetching board inside setState callback doesn't seem to work
+    const board = await getBoard(gameId).call();
+    this.setState((prevState) => ({
+      games: {
+        ...prevState.games,
+        [gameId]: {
+          ...prevState.games[gameId],
+          board
+        }
+      }
+    }));
   }
 
   handleCreateGame() {
@@ -117,40 +125,67 @@ class App extends Component {
   }
 
   handleGameCreated({ returnValues: { gameId } }) {
-    this.setState({
-      gameId
-    });
-    this.handleJoinGame();
+    this.setState((prevState) => ({
+      games: {
+        ...prevState.games,
+        [gameId]: {
+          active: true,
+          activePlayer: NO_ADDRESS,
+          board: []
+        }
+      }
+    }));
+    this.handleJoinGame(gameId);
   }
 
-  handleJoinGame() {
-    const { gameId, players, betSize, contract: { methods: { joinGame } } } = this.state;
-    joinGame(gameId).send({
+  async handleJoinGame(gameId) {
+    const { players, betSize, contract: { methods: { joinGame } } } = this.state;
+    await joinGame(gameId).send({
       from: players[1],
       value: betSize
+    });
+    this.props.history.push(`/${gameId}`);
+    this.setState({
+      active: gameId
     });
     this.handleGetBalances();
   }
 
-  handleNextPlayer({ returnValues: { player } }) {
-    this.setState({
-      activePlayer: player
-    });
-    this.handleUpdateBoard();
+  handleNextPlayer({ returnValues: { gameId, player } }) {
+    this.setState((prevState) => ({
+      games: {
+        ...prevState.games,
+        [gameId]: {
+          ...prevState.games[gameId],
+          activePlayer: player
+        }
+      }
+    }));
+    this.handleUpdateBoard(gameId);
   }
 
-  handlePlaceMark(column, row) {
-    const { board, gameId, activePlayer, contract: { methods: { placeMark } } } = this.state;
-    if (board[column][row] === NO_ADDRESS) {
-      placeMark(gameId, column, row).send({
+  handlePlaceMark(gameId, col, row) {
+    const { games, contract: { methods: { placeMark } } } = this.state;
+    const { board, activePlayer } = games[gameId];
+    if (board[col][row] === NO_ADDRESS) {
+      placeMark(gameId, col, row).send({
         from: activePlayer
       });
     }
   }
 
-  async handleGameOver(message) {
-    await this.handleUpdateBoard();
+  async handleGameOver({ returnValues: { gameId } }, message) {
+    await this.handleUpdateBoard(gameId);
     alert(message);
+    this.setState((prevState) => ({
+      games: {
+        ...prevState.games,
+        [gameId]: {
+          ...prevState.games[gameId],
+          active: false
+        }
+      }
+    }));
     this.handleCreateGame();
   }
 
@@ -177,28 +212,42 @@ class App extends Component {
     return fromWei(amount, 'ether');
   }
 
+  handleNavigateTo({ currentTarget: { value: gameId } }) {
+    this.props.history.push(`/${gameId}`);
+    this.setState({
+      active: gameId
+    });
+  }
+
   render() {
-    const { board, betSize, players, activePlayer, balances } = this.state;
+    const { active, games, players } = this.state;
+    const gameIds = Object.keys(games);
     return (
       <div className="App">
-        <Board
-          board={board}
-          activePlayer={activePlayer}
-          players={players}
-          noAddress={NO_ADDRESS}
-          onPlaceMark={(column, row) => this.handlePlaceMark(column, row)}
+        <Controls
+          active={active}
+          gameIds={gameIds}
+          games={games}
+          onNavigateTo={(e) => this.handleNavigateTo(e)}
+          onCreateGame={() => this.handleCreateGame()}
         />
-        <Info
-          betSize={betSize}
-          players={players}
-          activePlayer={activePlayer}
-          balances={balances}
-          noAddress={NO_ADDRESS}
-          onFromWei={(amount) => this.handleFromWei(amount)}
-        />
+        {gameIds.map((gameId) => (
+          <Route key={gameId} exact path={`/${gameId}`} render={(props) => (
+            games[gameId].active && (
+              <Board
+                key={gameId}
+                game={games[gameId]}
+                players={players}
+                noAddress={NO_ADDRESS}
+                onPlaceMark={(col, row) => this.handlePlaceMark(gameId, col, row)}
+                {...props}
+              />
+            )
+          )} />
+        ))}
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

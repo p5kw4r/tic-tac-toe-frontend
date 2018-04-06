@@ -2,7 +2,7 @@ import React from 'react';
 import Cell from './Cell';
 import logo from './logo.svg';
 
-const Board = ({ board, activePlayer, players, noAddress: NO_ADDRESS, onPlaceMark }) => {
+const Board = ({ game: { board, activePlayer }, players, noAddress: NO_ADDRESS, onPlaceMark }) => {
   if (activePlayer === NO_ADDRESS) {
     return <img src={logo} alt="logo" width={800} />;
   }

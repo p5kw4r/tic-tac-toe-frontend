@@ -13,6 +13,14 @@ body,
   align-items: center;
 }
 
+.Controls {
+  padding-bottom: 20px;
+}
+
+.Controls select {
+  margin-right: 10px;
+}
+
 .Board {
   width: 600px;
   height: 600px;
