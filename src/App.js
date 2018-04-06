@@ -30,7 +30,10 @@ class App extends Component {
   async componentDidMount() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
     const factory = new web3.eth.Contract(factoryAbi, ADDRESS, { gas: GAS_LIMIT });
-    this.setState({ web3, factory });
+    this.setState({
+      web3,
+      factory
+    });
     this.subscribeToEvents(factory);
     await this.getAccounts(web3);
     this.createGame();
@@ -62,12 +65,16 @@ class App extends Component {
   }
 
   async getAccounts({ eth: { getAccounts } }) {
-    this.setState({ accounts: await getAccounts() });
+    this.setState({
+      accounts: await getAccounts()
+    });
   }
 
   createGame() {
     const { accounts, factory: { methods: { createGame } } } = this.state;
-    createGame().send({ from: accounts[0] });
+    createGame().send({
+      from: accounts[0]
+    });
   }
 
   async handleGameCreated({ game: address }) {
@@ -102,7 +109,9 @@ class App extends Component {
 
   async joinGame(contract, account) {
     const { methods: { joinGame } } = contract;
-    await joinGame().send({ from: account, value: BET_SIZE });
+    await joinGame().send({
+      from: account, value: BET_SIZE
+    });
   }
 
   async handleNextPlayer({ game: address, player }) {
@@ -130,7 +139,9 @@ class App extends Component {
     const { methods: { placeMark } } = contracts[address];
     const { board, activePlayer } = games[address];
     if (board[col][row] === NO_ADDRESS) {
-      placeMark(col, row).send({ from: activePlayer });
+      placeMark(col, row).send({
+        from: activePlayer
+      });
     }
   }
 
