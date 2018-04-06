@@ -94,7 +94,10 @@ class App extends Component {
     const { getAccounts } = this.state.web3.eth;
     const accounts = await getAccounts();
     this.setState({
-      players: [accounts[0], accounts[1]]
+      players: [
+        accounts[0],
+        accounts[1]
+      ]
     });
   }
 
@@ -156,7 +159,10 @@ class App extends Component {
     const balance1 = getBalance(players[0]);
     const balance2 = getBalance(players[1]);
     this.setState({
-      balances: [await balance1, await balance2]
+      balances: [
+        await balance1,
+        await balance2
+      ]
     });
   }
 
