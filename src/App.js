@@ -30,10 +30,7 @@ class App extends Component {
   async componentDidMount() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
     const factory = new web3.eth.Contract(factoryAbi, ADDRESS, { gas: GAS_LIMIT });
-    this.setState({
-      web3,
-      factory
-    });
+    this.setState({ web3, factory });
     this.subscribeToEvents(factory);
     await this.getAccounts(web3);
     this.createGame();
@@ -64,30 +61,46 @@ class App extends Component {
     }
   }
 
-  async getAccounts({ eth: { getAccounts } }) {
-    this.setState({
-      accounts: await getAccounts()
-    });
-  }
-
-  createGame() {
-    const { accounts, factory: { methods: { createGame } } } = this.state;
-    createGame().send({
-      from: accounts[0]
-    });
-  }
-
   async handleGameCreated({ game: address }) {
     const { web3: { eth: { Contract } } } = this.state;
     const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     this.setState((prevState) => ({
-      contracts: {
-        ...prevState.contracts,
-        [address]: contract
-      }
+      contracts: { ...prevState.contracts, [address]: contract }
     }));
     this.launchGame(address);
+  }
+
+  async handleNextPlayer({ game: address, player }) {
+    const { contracts } = this.state;
+    const board = await this.getBoard(contracts[address]);
+    this.setState((prevState) => ({
+      games: {
+        ...prevState.games,
+        [address]: { ...prevState.games[address], activePlayer: player, board }
+      }
+    }));
+  }
+
+  async handleGameOver({ game: address }, message) {
+    const { contracts } = this.state;
+    const board = await this.getBoard(contracts[address]);
+    this.setState((prevState) => ({
+      games: {
+        ...prevState.games,
+        [address]: { ...prevState.games[address], active: false, board }
+      }
+    }));
+    alert(message);
+  }
+
+  async getAccounts({ eth: { getAccounts } }) {
+    this.setState({ accounts: await getAccounts() });
+  }
+
+  createGame() {
+    const { accounts, factory: { methods: { createGame } } } = this.state;
+    createGame().send({ from: accounts[0] });
   }
 
   async launchGame(address) {
@@ -98,35 +111,13 @@ class App extends Component {
       this.joinGame(contract, accounts[1])
     ]);
     this.setState((prevState) => ({
-      games: {
-        ...prevState.games,
-        [address]: {
-          active: true
-        }
-      }
+      games: { ...prevState.games, [address]: { active: true } }
     }));
   }
 
   async joinGame(contract, account) {
     const { methods: { joinGame } } = contract;
-    await joinGame().send({
-      from: account, value: BET_SIZE
-    });
-  }
-
-  async handleNextPlayer({ game: address, player }) {
-    const { contracts } = this.state;
-    const board = await this.getBoard(contracts[address]);
-    this.setState((prevState) => ({
-      games: {
-        ...prevState.games,
-        [address]: {
-          ...prevState.games[address],
-          activePlayer: player,
-          board
-        }
-      }
-    }));
+    await joinGame().send({ from: account, value: BET_SIZE });
   }
 
   async getBoard(contract) {
@@ -139,26 +130,8 @@ class App extends Component {
     const { methods: { placeMark } } = contracts[address];
     const { board, activePlayer } = games[address];
     if (board[col][row] === NO_ADDRESS) {
-      placeMark(col, row).send({
-        from: activePlayer
-      });
+      placeMark(col, row).send({ from: activePlayer });
     }
-  }
-
-  async handleGameOver({ game: address }, message) {
-    const { contracts } = this.state;
-    const board = await this.getBoard(contracts[address]);
-    this.setState((prevState) => ({
-      games: {
-        ...prevState.games,
-        [address]: {
-          ...prevState.games[address],
-          active: false,
-          board
-        }
-      }
-    }));
-    alert(message);
   }
 
   render() {
