@@ -57,6 +57,9 @@ class App extends Component {
       case 'GameOverWithDraw':
         this.handleGameOver(returnValues, 'Game is over! There is no winner.');
         break;
+      case 'PayoutSuccess':
+        this.handlePayoutSuccess(returnValues);
+        break;
       default:
         break;
     }
@@ -93,6 +96,12 @@ class App extends Component {
       }
     }));
     alert(message);
+  }
+
+  handlePayoutSuccess({ amountInWei, recipient }) {
+    const { web3: { utils: { fromWei } } } = this.state;
+    const amount = fromWei(amountInWei);
+    console.log(`Succesfully transferred ${amount} ether to ${recipient}.`);
   }
 
   async getAccounts({ eth: { getAccounts } }) {
