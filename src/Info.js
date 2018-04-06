@@ -1,5 +1,4 @@
 import React from 'react';
-import './Info.css';
 
 const Info = ({ betSize, players, activePlayer, balances, noAddress: NO_ADDRESS, onFromWei }) => (
   activePlayer !== NO_ADDRESS && (

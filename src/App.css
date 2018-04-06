@@ -21,6 +21,15 @@ body,
   margin-right: 10px;
 }
 
+.Info {
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
 .Board {
   width: 600px;
   height: 600px;
