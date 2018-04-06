@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Controls = ({ active: activeGame, gameIds, games, onNavigateTo, onCreateGame }) => (
+const Controls = ({ activeGame, gameIds, games, onNavigateTo, onCreateGame }) => (
   <div className="Controls">
     <select value={activeGame} onChange={(e) => onNavigateTo(e)}>
       {gameIds.map((gameId) => (
