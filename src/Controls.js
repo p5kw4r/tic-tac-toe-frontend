@@ -1,12 +1,12 @@
 import React from 'react';
 
-const Controls = ({ activeGame, gameIds, games, onNavigateTo, onCreateGame }) => (
+const Controls = ({ activeGame, addresses, games, onNavigateTo, onCreateGame }) => (
   <div className="Controls">
     <select value={activeGame} onChange={(e) => onNavigateTo(e)}>
-      {gameIds.map((gameId) => (
-        games[gameId].active && (
-          <option key={gameId} value={gameId}>
-            {`Game ${gameId}`}
+      {addresses.map((address) => (
+        games[address].active && (
+          <option key={address} value={address}>
+            {address}
           </option>
         )
       ))}

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
-import { abi, networks } from './TicTacToe.json';
-import Controls from './Controls';
-import Board from './Board';
+import { abi as factoryAbi, networks } from './TicTacToeFactory.json';
+import { abi as gameAbi } from './TicTacToe.json';
+import Game from './Game';
+import Logo from './Logo';
 import './App.css';
 
 const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
-const GAS_LIMIT = 300000;
+const BET_SIZE = 100000000000000000;
+const GAS_LIMIT = 3000000;
 
 // workaround to extract contract address from json interface without running
 // `npm run eject` and removing `ModuleScopePlugin` from webpack config
@@ -20,231 +22,161 @@ class App extends Component {
     super(props);
     this.state = {
       web3: {},
-      contract: {},
+      factory: {},
+      contracts: {},
       games: {},
-      players: [],
-      balances: [],
-      betSize: 0,
-      activeGame: 0
+      accounts: [],
+      activeGame: NO_ADDRESS,
     };
   }
 
   async componentDidMount() {
-    await this.initializeContract();
-    this.subscribeToEvents();
-    await this.initializeGame();
-    this.handleCreateGame();
-  }
-
-  async initializeContract() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
-    const contract = new web3.eth.Contract(abi, ADDRESS, { gas: GAS_LIMIT });
-    // not sure, if await really required
-    // this.setState({ web3: await web3, contract: await contract });
-    this.setState({
-      web3,
-      contract
-    });
+    const factory = new web3.eth.Contract(factoryAbi, ADDRESS, { gas: GAS_LIMIT });
+    this.setState({ web3, factory });
+    this.subscribeToEvents(factory);
+    await this.getAccounts(web3);
+    this.createGame();
   }
 
-  subscribeToEvents() {
-    const { allEvents } = this.state.contract.events;
-    allEvents({}, (error, event) => this.handleEvent(error, event));
+  subscribeToEvents({ events: { allEvents } }) {
+    allEvents({}, (error, event) => this.handleEvent(event));
   }
 
-  handleEvent(error, event) {
-    const { event: name } = event;
+  handleEvent({ event: name, returnValues: values }) {
     switch (name) {
       case 'GameCreated':
-        this.handleGameCreated(event);
+        this.handleGameCreated(values);
+        break;
+      case 'GameLaunched':
+        this.handleGameLaunched(values);
         break;
       case 'NextPlayer':
-        this.handleNextPlayer(event);
+        this.handleNextPlayer(values);
         break;
       case 'GameOverWithWin':
-        const { winner } = event.returnValues;
-        this.handleGameOver(event, `Game over, winner is ${winner}.`);
+        const { winner } = values;
+        this.handleGameOver(values, `Game is over! Winner is ${winner}.`);
         break;
       case 'GameOverWithDraw':
-        this.handleGameOver(event, 'Game over, there is no winner.');
+        this.handleGameOver(values, 'Game is over! There is no winner.');
         break;
       case 'PayoutSuccess':
-        this.handlePayoutSuccess(event);
+        this.handlePayoutSuccess(values);
         break;
       default:
         break;
     }
   }
 
-  async initializeGame() {
-    await Promise.all([
-      this.handleGetBetSize(),
-      this.handleGetAccounts()
-    ]);
+  async handleGameCreated({ game: address }) {
+    const { web3: { eth: { Contract } } } = this.state;
+    const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
+    this.subscribeToEvents(contract);
+    this.setState((prevState) => ({
+      contracts: { ...prevState.contracts, [address]: contract }
+    }));
+    this.launchGame(address);
   }
 
-  async handleGetBetSize() {
-    const { BET_SIZE: getBetSize } = this.state.contract.methods;
-    this.setState({
-      betSize: await getBetSize().call()
-    });
+  handleGameLaunched({ game: address }) {
+    this.setState((prevState) => ({
+      games: { ...prevState.games, [address]: { active: true } },
+      activeGame: address
+    }));
+    this.props.history.push(`/${address}`);
   }
 
-  async handleGetAccounts() {
-    const { getAccounts } = this.state.web3.eth;
-    const accounts = await getAccounts();
-    this.setState({
-      players: [
-        accounts[0],
-        accounts[1]
-      ]
-    });
-  }
-
-  async handleUpdateBoard(gameId) {
-    const { contract: { methods: { getBoard } } } = this.state;
-    // fetching board inside setState callback doesn't seem to work
-    const board = await getBoard(gameId).call();
+  async handleNextPlayer({ game: address, player }) {
+    const { contracts } = this.state;
+    const board = await this.getBoard(contracts[address]);
     this.setState((prevState) => ({
       games: {
         ...prevState.games,
-        [gameId]: {
-          ...prevState.games[gameId],
-          board
-        }
+        [address]: { ...prevState.games[address], activePlayer: player, board }
       }
     }));
   }
 
-  handleCreateGame() {
-    const { players, betSize, contract: { methods: { createGame } } } = this.state;
-    createGame().send({
-      from: players[0],
-      value: betSize
-    });
-  }
-
-  handleGameCreated({ returnValues: { gameId } }) {
+  async handleGameOver({ game: address }, message) {
+    const { contracts } = this.state;
+    const board = await this.getBoard(contracts[address]);
     this.setState((prevState) => ({
       games: {
         ...prevState.games,
-        [gameId]: {
-          active: true,
-          activePlayer: NO_ADDRESS,
-          board: []
-        }
+        [address]: { ...prevState.games[address], active: false, board }
       }
     }));
-    this.handleJoinGame(gameId);
+    alert(message);
+    this.createGame();
   }
 
-  async handleJoinGame(gameId) {
-    const { players, betSize, contract: { methods: { joinGame } } } = this.state;
-    await joinGame(gameId).send({
-      from: players[1],
-      value: betSize
-    });
-    this.props.history.push(`/${gameId}`);
-    this.setState({
-      activeGame: gameId
-    });
-    this.handleGetBalances();
+  handlePayoutSuccess({ amountInWei, recipient }) {
+    const { web3: { utils: { fromWei } } } = this.state;
+    const amount = fromWei(amountInWei);
+    console.log(`Succesfully transferred ${amount} ether to ${recipient}.`);
   }
 
-  handleNextPlayer({ returnValues: { gameId, player } }) {
-    this.setState((prevState) => ({
-      games: {
-        ...prevState.games,
-        [gameId]: {
-          ...prevState.games[gameId],
-          activePlayer: player
-        }
-      }
-    }));
-    this.handleUpdateBoard(gameId);
+  async getAccounts({ eth: { getAccounts } }) {
+    this.setState({ accounts: await getAccounts() });
   }
 
-  handlePlaceMark(gameId, col, row) {
-    const { games, contract: { methods: { placeMark } } } = this.state;
-    const { board, activePlayer } = games[gameId];
-    if (board[col][row] === NO_ADDRESS) {
-      placeMark(gameId, col, row).send({
-        from: activePlayer
-      });
+  createGame() {
+    const { accounts, factory: { methods: { createGame } } } = this.state;
+    createGame().send({ from: accounts[0] });
+  }
+
+  launchGame(address) {
+    const { accounts, contracts } = this.state;
+    const contract = contracts[address];
+    this.joinGame(contract, accounts[0]);
+    this.joinGame(contract, accounts[1]);
+  }
+
+  joinGame({ methods: { joinGame } }, account) {
+    joinGame().send({ from: account, value: BET_SIZE });
+  }
+
+  async getBoard({ methods: { getBoard } }) {
+    return await getBoard().call();
+  }
+
+  placeMark(address, row, col) {
+    const { contracts, games } = this.state;
+    const { methods: { placeMark } } = contracts[address];
+    const { board, activePlayer } = games[address];
+    if (board[row][col] === NO_ADDRESS) {
+      placeMark(row, col).send({ from: activePlayer });
     }
   }
 
-  async handleGameOver({ returnValues: { gameId } }, message) {
-    await this.handleUpdateBoard(gameId);
-    alert(message);
-    this.setState((prevState) => ({
-      games: {
-        ...prevState.games,
-        [gameId]: {
-          ...prevState.games[gameId],
-          active: false
-        }
-      }
-    }));
-    this.handleCreateGame();
-  }
-
-  async handleGetBalances() {
-    const { players, web3: { eth: { getBalance } } } = this.state;
-    const balance1 = getBalance(players[0]);
-    const balance2 = getBalance(players[1]);
-    this.setState({
-      balances: [
-        await balance1,
-        await balance2
-      ]
-    });
-  }
-
-  handlePayoutSuccess({ returnValues: { recipient, amountInWei } }) {
-    const amount = this.handleFromWei(amountInWei);
-    console.log(`Successfully transferred ${amount} ether to ${recipient}.`);
-    this.handleGetBalances();
-  }
-
-  handleFromWei(amount) {
-    const { web3: { utils: { fromWei } } } = this.state;
-    return fromWei(amount, 'ether');
-  }
-
-  handleNavigateTo({ currentTarget: { value: gameId } }) {
-    this.props.history.push(`/${gameId}`);
-    this.setState({
-      activeGame: gameId
-    });
+  navigateTo({ currentTarget: { value: address } }) {
+    this.setState({ activeGame: address });
+    this.props.history.push(`/${address}`);
   }
 
   render() {
-    const { activeGame, games, players } = this.state;
-    const gameIds = Object.keys(games);
+    const { accounts, games, activeGame } = this.state;
     return (
       <div className="App">
-        <Controls
-          activeGame={activeGame}
-          gameIds={gameIds}
-          games={games}
-          onNavigateTo={(e) => this.handleNavigateTo(e)}
-          onCreateGame={() => this.handleCreateGame()}
-        />
-        {gameIds.map((gameId) => (
-          <Route key={gameId} exact path={`/${gameId}`} render={(props) => (
-            games[gameId].active && (
-              <Board
-                key={gameId}
-                game={games[gameId]}
-                players={players}
+        <Switch>
+          {Object.keys(games).map((address) => (
+            <Route key={address} exact path={`/${address}`} render={(props) => (
+              <Game
+                activeGame={activeGame}
+                games={games}
+                game={games[address]}
+                accounts={accounts}
                 noAddress={NO_ADDRESS}
-                onPlaceMark={(col, row) => this.handlePlaceMark(gameId, col, row)}
+                onNavigateTo={(e) => this.navigateTo(e)}
+                onCreateGame={() => this.createGame()}
+                onPlaceMark={(row, col) => this.placeMark(address, row, col)}
                 {...props}
               />
-            )
-          )} />
-        ))}
+            )} />
+          ))}
+          <Route component={Logo} />
+        </Switch>
       </div>
     );
   }

@@ -1,27 +1,24 @@
 import React from 'react';
 import Cell from './Cell';
-import logo from './logo.svg';
 
-const Board = ({ game: { board, activePlayer }, players, noAddress: NO_ADDRESS, onPlaceMark }) => {
-  if (activePlayer === NO_ADDRESS) {
-    return <img src={logo} alt="logo" width={800} />;
-  }
-
-  return (
+const Board = ({ game: { board, activePlayer }, accounts, noAddress: NO_ADDRESS, onPlaceMark }) => (
+  board ? (
     <div className="Board">
-      {board.map((column, i) => (
-        column.map((address, j) => (
+      {board.map((cells, i) => (
+        cells.map((address, j) => (
           <Cell
             key={j}
             address={address}
-            players={players}
+            accounts={accounts}
             noAddress={NO_ADDRESS}
             onPlaceMark={() => onPlaceMark(i, j)}
           />
         ))
       ))}
     </div>
-  );
-};
+  ) : (
+    null
+  )
+);
 
 export default Board;

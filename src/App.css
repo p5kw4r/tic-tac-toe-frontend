@@ -13,6 +13,10 @@ body,
   align-items: center;
 }
 
+.Logo {
+  width: 900px;
+}
+
 .Controls {
   padding-bottom: 20px;
 }
@@ -22,12 +26,15 @@ body,
 }
 
 .Info {
-    padding-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    flex-wrap: wrap;
+  padding-top: 20px;
+}
+
+.Game {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .Board {
@@ -49,18 +56,13 @@ body,
   font-size: 5em;
 }
 
-.Cell:hover {
-  background-color: #a3be8c;
-}
-
 .Cell.valid:hover {
   cursor: pointer;
-  /*background-color: #a3be8c;*/
+  background-color: #a3be8c;
 }
 
 .Cell.invalid:hover {
   cursor: not-allowed;
-  /*background-color: #bf616a;*/
 }
 
 .noselect {
