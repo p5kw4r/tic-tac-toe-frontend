@@ -5,9 +5,7 @@ const Controls = ({ activeGame, addresses, games, onNavigateTo, onCreateGame }) 
     <select value={activeGame} onChange={(e) => onNavigateTo(e)}>
       {addresses.map((address) => (
         games[address].active && (
-          <option key={address} value={address}>
-            {address}
-          </option>
+          <option key={address} value={address}>{address}</option>
         )
       ))}
     </select>

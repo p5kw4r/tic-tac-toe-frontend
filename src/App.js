@@ -11,8 +11,9 @@ const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const BET_SIZE = 100000000000000000;
 const GAS_LIMIT = 3000000;
 
-// workaround to extract contract address from json interface without running
-// `npm run eject` and removing `ModuleScopePlugin` from webpack config
+// workaround to extract contract address from json interface (only needed
+// during development) once factory contract is deployed to production it will
+// have a fixed address
 const NETWORK_IDS = Object.keys(networks);
 const LAST_INDEX = NETWORK_IDS.length - 1;
 const ADDRESS = networks[NETWORK_IDS[LAST_INDEX]].address;
