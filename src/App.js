@@ -58,15 +58,15 @@ class App extends Component {
       case 'NextPlayer':
         this.handleNextPlayer(values);
         break;
-      case 'GameOverWithWin':
+      case 'GameOverWin':
         const { winner } = values;
         this.handleGameOver(values, `Game is over! Winner is ${winner}.`);
         break;
-      case 'GameOverWithDraw':
+      case 'GameOverDraw':
         this.handleGameOver(values, 'Game is over! There is no winner.');
         break;
-      case 'PayoutSuccess':
-        this.handlePayoutSuccess(values);
+      case 'Payout':
+        this.handlePayout(values);
         break;
       default:
         break;
@@ -132,7 +132,7 @@ class App extends Component {
     this.createGame();
   }
 
-  handlePayoutSuccess({ amountInWei, recipient }) {
+  handlePayout({ amountInWei, recipient }) {
     const { web3: { utils: { fromWei } } } = this.state;
     const amount = fromWei(amountInWei);
     console.log(`Succesfully transferred ${amount} ether to ${recipient}.`);
