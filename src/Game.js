@@ -1,6 +1,7 @@
 import React from 'react';
 import Controls from './Controls';
 import Board from './Board';
+import Info from './Info';
 
 const Game = ({
     activeGame,
@@ -28,6 +29,7 @@ const Game = ({
       onPlaceMark={(row, col) => onPlaceMark(row, col)}
       {...props}
     />
+    <Info activePlayer={game.activePlayer} />
   </div>
 );
 
