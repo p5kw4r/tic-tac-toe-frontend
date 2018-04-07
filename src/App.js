@@ -34,7 +34,10 @@ class App extends Component {
   async componentDidMount() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
     const factory = new web3.eth.Contract(factoryAbi, ADDRESS, { gas: GAS_LIMIT });
-    this.setState({ web3, factory });
+    this.setState({
+      web3,
+      factory
+    });
     this.subscribeToEvents(factory);
     await this.getAccounts(web3);
     this.createGame();
@@ -75,14 +78,22 @@ class App extends Component {
     const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     this.setState((prevState) => ({
-      contracts: { ...prevState.contracts, [address]: contract }
+      contracts: {
+        ...prevState.contracts,
+        [address]: contract
+      }
     }));
     this.launchGame(address);
   }
 
   handleGameLaunched({ game: address }) {
     this.setState((prevState) => ({
-      games: { ...prevState.games, [address]: { active: true } },
+      games: {
+        ...prevState.games,
+        [address]: {
+          active: true
+        }
+      },
       activeGame: address
     }));
     this.props.history.push(`/${address}`);
@@ -94,7 +105,11 @@ class App extends Component {
     this.setState((prevState) => ({
       games: {
         ...prevState.games,
-        [address]: { ...prevState.games[address], activePlayer: player, board }
+        [address]: {
+          ...prevState.games[address],
+          activePlayer: player,
+          board
+        }
       }
     }));
   }
@@ -105,7 +120,11 @@ class App extends Component {
     this.setState((prevState) => ({
       games: {
         ...prevState.games,
-        [address]: { ...prevState.games[address], active: false, board }
+        [address]: {
+          ...prevState.games[address],
+          active: false,
+          board
+        }
       }
     }));
     alert(message);
@@ -119,12 +138,16 @@ class App extends Component {
   }
 
   async getAccounts({ eth: { getAccounts } }) {
-    this.setState({ accounts: await getAccounts() });
+    this.setState({
+      accounts: await getAccounts()
+    });
   }
 
   createGame() {
     const { accounts, factory: { methods: { createGame } } } = this.state;
-    createGame().send({ from: accounts[0] });
+    createGame().send({
+      from: accounts[0]
+    });
   }
 
   launchGame(address) {
@@ -135,7 +158,10 @@ class App extends Component {
   }
 
   joinGame({ methods: { joinGame } }, account) {
-    joinGame().send({ from: account, value: BET_SIZE });
+    joinGame().send({
+      from: account,
+      value: BET_SIZE
+    });
   }
 
   async getBoard({ methods: { getBoard } }) {
@@ -147,12 +173,16 @@ class App extends Component {
     const { methods: { placeMark } } = contracts[address];
     const { board, activePlayer } = games[address];
     if (board[row][col] === NO_ADDRESS) {
-      placeMark(row, col).send({ from: activePlayer });
+      placeMark(row, col).send({
+        from: activePlayer
+      });
     }
   }
 
   navigateTo({ currentTarget: { value: address } }) {
-    this.setState({ activeGame: address });
+    this.setState({
+      activeGame: address
+    });
     this.props.history.push(`/${address}`);
   }
 
