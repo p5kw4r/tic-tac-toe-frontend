@@ -48,6 +48,9 @@ class App extends Component {
       case 'GameCreated':
         this.handleGameCreated(values);
         break;
+      case 'GameLaunched':
+        this.handleGameLaunched(values);
+        break;
       case 'NextPlayer':
         this.handleNextPlayer(values);
         break;
@@ -74,6 +77,14 @@ class App extends Component {
       contracts: { ...prevState.contracts, [address]: contract }
     }));
     this.launchGame(address);
+  }
+
+  handleGameLaunched({ game: address }) {
+    this.setState((prevState) => ({
+      games: { ...prevState.games, [address]: { active: true } },
+      activeGame: address
+    }));
+    this.props.history.push(`/${address}`);
   }
 
   async handleNextPlayer({ game: address, player }) {
@@ -115,22 +126,15 @@ class App extends Component {
     createGame().send({ from: accounts[0] });
   }
 
-  async launchGame(address) {
+  launchGame(address) {
     const { accounts, contracts } = this.state;
     const contract = contracts[address];
-    await Promise.all([
-      this.joinGame(contract, accounts[0]),
-      this.joinGame(contract, accounts[1])
-    ]);
-    this.setState((prevState) => ({
-      games: { ...prevState.games, [address]: { active: true } },
-      activeGame: address
-    }));
-    this.props.history.push(`/${address}`);
+    this.joinGame(contract, accounts[0]);
+    this.joinGame(contract, accounts[1]);
   }
 
-  async joinGame({ methods: { joinGame } }, account) {
-    await joinGame().send({ from: account, value: BET_SIZE });
+  joinGame({ methods: { joinGame } }, account) {
+    joinGame().send({ from: account, value: BET_SIZE });
   }
 
   async getBoard({ methods: { getBoard } }) {
