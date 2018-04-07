@@ -52,8 +52,8 @@ class App extends Component {
       case 'GameCreated':
         this.handleGameCreated(values);
         break;
-      case 'GameLaunched':
-        this.handleGameLaunched(values);
+      case 'GameActive':
+        this.handleGameActive(values);
         break;
       case 'NextPlayer':
         this.handleNextPlayer(values);
@@ -74,7 +74,7 @@ class App extends Component {
   }
 
   async handleGameCreated({ game: address }) {
-    const { web3: { eth: { Contract } } } = this.state;
+    const { accounts, web3: { eth: { Contract } } } = this.state;
     const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     this.setState((prevState) => ({
@@ -83,10 +83,11 @@ class App extends Component {
         [address]: contract
       }
     }));
-    this.launchGame(address);
+    this.joinGame(contract, accounts[0]);
+    this.joinGame(contract, accounts[1]);
   }
 
-  handleGameLaunched({ game: address }) {
+  handleGameActive({ game: address }) {
     this.setState((prevState) => ({
       activeGame: address,
       games: {
@@ -149,13 +150,6 @@ class App extends Component {
     createGame().send({
       from: accounts[0]
     });
-  }
-
-  launchGame(address) {
-    const { accounts, contracts } = this.state;
-    const contract = contracts[address];
-    this.joinGame(contract, accounts[0]);
-    this.joinGame(contract, accounts[1]);
   }
 
   joinGame({ methods: { joinGame } }, account) {
