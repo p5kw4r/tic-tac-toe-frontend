@@ -43,23 +43,23 @@ class App extends Component {
     allEvents({}, (error, event) => this.handleEvent(event));
   }
 
-  handleEvent({ event: name, returnValues }) {
+  handleEvent({ event: name, returnValues: values }) {
     switch (name) {
       case 'GameCreated':
-        this.handleGameCreated(returnValues);
+        this.handleGameCreated(values);
         break;
       case 'NextPlayer':
-        this.handleNextPlayer(returnValues);
+        this.handleNextPlayer(values);
         break;
       case 'GameOverWithWin':
-        const { winner } = returnValues;
-        this.handleGameOver(returnValues, `Game is over! Winner is ${winner}.`);
+        const { winner } = values;
+        this.handleGameOver(values, `Game is over! Winner is ${winner}.`);
         break;
       case 'GameOverWithDraw':
-        this.handleGameOver(returnValues, 'Game is over! There is no winner.');
+        this.handleGameOver(values, 'Game is over! There is no winner.');
         break;
       case 'PayoutSuccess':
-        this.handlePayoutSuccess(returnValues);
+        this.handlePayoutSuccess(values);
         break;
       default:
         break;
