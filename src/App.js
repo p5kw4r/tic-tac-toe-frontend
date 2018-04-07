@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { Route, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
 import { abi as factoryAbi, networks } from './TicTacToeFactory.json';
 import { abi as gameAbi } from './TicTacToe.json';
+import Controls from './Controls';
 import Board from './Board';
 import './App.css';
 
@@ -24,6 +26,7 @@ class App extends Component {
       contracts: {},
       games: {},
       accounts: [],
+      activeGame: NO_ADDRESS,
     };
   }
 
@@ -94,6 +97,7 @@ class App extends Component {
       }
     }));
     alert(message);
+    this.createGame();
   }
 
   handlePayoutSuccess({ amountInWei, recipient }) {
@@ -119,8 +123,10 @@ class App extends Component {
       this.joinGame(contract, accounts[1])
     ]);
     this.setState((prevState) => ({
-      games: { ...prevState.games, [address]: { active: true } }
+      games: { ...prevState.games, [address]: { active: true } },
+      activeGame: address
     }));
+    this.props.history.push(`/${address}`);
   }
 
   async joinGame({ methods: { joinGame } }, account) {
@@ -140,25 +146,37 @@ class App extends Component {
     }
   }
 
+  navigateTo({ currentTarget: { value: address } }) {
+    this.setState({ activeGame: address });
+    this.props.history.push(`/${address}`);
+  }
+
   render() {
-    const { accounts, games } = this.state;
+    const { accounts, games, activeGame } = this.state;
     const addresses = Object.keys(games);
     return (
       <div className="App">
+        <Controls
+          activeGame={activeGame}
+          addresses={addresses}
+          games={games}
+          onNavigateTo={(e) => this.navigateTo(e)}
+          onCreateGame={() => this.createGame()}
+        />
         {addresses.map((address) => (
-          games[address].board && (
+          <Route key={address} exact path={`/${address}`} render={(props) => (
             <Board
-              key={address}
               game={games[address]}
               accounts={accounts}
               noAddress={NO_ADDRESS}
               onPlaceMark={(col, row) => this.placeMark(address, col, row)}
+              {...props}
             />
-          )
+          )} />
         ))}
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
