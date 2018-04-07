@@ -91,6 +91,7 @@ class App extends Component {
       games: {
         ...prevState.games,
         [address]: {
+          ...prevState.games[address],
           active: true
         }
       },
