@@ -25,7 +25,7 @@ const Game = ({
       game={game}
       accounts={accounts}
       noAddress={NO_ADDRESS}
-      onPlaceMark={(col, row) => onPlaceMark(col, row)}
+      onPlaceMark={(row, col) => onPlaceMark(row, col)}
       {...props}
     />
   </div>

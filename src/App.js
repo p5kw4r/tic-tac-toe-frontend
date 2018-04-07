@@ -137,12 +137,12 @@ class App extends Component {
     return await getBoard().call();
   }
 
-  placeMark(address, col, row) {
+  placeMark(address, row, col) {
     const { contracts, games } = this.state;
     const { methods: { placeMark } } = contracts[address];
     const { board, activePlayer } = games[address];
-    if (board[col][row] === NO_ADDRESS) {
-      placeMark(col, row).send({ from: activePlayer });
+    if (board[row][col] === NO_ADDRESS) {
+      placeMark(row, col).send({ from: activePlayer });
     }
   }
 
@@ -166,7 +166,7 @@ class App extends Component {
                 noAddress={NO_ADDRESS}
                 onNavigateTo={(e) => this.navigateTo(e)}
                 onCreateGame={() => this.createGame()}
-                onPlaceMark={(col, row) => this.placeMark(address, col, row)}
+                onPlaceMark={(row, col) => this.placeMark(address, row, col)}
                 {...props}
               />
             )} />

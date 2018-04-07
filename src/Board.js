@@ -4,8 +4,8 @@ import Cell from './Cell';
 const Board = ({ game: { board, activePlayer }, accounts, noAddress: NO_ADDRESS, onPlaceMark }) => (
   board ? (
     <div className="Board">
-      {board.map((column, i) => (
-        column.map((address, j) => (
+      {board.map((cells, i) => (
+        cells.map((address, j) => (
           <Cell
             key={j}
             address={address}
