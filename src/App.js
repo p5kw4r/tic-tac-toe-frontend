@@ -88,14 +88,14 @@ class App extends Component {
 
   handleGameLaunched({ game: address }) {
     this.setState((prevState) => ({
+      activeGame: address,
       games: {
         ...prevState.games,
         [address]: {
           ...prevState.games[address],
           active: true
         }
-      },
-      activeGame: address
+      }
     }));
     this.props.history.push(`/${address}`);
   }
