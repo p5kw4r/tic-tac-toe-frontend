@@ -13,6 +13,10 @@ body,
   align-items: center;
 }
 
+.Logo {
+  width: 900px;
+}
+
 .Controls {
   padding-bottom: 20px;
 }
@@ -22,12 +26,20 @@ body,
 }
 
 .Info {
-    padding-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    flex-wrap: wrap;
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.Game {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .Board {

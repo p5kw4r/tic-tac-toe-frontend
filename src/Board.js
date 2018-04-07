@@ -17,7 +17,7 @@ const Board = ({ game: { board, activePlayer }, accounts, noAddress: NO_ADDRESS,
       ))}
     </div>
   ) : (
-    <div>Loading, please wait...</div>
+    null
   )
 );
 

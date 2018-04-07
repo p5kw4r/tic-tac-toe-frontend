@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
 import { abi as factoryAbi, networks } from './TicTacToeFactory.json';
 import { abi as gameAbi } from './TicTacToe.json';
-import Controls from './Controls';
-import Board from './Board';
+import Game from './Game';
+import Logo from './Logo';
 import './App.css';
 
 const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -153,27 +153,26 @@ class App extends Component {
 
   render() {
     const { accounts, games, activeGame } = this.state;
-    const addresses = Object.keys(games);
     return (
       <div className="App">
-        <Controls
-          activeGame={activeGame}
-          addresses={addresses}
-          games={games}
-          onNavigateTo={(e) => this.navigateTo(e)}
-          onCreateGame={() => this.createGame()}
-        />
-        {addresses.map((address) => (
-          <Route key={address} exact path={`/${address}`} render={(props) => (
-            <Board
-              game={games[address]}
-              accounts={accounts}
-              noAddress={NO_ADDRESS}
-              onPlaceMark={(col, row) => this.placeMark(address, col, row)}
-              {...props}
-            />
-          )} />
-        ))}
+        <Switch>
+          {Object.keys(games).map((address) => (
+            <Route key={address} exact path={`/${address}`} render={(props) => (
+              <Game
+                activeGame={activeGame}
+                games={games}
+                game={games[address]}
+                accounts={accounts}
+                noAddress={NO_ADDRESS}
+                onNavigateTo={(e) => this.navigateTo(e)}
+                onCreateGame={() => this.createGame()}
+                onPlaceMark={(col, row) => this.placeMark(address, col, row)}
+                {...props}
+              />
+            )} />
+          ))}
+          <Route component={Logo} />
+        </Switch>
       </div>
     );
   }
