@@ -135,7 +135,7 @@ class App extends Component {
   handlePayout({ amountInWei, recipient }) {
     const { web3: { utils: { fromWei } } } = this.state;
     const amount = fromWei(amountInWei);
-    console.log(`Succesfully transferred ${amount} ether to ${recipient}.`);
+    console.log(`Transferred ${amount} ether to ${recipient}.`);
   }
 
   async getAccounts({ eth: { getAccounts } }) {
