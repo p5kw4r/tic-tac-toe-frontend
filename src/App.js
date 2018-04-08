@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
 import { abi as factoryAbi, networks } from './TicTacToeFactory.json';
-import { abi as gameAbi } from './TicTacToe.json';
+import { abi as contractAbi } from './TicTacToe.json';
 import Game from './Game';
 import AlertModal from './AlertModal';
 import Logo from './Logo';
@@ -78,7 +78,7 @@ class App extends Component {
 
   handleGameCreated({ game: address }) {
     const { accounts, web3: { eth: { Contract } } } = this.state;
-    const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
+    const contract = new Contract(contractAbi, address, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     this.setState(({ contracts }) => ({
       contracts: {
