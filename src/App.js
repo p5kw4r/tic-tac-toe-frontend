@@ -35,9 +35,11 @@ class App extends Component {
   async componentDidMount() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
     const factory = new web3.eth.Contract(factoryAbi, ADDRESS, { gas: GAS_LIMIT });
-    this.setState({ web3, factory });
     this.subscribeToEvents(factory);
-    await this.getAccounts(web3);
+    await Promise.all([
+      this.setState({ web3, factory }),
+      this.getAccounts(web3)
+    ]);
     this.createGame();
   }
 
@@ -75,7 +77,7 @@ class App extends Component {
     const { accounts, web3: { eth: { Contract } } } = this.state;
     const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
-    this.setState(({ contracts }) => ({
+    await this.setState(({ contracts }) => ({
       contracts: {
         ...contracts,
         [address]: contract
