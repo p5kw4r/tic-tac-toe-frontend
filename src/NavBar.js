@@ -7,12 +7,9 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
+  NavLink
 } from 'reactstrap';
+import NavDropdown from './NavDropdown';
 
 class NavBar extends Component {
   constructor(props) {
@@ -57,25 +54,11 @@ class NavBar extends Component {
                     {isInfoOpen ? 'Hide Info' : 'Show Info'}
                   </NavLink>
                 </NavItem>
-                <UncontrolledDropdown nav inNavbar>
-                  <DropdownToggle className="no-select" tag="span" nav caret>
-                    Select Game
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    {Object.keys(games).map((address) => (
-                      games[address].active && (
-                        <DropdownItem
-                          key={address}
-                          value={address}
-                          active={address === activeGame}
-                          onClick={(e) => onNavigateTo(e)}
-                        >
-                          {address}
-                        </DropdownItem>
-                      )
-                    ))}
-                  </DropdownMenu>
-                </UncontrolledDropdown>
+                <NavDropdown
+                  activeGame={activeGame}
+                  games={games}
+                  onNavigateTo={(e) => onNavigateTo(e)}
+                />
                 <NavItem>
                   <NavLink
                     className="no-select"
