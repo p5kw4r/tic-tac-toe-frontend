@@ -34,9 +34,6 @@ const Game = ({
       <Accounts
         activePlayer={activePlayer}
         accounts={accounts}
-        games={games}
-        onNavigateTo={(e) => onNavigateTo(e)}
-        onCreateGame={() => onCreateGame()}
         onGetBalance={(account) => onGetBalance(account)}
       />
     ) : (

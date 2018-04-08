@@ -88,13 +88,12 @@ class App extends Component {
 
   handleGameActive({ game: address }) {
     this.setState(({ games }) => ({
-      activeGame: address,
       games: {
         ...games,
         [address]: { ...games[address], active: true }
       }
     }));
-    this.props.history.push(`/${address}`);
+    this.navigateTo({ currentTarget: { value: address } });
   }
 
   async handleNextPlayer({ game: address, player: activePlayer }) {
