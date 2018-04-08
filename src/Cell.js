@@ -1,9 +1,11 @@
 import React from 'react';
 
 const Cell = ({ address, accounts, noAddress: NO_ADDRESS, onPlaceMark }) => {
-  const status = address === NO_ADDRESS ? 'valid' : 'invalid';
   return (
-    <div className={`Cell no-select ${status}`} onClick={() => onPlaceMark()}>
+    <div
+      className={`Cell no-select ${address === NO_ADDRESS ? 'valid' : 'invalid'}`}
+      onClick={() => onPlaceMark()}
+    >
       {address === accounts[0] ? 'X' : address === accounts[1] ? 'O' : ''}
     </div>
   );
