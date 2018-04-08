@@ -10,7 +10,8 @@ const Game = ({
                 game: { activePlayer, board },
                 accounts,
                 noAddress: NO_ADDRESS,
-                isInfoOpen,
+                info,
+                info: { isOpen },
                 onNavigateTo,
                 onCreateGame,
                 onPlaceMark,
@@ -22,7 +23,7 @@ const Game = ({
     <NavBar
       activeGame={activeGame}
       games={games}
-      isInfoOpen={isInfoOpen}
+      info={info}
       onNavigateTo={(e) => onNavigateTo(e)}
       onCreateGame={() => onCreateGame()}
       onToggleInfo={() => onToggleInfo()}
@@ -35,7 +36,7 @@ const Game = ({
       {...props}
     />
     {board ? (
-      <Collapse isOpen={isInfoOpen}>
+      <Collapse isOpen={isOpen}>
         <Accounts
           activePlayer={activePlayer}
           accounts={accounts}

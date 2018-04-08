@@ -183,18 +183,11 @@ class App extends Component {
   }
 
   render() {
-    const {
-      accounts,
-      games,
-      activeGame,
-      modal: { isOpen: modalOpen, message },
-      info: { isOpen: infoOpen }
-    } = this.state;
+    const { accounts, games, activeGame, modal, info } = this.state;
     return (
       <div className="App">
         <AlertModal
-          isOpen={modalOpen}
-          message={message}
+          modal={modal}
           onClose={() => this.closeModal()}
         />
         <Switch>
@@ -206,7 +199,7 @@ class App extends Component {
                 game={games[address]}
                 accounts={accounts}
                 noAddress={NO_ADDRESS}
-                isInfoOpen={infoOpen}
+                info={info}
                 onNavigateTo={(e) => this.navigateTo(e)}
                 onCreateGame={() => this.createGame()}
                 onPlaceMark={(row, col) => this.placeMark(address, row, col)}

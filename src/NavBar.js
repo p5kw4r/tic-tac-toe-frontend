@@ -21,12 +21,21 @@ class NavBar extends Component {
   }
 
   toggle() {
-    this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
+    this.setState(({ isOpen }) => ({
+      isOpen: !isOpen
+    }));
   }
 
   render() {
-    const { activeGame, games, isInfoOpen, onNavigateTo, onCreateGame, onToggleInfo } = this.props;
     const { isOpen } = this.state;
+    const {
+      activeGame,
+      games,
+      info: { isOpen: isInfoOpen },
+      onNavigateTo,
+      onCreateGame,
+      onToggleInfo
+    } = this.props;
     return (
       <div className="NavBar">
         <Navbar fixed="top" color="light" light expand="md">
