@@ -78,6 +78,6 @@ body,
   cursor: not-allowed;
 }
 
-.noselect {
+.no-select {
   user-select: none;
 }

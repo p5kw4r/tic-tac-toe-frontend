@@ -16,12 +16,12 @@ const NavBar = ({ activeGame, addresses, games, onNavigateTo, onCreateGame }) =>
   <div className="Controls">
     <Navbar fixed="top" color="light" light expand="md">
       <Container>
-        <NavbarBrand className="noselect" tag="span">
+        <NavbarBrand className="no-select" tag="span">
           TicTacToe DApp
         </NavbarBrand>
         <Nav navbar>
           <UncontrolledDropdown nav inNavbar>
-            <DropdownToggle className="noselect" tag="span" nav caret>
+            <DropdownToggle className="no-select" tag="span" nav caret>
               Select Game
             </DropdownToggle>
             <DropdownMenu>
@@ -41,7 +41,7 @@ const NavBar = ({ activeGame, addresses, games, onNavigateTo, onCreateGame }) =>
           </UncontrolledDropdown>
           <NavItem>
             <NavLink
-              className="noselect"
+              className="no-select"
               tag="span"
               onClick={() => onCreateGame()}
             >
