@@ -1,7 +1,12 @@
 import React from 'react';
 import Cell from './Cell';
 
-const Board = ({ game: { board, activePlayer }, accounts, noAddress: NO_ADDRESS, onPlaceMark }) => (
+const Board = ({
+                 game: { board, activePlayer },
+                 accounts,
+                 noAddress: NO_ADDRESS,
+                 onPlaceMark
+               }) => (
   board ? (
     <div className="Board">
       {board.map((cells, i) => (
