@@ -27,7 +27,7 @@ class Accounts extends Component {
             <tr>
               <th>#</th>
               <th>Account</th>
-              <th>Balance (eth)</th>
+              <th>Balance</th>
             </tr>
           </thead>
           <tbody>
