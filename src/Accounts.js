@@ -35,7 +35,7 @@ class Accounts extends Component {
               i < 2 && (
                 <tr
                   key={account}
-                  className={account === activePlayer ? 'table-active' : ''}
+                  className={account === activePlayer ? 'active' : ''}
                 >
                   <th scope="row">{i + 1}</th>
                   <td>{account}</td>
