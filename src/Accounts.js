@@ -19,12 +19,11 @@ class Accounts extends Component {
   }
 
   render() {
-    const { activeGame, accounts, games, onNavigateTo, onCreateGame } = this.props;
+    const { accounts, games, onNavigateTo, onCreateGame } = this.props;
     const { balances } = this.state;
     return (
       <div className="Account">
         <NavBar
-          activeGame={activeGame}
           games={games}
           onNavigateTo={(e) => onNavigateTo(e)}
           onCreateGame={() => onCreateGame()}

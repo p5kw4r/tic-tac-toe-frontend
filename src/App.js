@@ -185,7 +185,6 @@ class App extends Component {
           ))}
           <Route exact path="/accounts" render={(props) => (
             <Accounts
-              activeGame={activeGame}
               accounts={accounts}
               games={games}
               onNavigateTo={(e) => this.navigateTo(e)}
