@@ -30,7 +30,8 @@ class App extends Component {
       accounts: [],
       activeGame: NO_ADDRESS,
       isModalOpen: false,
-      message: ''
+      message: '',
+      isInfoOpen: false
     };
   }
 
@@ -174,8 +175,12 @@ class App extends Component {
     this.createGame();
   }
 
+  toggleInfo() {
+    this.setState(({ isInfoOpen }) => ({ isInfoOpen: !isInfoOpen }));
+  }
+
   render() {
-    const { accounts, games, activeGame, isModalOpen, message } = this.state;
+    const { accounts, games, activeGame, isModalOpen, message, isInfoOpen } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -192,10 +197,12 @@ class App extends Component {
                 game={games[address]}
                 accounts={accounts}
                 noAddress={NO_ADDRESS}
+                isInfoOpen={isInfoOpen}
                 onNavigateTo={(e) => this.navigateTo(e)}
                 onCreateGame={() => this.createGame()}
                 onPlaceMark={(row, col) => this.placeMark(address, row, col)}
                 onGetBalance={(account) => this.getBalance(account)}
+                onToggleInfo={() => this.toggleInfo()}
                 {...props}
               />
             )} />
