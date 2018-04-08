@@ -18,15 +18,11 @@ import {
 class NavBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isOpen: false
-    };
+    this.state = { isOpen: false };
   }
 
   toggle() {
-    this.setState((prevState) => ({
-      isOpen: !prevState.isOpen
-    }));
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   }
 
   navigateTo(path) {

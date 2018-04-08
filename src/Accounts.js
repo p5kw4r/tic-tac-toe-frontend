@@ -5,9 +5,7 @@ import NavBar from './NavBar';
 class Accounts extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      balances: []
-    };
+    this.state = { balances: [] };
   }
 
   async componentDidMount() {
