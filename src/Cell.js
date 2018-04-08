@@ -4,7 +4,7 @@ const Cell = ({ address, accounts, noAddress: NO_ADDRESS, onPlaceMark }) => {
   let state, mark;
   if (address === NO_ADDRESS) {
     state = 'valid';
-    mark = ''
+    mark = '';
   } else {
     state = 'invalid';
     if (address === accounts[0]) {
