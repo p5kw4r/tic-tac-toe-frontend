@@ -29,7 +29,7 @@ class App extends Component {
       games: {},
       accounts: [],
       activeGame: NO_ADDRESS,
-      isOpenModal: false,
+      isModalOpen: false,
       message: ''
     };
   }
@@ -166,20 +166,20 @@ class App extends Component {
   }
 
   openModal(message) {
-    this.setState({ isOpenModal: true, message });
+    this.setState({ isModalOpen: true, message });
   }
 
   closeModal() {
-    this.setState({ isOpenModal: false });
+    this.setState({ isModalOpen: false });
     this.createGame();
   }
 
   render() {
-    const { accounts, games, activeGame, isOpenModal, message } = this.state;
+    const { accounts, games, activeGame, isModalOpen, message } = this.state;
     return (
       <div className="App">
         <AlertModal
-          isOpen={isOpenModal}
+          isOpen={isModalOpen}
           message={message}
           onClose={() => this.closeModal()}
         />
