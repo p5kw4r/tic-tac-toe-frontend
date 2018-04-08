@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import { abi as factoryAbi, networks } from './TicTacToeFactory.json';
 import { abi as gameAbi } from './TicTacToe.json';
 import Game from './Game';
+import AlertModal from './AlertModal';
 import Logo from './Logo';
 import './App.css';
 
@@ -27,7 +28,9 @@ class App extends Component {
       contracts: {},
       games: {},
       accounts: [],
-      activeGame: NO_ADDRESS
+      activeGame: NO_ADDRESS,
+      isOpenModal: false,
+      message: ''
     };
   }
 
@@ -59,10 +62,10 @@ class App extends Component {
         break;
       case 'GameOverWin':
         const { winner } = values;
-        this.handleGameOver(values, `Game is over! Winner is ${winner}.`);
+        this.handleGameOver(values, `Game ended with Win! Winner is ${winner}.`);
         break;
       case 'GameOverDraw':
-        this.handleGameOver(values, 'Game is over! There is no winner.');
+        this.handleGameOver(values, 'Game ended with Draw! There is no winner.');
         break;
       case 'Payout':
         this.handlePayout(values);
@@ -116,8 +119,7 @@ class App extends Component {
         [address]: { ...games[address], active: false, board }
       }
     }));
-    alert(message);
-    this.createGame();
+    this.openModal(message);
   }
 
   handlePayout({ amountInWei, recipient }) {
@@ -163,10 +165,24 @@ class App extends Component {
     this.props.history.push(`/${address}`);
   }
 
+  openModal(message) {
+    this.setState({ isOpenModal: true, message });
+  }
+
+  closeModal() {
+    this.setState({ isOpenModal: false });
+    this.createGame();
+  }
+
   render() {
-    const { accounts, games, activeGame } = this.state;
+    const { accounts, games, activeGame, isOpenModal, message } = this.state;
     return (
       <div className="App">
+        <AlertModal
+          isOpen={isOpenModal}
+          message={message}
+          onClose={() => this.closeModal()}
+        />
         <Switch>
           {Object.keys(games).map((address) => (
             <Route key={address} exact path={`/${address}`} render={(props) => (
