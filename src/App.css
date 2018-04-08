@@ -26,20 +26,8 @@ body,
   width: 900px;
 }
 
-.Controls {
-  padding-bottom: 20px;
-}
-
-.Controls select {
-  margin-right: 10px;
-}
-
-.Controls .nav-link:hover {
+.NavBar .nav-link:hover {
   cursor: pointer;
-}
-
-.Info {
-  padding-top: 20px;
 }
 
 .Game {

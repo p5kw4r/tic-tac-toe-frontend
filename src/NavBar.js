@@ -13,7 +13,7 @@ import {
 } from 'reactstrap';
 
 const NavBar = ({ activeGame, addresses, games, onNavigateTo, onCreateGame }) => (
-  <div className="Controls">
+  <div className="NavBar">
     <Navbar fixed="top" color="light" light expand="md">
       <Container>
         <NavbarBrand className="no-select" tag="span">

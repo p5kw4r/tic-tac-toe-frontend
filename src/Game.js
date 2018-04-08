@@ -1,7 +1,7 @@
 import React from 'react';
+import { Alert } from 'reactstrap';
 import NavBar from './NavBar';
 import Board from './Board';
-import Info from './Info';
 
 const Game = ({
     activeGame,
@@ -30,7 +30,9 @@ const Game = ({
       onPlaceMark={(row, col) => onPlaceMark(row, col)}
       {...props}
     />
-    <Info activePlayer={activePlayer} />
+    <Alert className="mt-3" color="light">
+      {`Active Player: ${activePlayer}`}
+    </Alert>
   </div>
 );
 
