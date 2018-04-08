@@ -1,5 +1,5 @@
 import React from 'react';
-import Controls from './Controls';
+import NavBar from './NavBar';
 import Board from './Board';
 import Info from './Info';
 
@@ -7,6 +7,7 @@ const Game = ({
     activeGame,
     games,
     game,
+    game: { activePlayer },
     accounts,
     noAddress: NO_ADDRESS,
     onNavigateTo,
@@ -15,7 +16,7 @@ const Game = ({
     ...props
   }) => (
   <div className="Game">
-    <Controls
+    <NavBar
       activeGame={activeGame}
       addresses={Object.keys(games)}
       games={games}
@@ -29,7 +30,7 @@ const Game = ({
       onPlaceMark={(row, col) => onPlaceMark(row, col)}
       {...props}
     />
-    <Info activePlayer={game.activePlayer} />
+    <Info activePlayer={activePlayer} />
   </div>
 );
 

@@ -34,6 +34,10 @@ body,
   margin-right: 10px;
 }
 
+.Controls .nav-link:hover {
+  cursor: pointer;
+}
+
 .Info {
   padding-top: 20px;
 }
