@@ -29,9 +29,8 @@ class App extends Component {
       games: {},
       accounts: [],
       activeGame: NO_ADDRESS,
-      isModalOpen: false,
-      message: '',
-      isInfoOpen: false
+      modal: {},
+      info: {}
     };
   }
 
@@ -167,24 +166,34 @@ class App extends Component {
   }
 
   openModal(message) {
-    this.setState({ isModalOpen: true, message });
+    this.setState({ modal: { isOpen: true, message } });
   }
 
   closeModal() {
-    this.setState({ isModalOpen: false });
+    this.setState(({ modal }) => ({
+      modal: { ...modal, isOpen: false }
+    }));
     this.createGame();
   }
 
   toggleInfo() {
-    this.setState(({ isInfoOpen }) => ({ isInfoOpen: !isInfoOpen }));
+    this.setState(({ info: { isOpen } }) => ({
+      info: { isOpen: !isOpen }
+    }));
   }
 
   render() {
-    const { accounts, games, activeGame, isModalOpen, message, isInfoOpen } = this.state;
+    const {
+      accounts,
+      games,
+      activeGame,
+      modal: { isOpen: modalOpen, message },
+      info: { isOpen: infoOpen }
+    } = this.state;
     return (
       <div className="App">
         <AlertModal
-          isOpen={isModalOpen}
+          isOpen={modalOpen}
           message={message}
           onClose={() => this.closeModal()}
         />
@@ -197,7 +206,7 @@ class App extends Component {
                 game={games[address]}
                 accounts={accounts}
                 noAddress={NO_ADDRESS}
-                isInfoOpen={isInfoOpen}
+                isInfoOpen={infoOpen}
                 onNavigateTo={(e) => this.navigateTo(e)}
                 onCreateGame={() => this.createGame()}
                 onPlaceMark={(row, col) => this.placeMark(address, row, col)}
