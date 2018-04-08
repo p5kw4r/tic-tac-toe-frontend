@@ -4,17 +4,17 @@ import NavBar from './NavBar';
 import Board from './Board';
 
 const Game = ({
-    activeGame,
-    games,
-    game,
-    game: { activePlayer },
-    accounts,
-    noAddress: NO_ADDRESS,
-    onNavigateTo,
-    onCreateGame,
-    onPlaceMark,
-    ...props
-  }) => (
+  activeGame,
+  games,
+  game,
+  game: { activePlayer },
+  accounts,
+  noAddress: NO_ADDRESS,
+  onNavigateTo,
+  onCreateGame,
+  onPlaceMark,
+  ...props
+}) => (
   <div className="Game">
     <NavBar
       activeGame={activeGame}
