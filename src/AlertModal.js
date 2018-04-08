@@ -7,7 +7,7 @@ const AlertModal = ({ isOpen, message, onClose }) => (
       <ModalHeader toggle={() => onClose()}>Game Over</ModalHeader>
       <ModalBody>{message}</ModalBody>
       <ModalFooter>
-        <Button outline color="primary" onClick={() => onClose()}>OK</Button>
+        <Button outline onClick={() => onClose()}>New Game</Button>
       </ModalFooter>
     </Modal>
   </div>
