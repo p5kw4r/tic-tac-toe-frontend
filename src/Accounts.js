@@ -18,11 +18,11 @@ class Accounts extends Component {
   }
 
   render() {
-    const { accounts } = this.props;
+    const { activePlayer, accounts } = this.props;
     const { balances } = this.state;
     return (
-      <div className="Account">
-        <Table hover responsive>
+      <div className="Accounts mt-5">
+        <Table responsive>
           <thead>
             <tr>
               <th>#</th>
@@ -33,8 +33,11 @@ class Accounts extends Component {
           <tbody>
             {accounts.map((account, i) => (
               i < 2 && (
-                <tr key={account}>
-                  <th>{i + 1}</th>
+                <tr
+                  key={account}
+                  className={account === activePlayer ? '' : 'inactive'}
+                >
+                  <th scope="row">{i + 1}</th>
                   <td>{account}</td>
                   <td>{balances[i]}</td>
                 </tr>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Alert } from 'reactstrap';
 import NavBar from './NavBar';
 import Accounts from './Accounts';
 import Board from './Board';
@@ -32,18 +31,14 @@ const Game = ({
       {...props}
     />
     {board ? (
-      <React.Fragment>
-        <Alert className="mt-3" color="light">
-          {`Active Player: ${activePlayer}`}
-        </Alert>
-        <Accounts
+      <Accounts
+        activePlayer={activePlayer}
         accounts={accounts}
         games={games}
         onNavigateTo={(e) => onNavigateTo(e)}
         onCreateGame={() => onCreateGame()}
         onGetBalance={(account) => onGetBalance(account)}
-        />
-      </React.Fragment>
+      />
     ) : (
       null
     )}

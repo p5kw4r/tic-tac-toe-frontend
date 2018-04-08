@@ -66,6 +66,10 @@ body,
   cursor: not-allowed;
 }
 
+.Accounts .inactive {
+  color: #818182;
+}
+
 .no-select {
   user-select: none;
 }
