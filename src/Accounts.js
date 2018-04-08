@@ -27,9 +27,9 @@ class Accounts extends Component {
         <Table responsive>
           <thead>
             <tr>
-              <th>#</th>
-              <th>Account</th>
-              <th>Balance</th>
+              <th scope="col">#</th>
+              <th scope="col">Account</th>
+              <th scope="col">Balance</th>
             </tr>
           </thead>
           <tbody>
