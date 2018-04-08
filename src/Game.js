@@ -17,8 +17,6 @@ const Game = ({
 }) => (
   <div className="Game">
     <NavBar
-      activeGame={activeGame}
-      addresses={Object.keys(games)}
       games={games}
       onNavigateTo={(e) => onNavigateTo(e)}
       onCreateGame={() => onCreateGame()}

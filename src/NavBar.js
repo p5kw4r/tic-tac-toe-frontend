@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   Container,
   Collapse,
@@ -28,8 +29,12 @@ class NavBar extends Component {
     }));
   }
 
+  navigateTo(path) {
+    this.props.history.push(path);
+  }
+
   render() {
-    const { activeGame, addresses, games, onNavigateTo, onCreateGame } = this.props;
+    const { games, onNavigateTo, onCreateGame } = this.props;
     const { isOpen } = this.state;
     return (
       <div className="NavBar">
@@ -41,17 +46,25 @@ class NavBar extends Component {
             <NavbarToggler onClick={() => this.toggle()} />
             <Collapse isOpen={isOpen} navbar>
               <Nav className="ml-auto" navbar>
+                <NavItem>
+                  <NavLink
+                    className="no-select"
+                    tag="span"
+                    onClick={() => this.navigateTo('/accounts')}
+                  >
+                    Accounts
+                  </NavLink>
+                </NavItem>
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle className="no-select" tag="span" nav caret>
                     Select Game
                   </DropdownToggle>
                   <DropdownMenu>
-                    {addresses.map((address) => (
+                    {Object.keys(games).map((address) => (
                       games[address].active && (
                         <DropdownItem
                           key={address}
                           value={address}
-                          disabled={address === activeGame}
                           onClick={(e) => onNavigateTo(e)}
                         >
                           {address}
@@ -78,4 +91,4 @@ class NavBar extends Component {
   }
 }
 
-export default NavBar;
+export default withRouter(NavBar);
