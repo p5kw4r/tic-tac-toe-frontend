@@ -130,6 +130,12 @@ class App extends Component {
     this.setState({ accounts: await getAccounts() });
   }
 
+  async getBalance(account) {
+    const { eth: { getBalance }, utils: { fromWei } } = this.state.web3;
+    const balance = await getBalance(account);
+    return fromWei(balance, 'ether');
+  }
+
   createGame() {
     const { accounts, factory: { methods: { createGame } } } = this.state;
     createGame().send({ from: accounts[0] });
@@ -150,12 +156,6 @@ class App extends Component {
     if (board[row][col] === NO_ADDRESS) {
       placeMark(row, col).send({ from: activePlayer });
     }
-  }
-
-  async getBalance(account) {
-    const { eth: { getBalance }, utils: { fromWei } } = this.state.web3;
-    const balance = await getBalance(account);
-    return fromWei(balance, 'ether');
   }
 
   navigateTo({ currentTarget: { value: address } }) {
