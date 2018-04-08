@@ -30,7 +30,7 @@ class NavBar extends Component {
   }
 
   render() {
-    const { games, onNavigateTo, onCreateGame } = this.props;
+    const { activeGame, games, onNavigateTo, onCreateGame } = this.props;
     const { isOpen } = this.state;
     return (
       <div className="NavBar">
@@ -61,6 +61,7 @@ class NavBar extends Component {
                         <DropdownItem
                           key={address}
                           value={address}
+                          active={address === activeGame}
                           onClick={(e) => onNavigateTo(e)}
                         >
                           {address}

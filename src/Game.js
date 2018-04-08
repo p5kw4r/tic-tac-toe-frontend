@@ -17,6 +17,7 @@ const Game = ({
               }) => (
   <div className="Game">
     <NavBar
+      activeGame={activeGame}
       games={games}
       onNavigateTo={(e) => onNavigateTo(e)}
       onCreateGame={() => onCreateGame()}
