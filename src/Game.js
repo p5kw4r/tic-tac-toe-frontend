@@ -16,10 +16,9 @@ const Game = ({
                 onCreateGame,
                 onPlaceMark,
                 onGetBalance,
-                onToggleInfo,
-                ...props
+                onToggleInfo
               }) => (
-  <div {...props} className="Game">
+  <div className="Game">
     <NavBar
       activeGame={activeGame}
       games={games}
