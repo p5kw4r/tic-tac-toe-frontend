@@ -25,7 +25,7 @@ class NavBar extends Component {
   }
 
   render() {
-    const { activeGame, games, onNavigateTo, onCreateGame } = this.props;
+    const { activeGame, games, isInfoOpen, onNavigateTo, onCreateGame, onToggleInfo } = this.props;
     const { isOpen } = this.state;
     return (
       <div className="NavBar">
@@ -37,6 +37,15 @@ class NavBar extends Component {
             <NavbarToggler onClick={() => this.toggle()} />
             <Collapse isOpen={isOpen} navbar>
               <Nav className="ml-auto" navbar>
+                <NavItem>
+                  <NavLink
+                    className="no-select"
+                    tag="span"
+                    onClick={() => onToggleInfo()}
+                  >
+                    {isInfoOpen ? 'Hide Info' : 'Show Info'}
+                  </NavLink>
+                </NavItem>
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle className="no-select" tag="span" nav caret>
                     Select Game
