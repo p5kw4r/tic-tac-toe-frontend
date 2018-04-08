@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   Container,
   Collapse,
@@ -75,4 +74,4 @@ class NavBar extends Component {
   }
 }
 
-export default withRouter(NavBar);
+export default NavBar;
