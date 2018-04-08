@@ -5,7 +5,8 @@ import Accounts from './Accounts';
 import Board from './Board';
 
 const Game = ({
-                activeGame, games,
+                activeGame,
+                games,
                 game,
                 game: { activePlayer, board },
                 accounts,
