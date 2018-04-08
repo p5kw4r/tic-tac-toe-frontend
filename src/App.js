@@ -72,11 +72,11 @@ class App extends Component {
     }
   }
 
-  async handleGameCreated({ game: address }) {
+  handleGameCreated({ game: address }) {
     const { accounts, web3: { eth: { Contract } } } = this.state;
     const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
-    await this.setState(({ contracts }) => ({
+    this.setState(({ contracts }) => ({
       contracts: {
         ...contracts,
         [address]: contract
