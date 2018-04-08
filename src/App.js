@@ -76,7 +76,10 @@ class App extends Component {
     const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     this.setState(({ contracts }) => ({
-      contracts: { ...contracts, [address]: contract }
+      contracts: {
+        ...contracts,
+        [address]: contract
+      }
     }));
     this.joinGame(contract, accounts[0]);
     this.joinGame(contract, accounts[1]);
