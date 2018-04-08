@@ -8,7 +8,7 @@ const Game = ({
                 activeGame,
                 games,
                 game,
-                game: { activePlayer },
+                game: { activePlayer, board },
                 accounts,
                 noAddress: NO_ADDRESS,
                 onNavigateTo,
@@ -31,16 +31,22 @@ const Game = ({
       onPlaceMark={(row, col) => onPlaceMark(row, col)}
       {...props}
     />
-    <Alert className="mt-3" color="light">
-      {`Active Player: ${activePlayer}`}
-    </Alert>
-    <Accounts
-      accounts={accounts}
-      games={games}
-      onNavigateTo={(e) => onNavigateTo(e)}
-      onCreateGame={() => onCreateGame()}
-      onGetBalance={(account) => onGetBalance(account)}
-    />
+    {board ? (
+      <React.Fragment>
+        <Alert className="mt-3" color="light">
+          {`Active Player: ${activePlayer}`}
+        </Alert>
+        <Accounts
+        accounts={accounts}
+        games={games}
+        onNavigateTo={(e) => onNavigateTo(e)}
+        onCreateGame={() => onCreateGame()}
+        onGetBalance={(account) => onGetBalance(account)}
+        />
+      </React.Fragment>
+    ) : (
+      null
+    )}
   </div>
 );
 
