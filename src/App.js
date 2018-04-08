@@ -93,10 +93,17 @@ class App extends Component {
     this.setState(({ games }) => ({
       games: {
         ...games,
-        [address]: { ...games[address], active: true }
+        [address]: {
+          ...games[address],
+          active: true
+        }
       }
     }));
-    this.navigateTo({ currentTarget: { value: address } });
+    this.navigateTo({
+      currentTarget: {
+        value: address
+      }
+    });
   }
 
   async handleNextPlayer({ game: address, player: activePlayer }) {
@@ -105,7 +112,11 @@ class App extends Component {
     this.setState(({ games }) => ({
       games: {
         ...games,
-        [address]: { ...games[address], activePlayer, board }
+        [address]: {
+          ...games[address],
+          activePlayer,
+          board
+        }
       }
     }));
   }
@@ -116,7 +127,11 @@ class App extends Component {
     this.setState(({ games }) => ({
       games: {
         ...games,
-        [address]: { ...games[address], active: false, board }
+        [address]: {
+          ...games[address],
+          active: false,
+          board
+        }
       }
     }));
     this.openModal(message);
@@ -129,7 +144,9 @@ class App extends Component {
   }
 
   async getAccounts({ eth: { getAccounts } }) {
-    this.setState({ accounts: await getAccounts() });
+    this.setState({
+      accounts: await getAccounts()
+    });
   }
 
   async getBalance(account) {
@@ -140,11 +157,16 @@ class App extends Component {
 
   createGame() {
     const { accounts, factory: { methods: { createGame } } } = this.state;
-    createGame().send({ from: accounts[0] });
+    createGame().send({
+      from: accounts[0]
+    });
   }
 
   joinGame({ methods: { joinGame } }, account) {
-    joinGame().send({ from: account, value: BET_SIZE });
+    joinGame().send({
+      from: account,
+      value: BET_SIZE
+    });
   }
 
   async getBoard({ methods: { getBoard } }) {
@@ -156,29 +178,43 @@ class App extends Component {
     const { methods: { placeMark } } = contracts[address];
     const { board, activePlayer } = games[address];
     if (board[row][col] === NO_ADDRESS) {
-      placeMark(row, col).send({ from: activePlayer });
+      placeMark(row, col).send({
+        from: activePlayer
+      });
     }
   }
 
   navigateTo({ currentTarget: { value: address } }) {
-    this.setState({ activeGame: address });
+    this.setState({
+      activeGame: address
+    });
     this.props.history.push(`/${address}`);
   }
 
   openModal(message) {
-    this.setState({ modal: { isOpen: true, message } });
+    this.setState({
+      modal: {
+        isOpen: true,
+        message
+      }
+    });
   }
 
   closeModal() {
     this.setState(({ modal }) => ({
-      modal: { ...modal, isOpen: false }
+      modal: {
+        ...modal,
+        isOpen: false
+      }
     }));
     this.createGame();
   }
 
   toggleInfo() {
     this.setState(({ info: { isOpen } }) => ({
-      info: { isOpen: !isOpen }
+      info: {
+        isOpen: !isOpen
+      }
     }));
   }
 

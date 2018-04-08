@@ -4,7 +4,9 @@ import { Table } from 'reactstrap';
 class Accounts extends Component {
   constructor(props) {
     super(props);
-    this.state = { balances: [] };
+    this.state = {
+      balances: []
+    };
   }
 
   async componentDidMount() {
