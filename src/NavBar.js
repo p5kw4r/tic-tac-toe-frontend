@@ -25,10 +25,6 @@ class NavBar extends Component {
     this.setState(({ isOpen }) => ({ isOpen: !isOpen }));
   }
 
-  navigateTo(path) {
-    this.props.history.push(path);
-  }
-
   render() {
     const { activeGame, games, onNavigateTo, onCreateGame } = this.props;
     const { isOpen } = this.state;
@@ -42,15 +38,6 @@ class NavBar extends Component {
             <NavbarToggler onClick={() => this.toggle()} />
             <Collapse isOpen={isOpen} navbar>
               <Nav className="ml-auto" navbar>
-                <NavItem>
-                  <NavLink
-                    className="no-select"
-                    tag="span"
-                    onClick={() => this.navigateTo('/accounts')}
-                  >
-                    Accounts
-                  </NavLink>
-                </NavItem>
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle className="no-select" tag="span" nav caret>
                     Select Game

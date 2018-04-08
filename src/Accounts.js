@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Table } from 'reactstrap';
-import NavBar from './NavBar';
 
 class Accounts extends Component {
   constructor(props) {
@@ -19,15 +18,10 @@ class Accounts extends Component {
   }
 
   render() {
-    const { accounts, games, onNavigateTo, onCreateGame } = this.props;
+    const { accounts } = this.props;
     const { balances } = this.state;
     return (
       <div className="Account">
-        <NavBar
-          games={games}
-          onNavigateTo={(e) => onNavigateTo(e)}
-          onCreateGame={() => onCreateGame()}
-        />
         <Table hover responsive>
           <thead>
             <tr>

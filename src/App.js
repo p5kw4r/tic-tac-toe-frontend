@@ -3,7 +3,6 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
 import { abi as factoryAbi, networks } from './TicTacToeFactory.json';
 import { abi as gameAbi } from './TicTacToe.json';
-import Accounts from './Accounts';
 import Game from './Game';
 import Logo from './Logo';
 import './App.css';
@@ -181,20 +180,11 @@ class App extends Component {
                 onNavigateTo={(e) => this.navigateTo(e)}
                 onCreateGame={() => this.createGame()}
                 onPlaceMark={(row, col) => this.placeMark(address, row, col)}
+                onGetBalance={(account) => this.getBalance(account)}
                 {...props}
               />
             )} />
           ))}
-          <Route exact path="/accounts" render={(props) => (
-            <Accounts
-              accounts={accounts}
-              games={games}
-              onNavigateTo={(e) => this.navigateTo(e)}
-              onCreateGame={() => this.createGame()}
-              onGetBalance={(account) => this.getBalance(account)}
-              {...props}
-            />
-          )} />
           <Route component={Logo} />
         </Switch>
       </div>

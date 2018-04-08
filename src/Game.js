@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert } from 'reactstrap';
 import NavBar from './NavBar';
+import Accounts from './Accounts';
 import Board from './Board';
 
 const Game = ({
@@ -13,6 +14,7 @@ const Game = ({
                 onNavigateTo,
                 onCreateGame,
                 onPlaceMark,
+                onGetBalance,
                 ...props
               }) => (
   <div className="Game">
@@ -32,6 +34,13 @@ const Game = ({
     <Alert className="mt-3" color="light">
       {`Active Player: ${activePlayer}`}
     </Alert>
+    <Accounts
+      accounts={accounts}
+      games={games}
+      onNavigateTo={(e) => onNavigateTo(e)}
+      onCreateGame={() => onCreateGame()}
+      onGetBalance={(account) => onGetBalance(account)}
+    />
   </div>
 );
 
