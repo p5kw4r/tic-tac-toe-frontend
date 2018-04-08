@@ -75,41 +75,31 @@ class App extends Component {
     const { accounts, web3: { eth: { Contract } } } = this.state;
     const contract = new Contract(gameAbi, address, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
-    this.setState((prevState) => ({
-      contracts: {
-        ...prevState.contracts,
-        [address]: contract
-      }
+    this.setState(({ contracts }) => ({
+      contracts: { ...contracts, [address]: contract }
     }));
     this.joinGame(contract, accounts[0]);
     this.joinGame(contract, accounts[1]);
   }
 
   handleGameActive({ game: address }) {
-    this.setState((prevState) => ({
+    this.setState(({ games }) => ({
       activeGame: address,
       games: {
-        ...prevState.games,
-        [address]: {
-          ...prevState.games[address],
-          active: true
-        }
+        ...games,
+        [address]: { ...games[address], active: true }
       }
     }));
     this.props.history.push(`/${address}`);
   }
 
-  async handleNextPlayer({ game: address, player }) {
+  async handleNextPlayer({ game: address, player: activePlayer }) {
     const { contracts } = this.state;
     const board = await this.getBoard(contracts[address]);
-    this.setState((prevState) => ({
+    this.setState(({ games }) => ({
       games: {
-        ...prevState.games,
-        [address]: {
-          ...prevState.games[address],
-          activePlayer: player,
-          board
-        }
+        ...games,
+        [address]: { ...games[address], activePlayer, board }
       }
     }));
   }
@@ -117,14 +107,10 @@ class App extends Component {
   async handleGameOver({ game: address }, message) {
     const { contracts } = this.state;
     const board = await this.getBoard(contracts[address]);
-    this.setState((prevState) => ({
+    this.setState(({ games }) => ({
       games: {
-        ...prevState.games,
-        [address]: {
-          ...prevState.games[address],
-          active: false,
-          board
-        }
+        ...games,
+        [address]: { ...games[address], active: false, board }
       }
     }));
     alert(message);
