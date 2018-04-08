@@ -19,7 +19,7 @@ const Game = ({
                 onToggleInfo,
                 ...props
               }) => (
-  <div className="Game">
+  <div {...props} className="Game">
     <NavBar
       activeGame={activeGame}
       games={games}
@@ -33,7 +33,6 @@ const Game = ({
       accounts={accounts}
       noAddress={NO_ADDRESS}
       onPlaceMark={(row, col) => onPlaceMark(row, col)}
-      {...props}
     />
     {board ? (
       <Collapse isOpen={isOpen}>

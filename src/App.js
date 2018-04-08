@@ -230,6 +230,7 @@ class App extends Component {
           {Object.keys(games).map((address) => (
             <Route key={address} exact path={`/${address}`} render={(props) => (
               <Game
+                {...props}
                 activeGame={activeGame}
                 games={games}
                 game={games[address]}
@@ -241,7 +242,6 @@ class App extends Component {
                 onPlaceMark={(row, col) => this.placeMark(address, row, col)}
                 onGetBalance={(account) => this.getBalance(account)}
                 onToggleInfo={() => this.toggleInfo()}
-                {...props}
               />
             )} />
           ))}
