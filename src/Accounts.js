@@ -31,18 +31,18 @@ class Accounts extends Component {
         <Table hover responsive>
           <thead>
             <tr>
-              <th> # </th>
-              <th> Account </th>
-              <th> Balance (eth) </th>
+              <th>#</th>
+              <th>Account</th>
+              <th>Balance (eth)</th>
             </tr>
           </thead>
           <tbody>
             {accounts.map((account, i) => (
               i < 2 && (
                 <tr key={account}>
-                  <th> {i + 1} </th>
-                  <td> {account} </td>
-                  <td> {balances[i]} </td>
+                  <th>{i + 1}</th>
+                  <td>{account}</td>
+                  <td>{balances[i]}</td>
                 </tr>
               )
             ))}
