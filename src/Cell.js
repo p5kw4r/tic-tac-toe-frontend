@@ -1,20 +1,28 @@
 import React from 'react';
 
-const Cell = ({ address, accounts, noAddress: NO_ADDRESS, onPlaceMark }) => {
-  let state, mark;
-  if (address === NO_ADDRESS) {
-    state = 'valid';
-    mark = '';
+const resolveValidity = (address, noAddress) => {
+  if (address === noAddress) {
+    return 'valid';
   } else {
-    state = 'invalid';
-    if (address === accounts[0]) {
-      mark = 'X';
-    } else {
-      mark = 'O';
-    }
+    return 'invalid';
   }
+};
+
+const resolveMark = (address, accounts) => {
+  if (address === accounts[0]) {
+    return 'X';
+  } else if (address === accounts[1]) {
+    return 'O';
+  } else {
+    return '';
+  }
+};
+
+const Cell = ({ address, accounts, noAddress: NO_ADDRESS, onPlaceMark }) => {
+  const validity = resolveValidity(address, NO_ADDRESS);
+  const mark = resolveMark(address, accounts);
   return (
-    <div className={`Cell no-select ${state}`} onClick={() => onPlaceMark()}>
+    <div className={`Cell no-select ${validity}`} onClick={() => onPlaceMark()}>
       {mark}
     </div>
   );
