@@ -119,9 +119,7 @@ class App extends Component {
   }
 
   async getAccounts({ eth: { getAccounts } }) {
-    this.setState({
-      accounts: await getAccounts()
-    });
+    this.setState({ accounts: await getAccounts() });
   }
 
   async getBalance(account) {
@@ -162,9 +160,7 @@ class App extends Component {
   }
 
   navigateTo({ currentTarget: { value: gameId } }) {
-    this.setState({
-      activeGame: gameId
-    });
+    this.setState({ activeGame: gameId });
     this.props.history.push(`/${gameId}`);
   }
 
