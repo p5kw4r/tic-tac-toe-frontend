@@ -8,7 +8,9 @@ const AlertModal = ({ modal: { isOpen, message }, onClose, onCreateGame }) => (
       <ModalBody>{message}</ModalBody>
       <ModalFooter>
         <Button outline onClick={() => onClose()}>Close</Button>
-        <Button outline onClick={() => onCreateGame()}>New Game</Button>
+        <Button outline color="primary" onClick={() => onCreateGame()}>
+          New Game
+        </Button>
       </ModalFooter>
     </Modal>
   </div>
