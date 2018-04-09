@@ -8,6 +8,14 @@ const resolveValidity = (address, NO_ADDRESS) => {
   }
 };
 
+const resolveState = (active) => {
+  if (active) {
+    return 'active';
+  } else {
+    return 'inactive';
+  }
+};
+
 const resolveMark = (address, accounts) => {
   if (address === accounts[0]) {
     return 'X';
@@ -18,11 +26,21 @@ const resolveMark = (address, accounts) => {
   }
 };
 
-const Cell = ({ address, accounts, noAddress: NO_ADDRESS, onPlaceMark }) => {
+const Cell = ({
+                active,
+                address,
+                accounts,
+                noAddress: NO_ADDRESS,
+                onPlaceMark
+              }) => {
   const validity = resolveValidity(address, NO_ADDRESS);
+  const state = resolveState(active);
   const mark = resolveMark(address, accounts);
   return (
-    <div className={`Cell no-select ${validity}`} onClick={() => onPlaceMark()}>
+    <div
+      className={`Cell no-select ${validity} ${state}`}
+      onClick={() => onPlaceMark()}
+    >
       {mark}
     </div>
   );

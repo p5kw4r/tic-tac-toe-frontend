@@ -57,12 +57,16 @@ body,
   font-size: 5em;
 }
 
-.Cell.valid:hover {
+.Cell.active.valid:hover {
   cursor: pointer;
   background-color: #a3be8c;
 }
 
-.Cell.invalid:hover {
+.Cell.active.invalid:hover {
+  cursor: not-allowed;
+}
+
+.Cell.inactive:hover {
   cursor: not-allowed;
 }
 
