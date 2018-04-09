@@ -26,7 +26,7 @@ class App extends Component {
       contract: {},
       games: {},
       accounts: [],
-      activeGame: NO_ADDRESS,
+      activeGame: 0,
       modal: {},
       info: {}
     };
