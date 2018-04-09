@@ -5,7 +5,6 @@ import Accounts from './Accounts';
 import Board from './Board';
 
 const Game = ({
-                activeGame,
                 games,
                 game,
                 game: { activePlayer, board },
@@ -13,7 +12,6 @@ const Game = ({
                 noAddress: NO_ADDRESS,
                 info,
                 info: { isOpen },
-                onNavigateTo,
                 onCreateGame,
                 onPlaceMark,
                 onGetBalance,
@@ -21,10 +19,8 @@ const Game = ({
               }) => (
   <div className="Game">
     <NavBar
-      activeGame={activeGame}
       games={games}
       info={info}
-      onNavigateTo={(e) => onNavigateTo(e)}
       onCreateGame={() => onCreateGame()}
       onToggleInfo={() => onToggleInfo()}
     />

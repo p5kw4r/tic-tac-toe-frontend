@@ -26,7 +26,6 @@ class App extends Component {
       contract: {},
       games: {},
       accounts: [],
-      activeGame: 0,
       modal: {},
       info: {}
     };
@@ -76,8 +75,7 @@ class App extends Component {
   }
 
   handleGameActive({ gameId }) {
-    // workaround because js does not support param type overloading
-    this.navigateTo({ currentTarget: { value: gameId } });
+    this.props.history.push(`/${gameId}`);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -168,11 +166,6 @@ class App extends Component {
     }
   }
 
-  navigateTo({ currentTarget: { value: gameId } }) {
-    this.setState({ activeGame: gameId });
-    this.props.history.push(`/${gameId}`);
-  }
-
   openModal(message) {
     this.setState({
       modal: {
@@ -200,7 +193,7 @@ class App extends Component {
   }
 
   render() {
-    const { accounts, games, activeGame, modal, info } = this.state;
+    const { accounts, games, modal, info } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -213,16 +206,13 @@ class App extends Component {
         />
         <Switch>
           {Object.keys(games).map((gameId) => (
-            <Route key={gameId} exact path={`/${gameId}`} render={(props) => (
+            <Route key={gameId} exact path={`/${gameId}`} render={() => (
               <Game
-                {...props}
-                activeGame={activeGame}
                 games={games}
                 game={games[gameId]}
                 accounts={accounts}
                 noAddress={NO_ADDRESS}
                 info={info}
-                onNavigateTo={(e) => this.navigateTo(e)}
                 onCreateGame={() => this.createGame()}
                 onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
                 onGetBalance={(account) => this.getBalance(account)}

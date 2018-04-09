@@ -27,14 +27,7 @@ class NavBar extends Component {
 
   render() {
     const { isOpen } = this.state;
-    const {
-      activeGame,
-      games,
-      info: { isOpen: isInfoOpen },
-      onNavigateTo,
-      onCreateGame,
-      onToggleInfo
-    } = this.props;
+    const { games, info: { isOpen: isInfoOpen }, onCreateGame, onToggleInfo } = this.props;
     return (
       <div className="NavBar">
         <Navbar fixed="top" color="light" light expand="md">
@@ -54,11 +47,7 @@ class NavBar extends Component {
                     {isInfoOpen ? 'Hide Info' : 'Show Info'}
                   </NavLink>
                 </NavItem>
-                <NavDropdown
-                  activeGame={activeGame}
-                  games={games}
-                  onNavigateTo={(e) => onNavigateTo(e)}
-                />
+                <NavDropdown games={games} />
                 <NavItem>
                   <NavLink
                     className="no-select"
