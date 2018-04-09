@@ -12,15 +12,15 @@ const NavDropdown = ({ activeGame, games, onNavigateTo}) => (
       Select Game
     </DropdownToggle>
     <DropdownMenu>
-      {Object.keys(games).map((address) => (
-        games[address].active && (
+      {Object.keys(games).map((gameId) => (
+        games[gameId].active && (
           <DropdownItem
-            key={address}
-            value={address}
-            active={address === activeGame}
+            key={gameId}
+            value={gameId}
+            active={gameId === activeGame}
             onClick={(e) => onNavigateTo(e)}
           >
-            {address}
+            {`Game ${gameId}`}
           </DropdownItem>
         )
       ))}

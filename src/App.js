@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
-import { abi as factoryAbi, networks } from './TicTacToeFactory.json';
-import { abi as contractAbi } from './TicTacToe.json';
+import { abi, networks } from './TicTacToe.json';
 import Game from './Game';
 import AlertModal from './AlertModal';
 import Logo from './Logo';
@@ -10,7 +9,7 @@ import './App.css';
 
 const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const BET_SIZE = 100000000000000000;
-const GAS_LIMIT = 3000000;
+const GAS_LIMIT = 300000;
 
 // workaround to extract contract address from json interface (only needed
 // during development) once factory contract is deployed to production it will
@@ -24,8 +23,7 @@ class App extends Component {
     super(props);
     this.state = {
       web3: {},
-      factory: {},
-      contracts: {},
+      contract: {},
       games: {},
       accounts: [],
       activeGame: NO_ADDRESS,
@@ -36,10 +34,10 @@ class App extends Component {
 
   async componentDidMount() {
     const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
-    const factory = new web3.eth.Contract(factoryAbi, ADDRESS, { gas: GAS_LIMIT });
-    this.subscribeToEvents(factory);
+    const contract = new web3.eth.Contract(abi, ADDRESS, { gas: GAS_LIMIT });
+    this.subscribeToEvents(contract);
     await Promise.all([
-      this.setState({ web3, factory }),
+      this.setState({ web3, contract }),
       this.getAccounts(web3)
     ]);
     this.createGame();
@@ -75,45 +73,33 @@ class App extends Component {
     }
   }
 
-  handleGameCreated({ game: address }) {
-    const { accounts, web3: { eth: { Contract } } } = this.state;
-    const contract = new Contract(contractAbi, address, { gas: GAS_LIMIT });
-    this.subscribeToEvents(contract);
-    this.setState(({ contracts }) => ({
-      contracts: {
-        ...contracts,
-        [address]: contract
-      }
-    }));
-    this.joinGame(contract, accounts[0]);
-    this.joinGame(contract, accounts[1]);
+  handleGameCreated({ gameId }) {
+    const { accounts } = this.state;
+    this.joinGame(gameId, accounts[0]);
+    this.joinGame(gameId, accounts[1]);
   }
 
-  handleGameActive({ game: address }) {
+  handleGameActive({ gameId }) {
     this.setState(({ games }) => ({
       games: {
         ...games,
-        [address]: {
-          ...games[address],
+        [gameId]: {
+          ...games[gameId],
           active: true
         }
       }
     }));
-    this.navigateTo({
-      currentTarget: {
-        value: address
-      }
-    });
+    // workaround because js does not support param type overloading
+    this.navigateTo({ currentTarget: { value: gameId } });
   }
 
-  async handleNextPlayer({ game: address, player: activePlayer }) {
-    const { contracts } = this.state;
-    const board = await this.getBoard(contracts[address]);
+  async handleNextPlayer({ gameId, player: activePlayer }) {
+    const board = await this.getBoard(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
-        [address]: {
-          ...games[address],
+        [gameId]: {
+          ...games[gameId],
           activePlayer,
           board
         }
@@ -121,14 +107,13 @@ class App extends Component {
     }));
   }
 
-  async handleGameOver({ game: address }, message) {
-    const { contracts } = this.state;
-    const board = await this.getBoard(contracts[address]);
+  async handleGameOver({ gameId }, message) {
+    const board = await this.getBoard(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
-        [address]: {
-          ...games[address],
+        [gameId]: {
+          ...games[gameId],
           active: false,
           board
         }
@@ -137,7 +122,7 @@ class App extends Component {
     this.openModal(message);
   }
 
-  // handlePayout({ amountInWei, recipient }) {
+  // handlePayout({ recipient, amountInWei }) {
   //   const { web3: { utils: { fromWei } } } = this.state;
   //   const amount = fromWei(amountInWei, 'ether');
   //   console.log(`Transferred ${amount} ether to ${recipient}.`);
@@ -156,39 +141,41 @@ class App extends Component {
   }
 
   createGame() {
-    const { accounts, factory: { methods: { createGame } } } = this.state;
+    const { accounts, contract: { methods: { createGame } } } = this.state;
     createGame().send({
-      from: accounts[0]
+      from: accounts[0],
+      value: BET_SIZE
     });
   }
 
-  joinGame({ methods: { joinGame } }, account) {
-    joinGame().send({
+  joinGame(gameId, account) {
+    const { joinGame } = this.state.contract.methods;
+    joinGame(gameId).send({
       from: account,
       value: BET_SIZE
     });
   }
 
-  async getBoard({ methods: { getBoard } }) {
-    return await getBoard().call();
+  async getBoard(gameId) {
+    const { getBoard } = this.state.contract.methods;
+    return await getBoard(gameId).call();
   }
 
-  placeMark(address, row, col) {
-    const { contracts, games } = this.state;
-    const { methods: { placeMark } } = contracts[address];
-    const { board, activePlayer } = games[address];
+  placeMark(gameId, row, col) {
+    const { games, contract: { methods: { placeMark } } } = this.state;
+    const { board, activePlayer } = games[gameId];
     if (board[row][col] === NO_ADDRESS) {
-      placeMark(row, col).send({
+      placeMark(gameId, row, col).send({
         from: activePlayer
       });
     }
   }
 
-  navigateTo({ currentTarget: { value: address } }) {
+  navigateTo({ currentTarget: { value: gameId } }) {
     this.setState({
-      activeGame: address
+      activeGame: gameId
     });
-    this.props.history.push(`/${address}`);
+    this.props.history.push(`/${gameId}`);
   }
 
   openModal(message) {
@@ -227,19 +214,19 @@ class App extends Component {
           onClose={() => this.closeModal()}
         />
         <Switch>
-          {Object.keys(games).map((address) => (
-            <Route key={address} exact path={`/${address}`} render={(props) => (
+          {Object.keys(games).map((gameId) => (
+            <Route key={gameId} exact path={`/${gameId}`} render={(props) => (
               <Game
                 {...props}
                 activeGame={activeGame}
                 games={games}
-                game={games[address]}
+                game={games[gameId]}
                 accounts={accounts}
                 noAddress={NO_ADDRESS}
                 info={info}
                 onNavigateTo={(e) => this.navigateTo(e)}
                 onCreateGame={() => this.createGame()}
-                onPlaceMark={(row, col) => this.placeMark(address, row, col)}
+                onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
                 onGetBalance={(account) => this.getBalance(account)}
                 onToggleInfo={() => this.toggleInfo()}
               />
