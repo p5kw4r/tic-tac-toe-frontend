@@ -104,6 +104,7 @@ class App extends Component {
   }
 
   async handleGameOver({ gameId }, message) {
+    this.openModal(message);
     const board = await this.getBoard(gameId);
     this.setState(({ games }) => ({
       games: {
@@ -115,7 +116,6 @@ class App extends Component {
         }
       }
     }));
-    this.openModal(message);
   }
 
   async getAccounts({ eth: { getAccounts } }) {
