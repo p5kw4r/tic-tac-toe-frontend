@@ -1,7 +1,7 @@
 import React from 'react';
 
-const resolveValidity = (address, noAddress) => {
-  if (address === noAddress) {
+const resolveValidity = (address, NO_ADDRESS) => {
+  if (address === NO_ADDRESS) {
     return 'valid';
   } else {
     return 'invalid';
