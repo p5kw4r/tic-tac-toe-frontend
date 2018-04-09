@@ -120,12 +120,6 @@ class App extends Component {
     this.setState({ accounts: await getAccounts() });
   }
 
-  async getBalance(account) {
-    const { eth: { getBalance }, utils: { fromWei } } = this.state.web3;
-    const balance = await getBalance(account);
-    return fromWei(balance, 'ether');
-  }
-
   createGame() {
     const { accounts, contract: { methods: { createGame } } } = this.state;
     createGame().send({
@@ -193,7 +187,7 @@ class App extends Component {
   }
 
   render() {
-    const { accounts, games, modal, info } = this.state;
+    const { web3, accounts, games, modal, info } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -208,6 +202,7 @@ class App extends Component {
           {Object.keys(games).map((gameId) => (
             <Route key={gameId} exact path={`/${gameId}`} render={() => (
               <Game
+                web3={web3}
                 games={games}
                 game={games[gameId]}
                 accounts={accounts}
@@ -215,7 +210,6 @@ class App extends Component {
                 info={info}
                 onCreateGame={() => this.createGame()}
                 onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
-                onGetBalance={(account) => this.getBalance(account)}
                 onToggleInfo={() => this.toggleInfo()}
               />
             )} />

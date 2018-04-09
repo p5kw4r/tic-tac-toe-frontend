@@ -10,13 +10,19 @@ class Accounts extends Component {
   }
 
   async componentDidMount() {
-    const { accounts, onGetBalance } = this.props;
+    const { accounts } = this.props;
     this.setState({
       balances: [
-        await onGetBalance(accounts[0]),
-        await onGetBalance(accounts[1])
+        await this.getBalance(accounts[0]),
+        await this.getBalance(accounts[1])
       ]
     });
+  }
+
+  async getBalance(account) {
+    const { eth: { getBalance }, utils: { fromWei } } = this.props.web3;
+    const balance = await getBalance(account);
+    return fromWei(balance, 'ether');
   }
 
   render() {
