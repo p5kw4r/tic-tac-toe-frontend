@@ -89,7 +89,7 @@ class App extends Component {
     }));
   }
 
-  async handleNextPlayer({ gameId, player: activePlayer }) {
+  async handleNextPlayer({ gameId, activePlayer }) {
     const board = await this.getBoard(gameId);
     this.setState(({ games }) => ({
       games: {
