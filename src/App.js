@@ -195,11 +195,6 @@ class App extends Component {
     }));
   }
 
-  closeModalAndCreateGame() {
-    this.closeModal();
-    this.createGame();
-  }
-
   toggleInfo() {
     this.setState(({ info: { isOpen } }) => ({
       info: {
@@ -215,7 +210,10 @@ class App extends Component {
         <AlertModal
           modal={modal}
           onClose={() => this.closeModal()}
-          onCreateGame={() => this.closeModalAndCreateGame()}
+          onCreateGame={() => {
+            this.closeModal();
+            this.createGame();
+          }}
         />
         <Switch>
           {Object.keys(games).map((gameId) => (
