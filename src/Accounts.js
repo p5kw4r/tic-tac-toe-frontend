@@ -40,7 +40,7 @@ class Accounts extends Component {
                   className={account === activePlayer ? 'active' : ''}
                 >
                   <th scope="row">{i + 1}</th>
-                  <td>{account}</td>
+                  <td>{i === 0 ? 'Player X' : 'Player O'}</td>
                   <td>{balances[i]}</td>
                 </tr>
               )

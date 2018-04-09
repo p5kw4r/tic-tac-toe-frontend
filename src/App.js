@@ -59,7 +59,7 @@ class App extends Component {
         this.handleNextPlayer(values);
         break;
       case 'GameOverWin':
-        const { winner } = values;
+        const winner = this.resolveWinner(values);
         this.handleGameOver(values, `Game ended with Win! Winner is ${winner}.`);
         break;
       case 'GameOverDraw':
@@ -156,6 +156,15 @@ class App extends Component {
       placeMark(gameId, row, col).send({
         from: activePlayer
       });
+    }
+  }
+
+  resolveWinner({ winner }) {
+    const { accounts } = this.state;
+    if (winner === accounts[0]) {
+      return 'Player X';
+    } else {
+      return 'Player O';
     }
   }
 
