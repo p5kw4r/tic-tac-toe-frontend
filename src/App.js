@@ -76,6 +76,8 @@ class App extends Component {
   }
 
   handleGameActive({ gameId }) {
+    // workaround because js does not support param type overloading
+    this.navigateTo({ currentTarget: { value: gameId } });
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -85,8 +87,6 @@ class App extends Component {
         }
       }
     }));
-    // workaround because js does not support param type overloading
-    this.navigateTo({ currentTarget: { value: gameId } });
   }
 
   async handleNextPlayer({ gameId, player: activePlayer }) {
