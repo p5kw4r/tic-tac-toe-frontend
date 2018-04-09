@@ -75,7 +75,6 @@ class App extends Component {
 
   handleGameCreated({ gameId }) {
     const { accounts } = this.state;
-    this.joinGame(gameId, accounts[0]);
     this.joinGame(gameId, accounts[1]);
   }
 
