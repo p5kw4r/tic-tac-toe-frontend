@@ -59,10 +59,10 @@ class App extends Component {
         break;
       case 'GameOverWin':
         const winner = this.resolveWinner(values);
-        this.handleGameOver(values, `Game ended with Win! Winner is ${winner}.`);
+        this.handleGameOver(values, `${winner} has won this game.`);
         break;
       case 'GameOverDraw':
-        this.handleGameOver(values, 'Game ended with Draw! There is no winner.');
+        this.handleGameOver(values, 'There was no winner.');
         break;
       default:
         break;
