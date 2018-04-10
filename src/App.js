@@ -143,8 +143,8 @@ class App extends Component {
 
   placeMark(gameId, row, col) {
     const { games, contract: { methods: { placeMark } } } = this.state;
-    const { board, activePlayer } = games[gameId];
-    if (board[row][col] === NO_ADDRESS) {
+    const { active, board, activePlayer } = games[gameId];
+    if (active && board[row][col] === NO_ADDRESS) {
       placeMark(gameId, row, col).send({
         from: activePlayer
       });
