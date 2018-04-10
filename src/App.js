@@ -54,8 +54,8 @@ class App extends Component {
       case 'GameActive':
         this.handleGameActive(values);
         break;
-      case 'NextPlayer':
-        this.handleNextPlayer(values);
+      case 'GameMove':
+        this.handleGameMove(values);
         break;
       case 'GameOverWin':
         const winner = this.resolveWinner(values);
@@ -87,8 +87,7 @@ class App extends Component {
     }));
   }
 
-  async handleNextPlayer({ gameId, activePlayer }) {
-    const board = await this.getBoard(gameId);
+  async handleGameMove({ gameId, board, activePlayer }) {
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -101,9 +100,8 @@ class App extends Component {
     }));
   }
 
-  async handleGameOver({ gameId }, message) {
+  handleGameOver({ gameId, board }, message) {
     this.openModal(message);
-    const board = await this.getBoard(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -134,11 +132,6 @@ class App extends Component {
       from: account,
       value: BET_SIZE
     });
-  }
-
-  async getBoard(gameId) {
-    const { getBoard } = this.state.contract.methods;
-    return await getBoard(gameId).call();
   }
 
   placeMark(gameId, row, col) {
