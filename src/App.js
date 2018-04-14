@@ -26,7 +26,7 @@ class App extends Component {
       contract: {},
       games: {},
       accounts: [],
-      modal: {},
+      alert: {},
       info: {}
     };
   }
@@ -101,7 +101,7 @@ class App extends Component {
   }
 
   handleGameOver({ gameId, board }, message) {
-    this.openModal(message);
+    this.openAlert(message);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -153,19 +153,19 @@ class App extends Component {
     }
   }
 
-  openModal(message) {
+  openAlert(message) {
     this.setState({
-      modal: {
+      alert: {
         isOpen: true,
         message
       }
     });
   }
 
-  closeModal() {
-    this.setState(({ modal }) => ({
-      modal: {
-        ...modal,
+  closeAlert() {
+    this.setState(({ alert }) => ({
+      alert: {
+        ...alert,
         isOpen: false
       }
     }));
@@ -180,14 +180,14 @@ class App extends Component {
   }
 
   render() {
-    const { web3, accounts, games, modal, info } = this.state;
+    const { web3, accounts, games, alert, info } = this.state;
     return (
       <div className="App">
         <AlertModal
-          modal={modal}
-          onClose={() => this.closeModal()}
+          alert={alert}
+          onClose={() => this.closeAlert()}
           onCreateGame={() => {
-            this.closeModal();
+            this.closeAlert();
             this.createGame();
           }}
         />
