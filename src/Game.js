@@ -16,7 +16,8 @@ const Game = ({
                 onCreateGame,
                 onPlaceMark,
                 onGetBalance,
-                onToggleInfo
+                onToggleInfo,
+                onOpenConfig
               }) => (
   <div className="Game">
     <NavBar
@@ -24,6 +25,7 @@ const Game = ({
       info={info}
       onCreateGame={() => onCreateGame()}
       onToggleInfo={() => onToggleInfo()}
+      onOpenConfig={() => onOpenConfig()}
     />
     <Board
       game={game}

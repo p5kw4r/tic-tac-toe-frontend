@@ -4,11 +4,12 @@ import Web3 from 'web3';
 import { abi, networks } from './TicTacToe.json';
 import Game from './Game';
 import AlertModal from './AlertModal';
+import ConfigModal from './ConfigModal';
 import Logo from './Logo';
 import './App.css';
 
 const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
-const BET_SIZE = 100000000000000000;
+const INITIAL_BET_SIZE = '0.1';
 const GAS_LIMIT = 300000;
 
 // workaround to extract contract address from json interface (only needed
@@ -26,6 +27,7 @@ class App extends Component {
       contract: {},
       games: {},
       accounts: [],
+      config: { betSize: INITIAL_BET_SIZE },
       modal: {},
       info: {}
     };
@@ -119,18 +121,29 @@ class App extends Component {
   }
 
   createGame() {
-    const { accounts, contract: { methods: { createGame } } } = this.state;
+    const {
+      accounts,
+      config: { betSize },
+      contract: { methods: { createGame } },
+      web3: { utils: { toWei } }
+    } = this.state;
+
     createGame().send({
       from: accounts[0],
-      value: BET_SIZE
+      value: toWei(betSize, 'ether')
     });
   }
 
   joinGame(gameId, account) {
-    const { joinGame } = this.state.contract.methods;
+    const {
+      config: { betSize },
+      contract: { methods: { joinGame } },
+      web3: { utils: { toWei } }
+    } = this.state;
+
     joinGame(gameId).send({
       from: account,
-      value: BET_SIZE
+      value: toWei(betSize, 'ether')
     });
   }
 
@@ -179,8 +192,35 @@ class App extends Component {
     }));
   }
 
+  openConfig() {
+    this.setState(({ config }) => ({
+      config: {
+        ...config,
+        isOpen: true
+      }
+    }));
+  }
+
+  closeConfig() {
+    this.setState(({ config }) => ({
+      config: {
+        ...config,
+        isOpen: false
+      }
+    }));
+  }
+
+  changeBetSize({ target: { value: betSize } }) {
+    this.setState(({ config }) => ({
+      config: {
+        ...config,
+        betSize
+      }
+    }));
+  }
+
   render() {
-    const { web3, accounts, games, modal, info } = this.state;
+    const { web3, accounts, games, config, modal, info } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -190,6 +230,11 @@ class App extends Component {
             this.closeModal();
             this.createGame();
           }}
+        />
+        <ConfigModal
+          config={config}
+          onChangeBetSize={(e) => this.changeBetSize(e)}
+          onClose={() => this.closeConfig()}
         />
         <Switch>
           {Object.keys(games).map((gameId) => (
@@ -204,6 +249,7 @@ class App extends Component {
                 onCreateGame={() => this.createGame()}
                 onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
                 onToggleInfo={() => this.toggleInfo()}
+                onOpenConfig={() => this.openConfig()}
               />
             )} />
           ))}
