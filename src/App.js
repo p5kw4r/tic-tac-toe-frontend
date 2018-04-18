@@ -228,13 +228,17 @@ class App extends Component {
           onClose={() => this.closeAlert()}
           onCreateGame={() => {
             this.closeAlert();
-            this.createGame();
+            this.openConfig();
           }}
         />
         <ConfigModal
           config={config}
           onChangeBetSize={(e) => this.changeBetSize(e)}
           onClose={() => this.closeConfig()}
+          onCreateGame={() => {
+            this.closeConfig();
+            this.createGame();
+          }}
         />
         <Switch>
           {Object.keys(games).map((gameId) => (
@@ -246,10 +250,9 @@ class App extends Component {
                 accounts={accounts}
                 noAddress={NO_ADDRESS}
                 info={info}
-                onCreateGame={() => this.createGame()}
+                onCreateGame={() => this.openConfig()}
                 onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
                 onToggleInfo={() => this.toggleInfo()}
-                onOpenConfig={() => this.openConfig()}
               />
             )} />
           ))}

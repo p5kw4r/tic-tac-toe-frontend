@@ -27,7 +27,7 @@ class NavBar extends Component {
 
   render() {
     const { isOpen } = this.state;
-    const { games, info: { isOpen: isInfoOpen }, onCreateGame, onToggleInfo, onOpenConfig } = this.props;
+    const { games, info: { isOpen: isInfoOpen }, onCreateGame, onToggleInfo } = this.props;
     return (
       <div className="NavBar">
         <Navbar fixed="top" color="light" light expand="md">
@@ -45,15 +45,6 @@ class NavBar extends Component {
                     onClick={() => onToggleInfo()}
                   >
                     {isInfoOpen ? 'Hide Info' : 'Show Info'}
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className="no-select"
-                    tag="span"
-                    onClick={() => onOpenConfig()}
-                  >
-                    Change Config
                   </NavLink>
                 </NavItem>
                 <NavDropdown games={games} />

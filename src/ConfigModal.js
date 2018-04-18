@@ -10,7 +10,7 @@ import {
   ModalHeader
 } from 'reactstrap';
 
-const ConfigModal = ({ config: { isOpen, betSize }, onClose, onChangeBetSize }) => (
+const ConfigModal = ({ config: { isOpen, betSize }, onClose, onChangeBetSize, onCreateGame }) => (
   <div className="ConfigModal">
     <Modal isOpen={isOpen} backdrop="static">
       <ModalHeader toggle={() => onClose()}>Game Config</ModalHeader>
@@ -28,6 +28,9 @@ const ConfigModal = ({ config: { isOpen, betSize }, onClose, onChangeBetSize }) 
       </ModalBody>
       <ModalFooter>
         <Button outline onClick={() => onClose()}>Close</Button>
+        <Button outline color="primary" onClick={() => onCreateGame()}>
+          Create Game
+        </Button>
       </ModalFooter>
     </Modal>
   </div>
