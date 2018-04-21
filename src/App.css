@@ -23,7 +23,13 @@ body,
 }
 
 .Logo img {
+  animation: Logo-spin infinite 20s linear;
   width: 900px;
+}
+
+@keyframes Logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .NavBar .nav-link:hover {
