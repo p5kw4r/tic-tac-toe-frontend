@@ -30,7 +30,7 @@ class App extends Component {
       balances: [],
       config: { betSize: INITIAL_BET_SIZE },
       alert: {},
-      info: {}
+      info: { isOpen: true }
     };
   }
 
