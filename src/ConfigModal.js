@@ -27,7 +27,7 @@ const ConfigModal = ({ config: { isOpen, betSize }, onClose, onChangeBetSize, on
         </FormGroup>
       </ModalBody>
       <ModalFooter>
-        <Button outline onClick={() => onClose()}>Close</Button>
+        <Button outline onClick={() => onClose()}>Cancel</Button>
         <Button outline color="primary" onClick={() => onCreateGame()}>
           Create Game
         </Button>

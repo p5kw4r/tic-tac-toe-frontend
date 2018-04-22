@@ -7,7 +7,7 @@ const AlertModal = ({ alert: { isOpen, message }, onClose, onCreateGame }) => (
       <ModalHeader toggle={() => onClose()}>Game Over</ModalHeader>
       <ModalBody>{message}</ModalBody>
       <ModalFooter>
-        <Button outline onClick={() => onClose()}>Close</Button>
+        <Button outline onClick={() => onClose()}>Cancel</Button>
         <Button outline color="primary" onClick={() => onCreateGame()}>
           New Game
         </Button>
