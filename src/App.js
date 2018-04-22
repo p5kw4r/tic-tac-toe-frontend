@@ -27,6 +27,7 @@ class App extends Component {
       contract: {},
       games: {},
       accounts: [],
+      balances: [],
       config: { betSize: INITIAL_BET_SIZE },
       alert: {},
       info: {}
@@ -41,6 +42,7 @@ class App extends Component {
       this.setState({ web3, contract }),
       this.getAccounts(web3)
     ]);
+    this.updateBalances();
     this.createGame();
   }
 
@@ -78,6 +80,7 @@ class App extends Component {
 
   handleGameActive({ gameId }) {
     this.props.history.push(`/${gameId}`);
+    this.updateBalances();
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -90,6 +93,7 @@ class App extends Component {
   }
 
   async handleGameMove({ gameId, board, activePlayer }) {
+    this.updateBalances();
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -104,6 +108,7 @@ class App extends Component {
 
   handleGameOver({ gameId, board }, message) {
     this.openAlert(message);
+    this.updateBalances();
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -118,6 +123,20 @@ class App extends Component {
 
   async getAccounts({ eth: { getAccounts } }) {
     this.setState({ accounts: await getAccounts() });
+  }
+
+  async updateBalances() {
+    const {
+      accounts,
+      web3: { eth: { getBalance }, utils: { fromWei } }
+    } = this.state;
+
+    this.setState({
+      balances: [
+        fromWei(await getBalance(accounts[0]), 'ether'),
+        fromWei(await getBalance(accounts[1]), 'ether')
+      ]
+    });
   }
 
   createGame() {
@@ -220,7 +239,7 @@ class App extends Component {
   }
 
   render() {
-    const { web3, accounts, games, config, alert, info } = this.state;
+    const { accounts, balances, games, config, alert, info } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -244,10 +263,10 @@ class App extends Component {
           {Object.keys(games).map((gameId) => (
             <Route key={gameId} exact path={`/${gameId}`} render={() => (
               <Game
-                web3={web3}
                 games={games}
                 game={games[gameId]}
                 accounts={accounts}
+                balances={balances}
                 noAddress={NO_ADDRESS}
                 info={info}
                 onCreateGame={() => this.openConfig()}

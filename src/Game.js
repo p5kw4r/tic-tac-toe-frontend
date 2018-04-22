@@ -5,11 +5,11 @@ import Accounts from './Accounts';
 import Board from './Board';
 
 const Game = ({
-                web3,
                 games,
                 game,
                 game: { activePlayer, board },
                 accounts,
+                balances,
                 noAddress: NO_ADDRESS,
                 info,
                 info: { isOpen },
@@ -34,9 +34,9 @@ const Game = ({
     {board ? (
       <Collapse isOpen={isOpen}>
         <Accounts
-          web3={web3}
           activePlayer={activePlayer}
           accounts={accounts}
+          balances={balances}
         />
       </Collapse>
     ) : (
