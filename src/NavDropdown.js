@@ -18,9 +18,9 @@ const NavDropdown = ({ games, match: { url }, history }) => (
           <DropdownItem
             key={gameId}
             value={gameId}
-            active={gameId === url.replace('/', '')}
+            active={gameId === url.replace('/game/', '')}
             onClick={({ currentTarget: { value: gameId } }) => (
-              history.push(`/${gameId}`)
+              history.push(`/game/${gameId}`)
             )}
           >
             {`Game ${gameId}`}

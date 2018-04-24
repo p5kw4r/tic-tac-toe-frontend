@@ -79,7 +79,7 @@ class App extends Component {
   }
 
   handleGameActive({ gameId }) {
-    this.navigateTo(`/${gameId}`);
+    this.navigateTo(`/game/${gameId}`);
     this.updateBalances();
     this.setState(({ games }) => ({
       games: {
@@ -266,7 +266,7 @@ class App extends Component {
         />
         <Switch>
           <Route
-            path={`/:gameId`}
+            path={`/game/:gameId`}
             render={({ match: { params: { gameId } } }) => {
               const game = games[gameId];
               return (
