@@ -7,7 +7,7 @@ import {
   UncontrolledDropdown
 } from 'reactstrap';
 
-const NavDropdown = ({ games, match: { path }, history }) => (
+const NavDropdown = ({ games, match: { url }, history }) => (
   <UncontrolledDropdown nav inNavbar>
     <DropdownToggle className="no-select" tag="span" nav caret>
       Select Game
@@ -18,7 +18,7 @@ const NavDropdown = ({ games, match: { path }, history }) => (
           <DropdownItem
             key={gameId}
             value={gameId}
-            active={gameId === path.replace('/', '')}
+            active={gameId === url.replace('/', '')}
             onClick={({ currentTarget: { value: gameId } }) => (
               history.push(`/${gameId}`)
             )}
