@@ -79,7 +79,7 @@ class App extends Component {
   }
 
   handleGameActive({ gameId }) {
-    this.props.history.push(`/${gameId}`);
+    this.navigateTo(`/${gameId}`);
     this.updateBalances();
     this.setState(({ games }) => ({
       games: {
@@ -176,6 +176,11 @@ class App extends Component {
     }
   }
 
+  navigateTo(path) {
+    const { history } = this.props;
+    history.push(path);
+  }
+
   resolveWinner({ winner }) {
     const { accounts } = this.state;
     if (winner === accounts[0]) {
@@ -260,21 +265,28 @@ class App extends Component {
           }}
         />
         <Switch>
-          {Object.keys(games).map((gameId) => (
-            <Route key={gameId} exact path={`/${gameId}`} render={() => (
-              <Game
-                games={games}
-                game={games[gameId]}
-                accounts={accounts}
-                balances={balances}
-                noAddress={NO_ADDRESS}
-                info={info}
-                onCreateGame={() => this.openConfig()}
-                onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
-                onToggleInfo={() => this.toggleInfo()}
-              />
-            )} />
-          ))}
+          <Route
+            path={`/:gameId`}
+            render={({ match: { params: { gameId } } }) => {
+              const game = games[gameId];
+              return (
+                game ? (
+                  <Game
+                    game={game}
+                    games={games}
+                    accounts={accounts}
+                    balances={balances}
+                    noAddress={NO_ADDRESS}
+                    info={info}
+                    onCreateGame={() => this.openConfig()}
+                    onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
+                    onToggleInfo={() => this.toggleInfo()}
+                  />
+                ) : (
+                  <Logo />
+                )
+              );
+            }} />
           <Route component={Logo} />
         </Switch>
       </div>

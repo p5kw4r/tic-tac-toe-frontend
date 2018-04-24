@@ -16,33 +16,35 @@ const Game = ({
                 onCreateGame,
                 onPlaceMark,
                 onGetBalance,
-                onToggleInfo
-              }) => (
-  <div className="Game">
-    <NavBar
-      games={games}
-      info={info}
-      onCreateGame={() => onCreateGame()}
-      onToggleInfo={() => onToggleInfo()}
-    />
-    <Board
-      game={game}
-      accounts={accounts}
-      noAddress={NO_ADDRESS}
-      onPlaceMark={(row, col) => onPlaceMark(row, col)}
-    />
-    {board ? (
-      <Collapse isOpen={isOpen}>
-        <Accounts
-          activePlayer={activePlayer}
-          accounts={accounts}
-          balances={balances}
-        />
-      </Collapse>
-    ) : (
-      null
-    )}
-  </div>
-);
+                onToggleInfo,
+              }) => {
+  return (
+    <div className="Game">
+      <NavBar
+        games={games}
+        info={info}
+        onCreateGame={() => onCreateGame()}
+        onToggleInfo={() => onToggleInfo()}
+      />
+      <Board
+        game={game}
+        accounts={accounts}
+        noAddress={NO_ADDRESS}
+        onPlaceMark={(row, col) => onPlaceMark(row, col)}
+      />
+      {board ? (
+        <Collapse isOpen={isOpen}>
+          <Accounts
+            activePlayer={activePlayer}
+            accounts={accounts}
+            balances={balances}
+          />
+        </Collapse>
+      ) : (
+        null
+      )}
+    </div>
+  );
+};
 
 export default Game;
