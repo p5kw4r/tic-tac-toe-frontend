@@ -1,7 +1,7 @@
 import React from 'react';
 import { Collapse } from 'reactstrap';
 import NavBar from './NavBar';
-import Accounts from './Accounts';
+import Info from './Info';
 import Board from './Board';
 
 const Game = ({
@@ -34,7 +34,7 @@ const Game = ({
       />
       {board ? (
         <Collapse isOpen={isOpen}>
-          <Accounts
+          <Info
             activePlayer={activePlayer}
             accounts={accounts}
             balances={balances}
