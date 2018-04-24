@@ -286,7 +286,8 @@ class App extends Component {
                   <Logo />
                 )
               );
-            }} />
+            }}
+          />
           <Route component={Logo} />
         </Switch>
       </div>
