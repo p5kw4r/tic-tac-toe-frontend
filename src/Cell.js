@@ -1,6 +1,6 @@
 import React from 'react';
 
-const resolveValidity = (address, NO_ADDRESS) => {
+const validity = (address, NO_ADDRESS) => {
   if (address === NO_ADDRESS) {
     return 'valid';
   } else {
@@ -8,7 +8,7 @@ const resolveValidity = (address, NO_ADDRESS) => {
   }
 };
 
-const resolveState = (active) => {
+const state = (active) => {
   if (active) {
     return 'active';
   } else {
@@ -16,7 +16,7 @@ const resolveState = (active) => {
   }
 };
 
-const resolveMark = (address, accounts) => {
+const mark = (address, accounts) => {
   if (address === accounts[0]) {
     return 'X';
   } else if (address === accounts[1]) {
@@ -32,18 +32,13 @@ const Cell = ({
                 accounts,
                 noAddress: NO_ADDRESS,
                 onPlaceMark
-              }) => {
-  const validity = resolveValidity(address, NO_ADDRESS);
-  const state = resolveState(active);
-  const mark = resolveMark(address, accounts);
-  return (
-    <div
-      className={`Cell no-select ${validity} ${state}`}
-      onClick={() => onPlaceMark()}
-    >
-      {mark}
-    </div>
-  );
-};
+              }) => (
+  <div
+    className={`Cell no-select ${validity(address, NO_ADDRESS)} ${state(active)}`}
+    onClick={() => onPlaceMark()}
+  >
+    {mark(address, accounts)}
+  </div>
+);
 
 export default Cell;
