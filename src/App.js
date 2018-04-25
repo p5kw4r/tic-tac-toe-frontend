@@ -27,8 +27,7 @@ class App extends Component {
       contract: {},
       games: {},
       accounts: [],
-      balances: [],
-      config: { betSize: INITIAL_BET_SIZE },
+      config: {},
       alert: {},
       info: { isOpen: true }
     };
@@ -42,7 +41,6 @@ class App extends Component {
       this.setState({ web3, contract }),
       this.getAccounts(web3)
     ]);
-    this.updateBalances();
     this.createGame();
   }
 
@@ -73,14 +71,27 @@ class App extends Component {
     }
   }
 
-  handleGameCreated({ gameId }) {
-    const { accounts } = this.state;
-    this.joinGame(gameId, accounts[1]);
+  async handleGameCreated({ gameId }) {
+    const { config: { players } } = this.state;
+    await this.setState(({ games }) => ({
+      games: {
+        ...games,
+        [gameId]: {
+          ...games[gameId],
+          players: [
+            players[0],
+            players[1]
+          ]
+        }
+      }
+    }));
+    await this.updateBalances(gameId);
+    this.joinGame(gameId, players[1]);
   }
 
   handleGameActive({ gameId }) {
     this.navigateTo(`/game/${gameId}`);
-    this.updateBalances();
+    this.updateBalances(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -93,7 +104,7 @@ class App extends Component {
   }
 
   async handleGameMove({ gameId, board, activePlayer }) {
-    this.updateBalances();
+    this.updateBalances(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -108,7 +119,7 @@ class App extends Component {
 
   handleGameOver({ gameId, board }, message) {
     this.openAlert(message);
-    this.updateBalances();
+    this.updateBalances(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -122,34 +133,46 @@ class App extends Component {
   }
 
   async getAccounts({ eth: { getAccounts } }) {
-    this.setState({ accounts: await getAccounts() });
+    const accounts = await getAccounts();
+    this.setState({
+      config: {
+        betSize: INITIAL_BET_SIZE,
+        players: {
+          0: accounts[0],
+          1: accounts[1]
+        }
+      },
+      accounts
+    });
   }
 
-  async updateBalances() {
-    const {
-      accounts,
-      web3: { eth: { getBalance }, utils: { fromWei } }
-    } = this.state;
-
-    const balance1 = getBalance(accounts[0]);
-    const balance2 = getBalance(accounts[1]);
-    this.setState({
-      balances: [
-        fromWei(await balance1, 'ether'),
-        fromWei(await balance2, 'ether')
-      ]
-    });
+  async updateBalances(gameId) {
+    const { games, web3: { eth: { getBalance }, utils: { fromWei } } } = this.state;
+    const { players } = games[gameId];
+    const balance1 = await getBalance(players[0]);
+    const balance2 = await getBalance(players[1]);
+    this.setState(({ games }) => ({
+      games: {
+        ...games,
+        [gameId]: {
+          ...games[gameId],
+          balances: [
+            fromWei(balance1, 'ether'),
+            fromWei(balance2, 'ether')
+          ]
+        }
+      }
+    }));
   }
 
   createGame() {
     const {
-      accounts,
-      config: { betSize },
+      config: { betSize, players },
       contract: { methods: { createGame } },
       web3: { utils: { toWei } }
     } = this.state;
     createGame().send({
-      from: accounts[0],
+      from: players[0],
       value: toWei(betSize, 'ether')
     });
   }
@@ -181,9 +204,10 @@ class App extends Component {
     history.push(path);
   }
 
-  resolveWinner({ winner }) {
-    const { accounts } = this.state;
-    if (winner === accounts[0]) {
+  resolveWinner({ gameId, winner }) {
+    const { games } = this.state;
+    const { players } = games[gameId];
+    if (winner === players[0]) {
       return 'Player X';
     } else {
       return 'Player O';
@@ -243,8 +267,20 @@ class App extends Component {
     }));
   }
 
+  changePlayer(player, i) {
+    this.setState(({ config, config: { players } }) => ({
+      config: {
+        ...config,
+        players: {
+          ...players,
+          [i]: player
+        }
+      }
+    }));
+  }
+
   render() {
-    const { accounts, balances, games, config, alert, info } = this.state;
+    const { accounts, games, config, config: { players }, alert, info } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -255,15 +291,19 @@ class App extends Component {
             this.openConfig();
           }}
         />
-        <ConfigModal
-          config={config}
-          onChangeBetSize={(betSize) => this.changeBetSize(betSize)}
-          onClose={() => this.closeConfig()}
-          onCreateGame={() => {
-            this.closeConfig();
-            this.createGame();
-          }}
-        />
+        {players && (
+          <ConfigModal
+            accounts={accounts}
+            config={config}
+            onChangeBetSize={(betSize) => this.changeBetSize(betSize)}
+            onChangePlayer={(player, i) => this.changePlayer(player, i)}
+            onClose={() => this.closeConfig()}
+            onCreateGame={() => {
+              this.closeConfig();
+              this.createGame();
+            }}
+          />
+        )}
         <Switch>
           <Route
             path={`/game/:gameId`}
@@ -276,8 +316,6 @@ class App extends Component {
                 <Game
                   game={game}
                   games={games}
-                  accounts={accounts}
-                  balances={balances}
                   noAddress={NO_ADDRESS}
                   info={info}
                   onCreateGame={() => this.openConfig()}

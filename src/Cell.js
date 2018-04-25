@@ -16,10 +16,10 @@ const state = (active) => {
   }
 };
 
-const mark = (address, accounts) => {
-  if (address === accounts[0]) {
+const mark = (address, players) => {
+  if (address === players[0]) {
     return 'X';
-  } else if (address === accounts[1]) {
+  } else if (address === players[1]) {
     return 'O';
   } else {
     return '';
@@ -29,7 +29,7 @@ const mark = (address, accounts) => {
 const Cell = ({
                 active,
                 address,
-                accounts,
+                players,
                 noAddress: NO_ADDRESS,
                 onPlaceMark
               }) => (
@@ -37,7 +37,7 @@ const Cell = ({
     className={`Cell no-select ${validity(address, NO_ADDRESS)} ${state(active)}`}
     onClick={() => onPlaceMark()}
   >
-    {mark(address, accounts)}
+    {mark(address, players)}
   </div>
 );
 

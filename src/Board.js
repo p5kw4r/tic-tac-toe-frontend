@@ -3,7 +3,7 @@ import Cell from './Cell';
 
 const Board = ({
                  game: { active, board },
-                 accounts,
+                 players,
                  noAddress: NO_ADDRESS,
                  onPlaceMark
                }) => (
@@ -14,7 +14,7 @@ const Board = ({
           key={j}
           active={active}
           address={address}
-          accounts={accounts}
+          players={players}
           noAddress={NO_ADDRESS}
           onPlaceMark={() => onPlaceMark(i, j)}
         />

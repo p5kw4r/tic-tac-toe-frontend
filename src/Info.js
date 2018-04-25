@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'reactstrap';
 
-const Info = ({ activePlayer, accounts, balances }) => (
+const Info = ({ activePlayer, players, balances }) => (
   <div className="Info mt-5 no-select">
     <Table responsive>
       <thead>
@@ -14,8 +14,8 @@ const Info = ({ activePlayer, accounts, balances }) => (
       </thead>
       <tbody>
       {balances.map((balance, i) => (
-        <tr key={accounts[i]}>
-          <td>{accounts[i] === activePlayer && <i className="fa fa-play" />}</td>
+        <tr key={players[i]}>
+          <td>{players[i] === activePlayer && <i className="fa fa-play" />}</td>
           <th scope="row">{i + 1}</th>
           <td>{i === 0 ? 'Player X' : 'Player O'}</td>
           <td>{balance}</td>

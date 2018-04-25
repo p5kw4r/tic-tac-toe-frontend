@@ -7,9 +7,7 @@ import Board from './Board';
 const Game = ({
                 games,
                 game,
-                game: { activePlayer },
-                accounts,
-                balances,
+                game: { activePlayer, players, balances },
                 noAddress: NO_ADDRESS,
                 info,
                 info: { isOpen },
@@ -27,14 +25,14 @@ const Game = ({
     />
     <Board
       game={game}
-      accounts={accounts}
+      players={players}
       noAddress={NO_ADDRESS}
       onPlaceMark={(row, col) => onPlaceMark(row, col)}
     />
     <Collapse isOpen={isOpen}>
       <Info
         activePlayer={activePlayer}
-        accounts={accounts}
+        players={players}
         balances={balances}
       />
     </Collapse>
