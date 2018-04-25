@@ -22,7 +22,7 @@ const ConfigModal = ({ config: { isOpen, betSize }, onClose, onChangeBetSize, on
             step={0.1}
             min={0}
             value={betSize}
-            onChange={(e) => onChangeBetSize(e)}
+            onChange={({ target: { value } }) => onChangeBetSize(value)}
           />
         </FormGroup>
       </ModalBody>

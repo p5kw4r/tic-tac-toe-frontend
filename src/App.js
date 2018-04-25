@@ -234,7 +234,7 @@ class App extends Component {
     }));
   }
 
-  changeBetSize({ target: { value: betSize } }) {
+  changeBetSize(betSize) {
     this.setState(({ config }) => ({
       config: {
         ...config,
@@ -257,7 +257,7 @@ class App extends Component {
         />
         <ConfigModal
           config={config}
-          onChangeBetSize={(e) => this.changeBetSize(e)}
+          onChangeBetSize={(betSize) => this.changeBetSize(betSize)}
           onClose={() => this.closeConfig()}
           onCreateGame={() => {
             this.closeConfig();
