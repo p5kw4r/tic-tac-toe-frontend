@@ -131,10 +131,12 @@ class App extends Component {
       web3: { eth: { getBalance }, utils: { fromWei } }
     } = this.state;
 
+    const balance1 = getBalance(accounts[0]);
+    const balance2 = getBalance(accounts[1]);
     this.setState({
       balances: [
-        fromWei(await getBalance(accounts[0]), 'ether'),
-        fromWei(await getBalance(accounts[1]), 'ether')
+        fromWei(await balance1, 'ether'),
+        fromWei(await balance2, 'ether')
       ]
     });
   }
