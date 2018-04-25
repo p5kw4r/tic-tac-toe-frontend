@@ -73,10 +73,6 @@ body,
   cursor: not-allowed;
 }
 
-.Info .active {
-  color: #a3be8c;
-}
-
 .no-select {
   user-select: none;
 }

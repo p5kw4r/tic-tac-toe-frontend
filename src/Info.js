@@ -6,6 +6,7 @@ const Info = ({ activePlayer, accounts, balances }) => (
     <Table responsive>
       <thead>
       <tr>
+        <th scope="col" />
         <th scope="col">#</th>
         <th scope="col">Account</th>
         <th scope="col">Balance</th>
@@ -13,10 +14,8 @@ const Info = ({ activePlayer, accounts, balances }) => (
       </thead>
       <tbody>
       {balances.map((balance, i) => (
-        <tr
-          key={accounts[i]}
-          className={accounts[i] === activePlayer ? 'active' : ''}
-        >
+        <tr key={accounts[i]}>
+          <td>{accounts[i] === activePlayer && <i className="fa fa-play" />}</td>
           <th scope="row">{i + 1}</th>
           <td>{i === 0 ? 'Player X' : 'Player O'}</td>
           <td>{balance}</td>
