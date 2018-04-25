@@ -33,7 +33,6 @@ class NavBar extends Component {
       onToggleInfo
     } = this.props;
     const { isOpen } = this.state;
-
     return (
       <div className="NavBar">
         <Navbar fixed="top" color="light" light expand="md">

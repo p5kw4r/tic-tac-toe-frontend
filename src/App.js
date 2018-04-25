@@ -148,7 +148,6 @@ class App extends Component {
       contract: { methods: { createGame } },
       web3: { utils: { toWei } }
     } = this.state;
-
     createGame().send({
       from: accounts[0],
       value: toWei(betSize, 'ether')
@@ -161,7 +160,6 @@ class App extends Component {
       contract: { methods: { joinGame } },
       web3: { utils: { toWei } }
     } = this.state;
-
     joinGame(gameId).send({
       from: account,
       value: toWei(betSize, 'ether')
