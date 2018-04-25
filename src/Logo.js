@@ -3,7 +3,7 @@ import logo from './logo.svg';
 
 const Logo = () => (
   <div className="Logo">
-    <img src={logo} alt="logo" />
+    <img src={logo} alt="" />
   </div>
 );
 
