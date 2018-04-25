@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button,
   FormGroup,
+  FormText,
   Input,
   Label,
   Modal,
@@ -21,7 +22,7 @@ const ConfigModal = ({
       <ModalHeader toggle={() => onClose()}>Game Config</ModalHeader>
       <ModalBody>
         <FormGroup>
-          <Label>Bet Size (in ether)</Label>
+          <Label>Bet Size</Label>
           <Input
             type="number"
             step={0.1}
@@ -29,6 +30,7 @@ const ConfigModal = ({
             value={betSize}
             onChange={({ target: { value } }) => onChangeBetSize(value)}
           />
+          <FormText>Amount is specified in ether.</FormText>
         </FormGroup>
       </ModalBody>
       <ModalFooter>
