@@ -2,7 +2,7 @@ import React from 'react';
 import Cell from './Cell';
 
 const Board = ({
-                 game: { active, board, activePlayer },
+                 game: { active, board },
                  accounts,
                  noAddress: NO_ADDRESS,
                  onPlaceMark
