@@ -60,7 +60,7 @@ const ConfigModal = ({
             value={betSize}
             onChange={({ target: { value } }) => onChangeBetSize(value)}
           />
-          <FormText>Amount is specified in ether.</FormText>
+          <FormText>Amount is specified in ether (ETH).</FormText>
         </FormGroup>
       </ModalBody>
       <ModalFooter>
