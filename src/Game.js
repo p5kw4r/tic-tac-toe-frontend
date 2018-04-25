@@ -7,7 +7,7 @@ import Board from './Board';
 const Game = ({
                 games,
                 game,
-                game: { activePlayer, board },
+                game: { activePlayer },
                 accounts,
                 balances,
                 noAddress: NO_ADDRESS,
@@ -31,17 +31,13 @@ const Game = ({
       noAddress={NO_ADDRESS}
       onPlaceMark={(row, col) => onPlaceMark(row, col)}
     />
-    {board ? (
-      <Collapse isOpen={isOpen}>
-        <Info
-          activePlayer={activePlayer}
-          accounts={accounts}
-          balances={balances}
-        />
-      </Collapse>
-    ) : (
-      null
-    )}
+    <Collapse isOpen={isOpen}>
+      <Info
+        activePlayer={activePlayer}
+        accounts={accounts}
+        balances={balances}
+      />
+    </Collapse>
   </div>
 );
 
