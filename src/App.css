@@ -68,10 +68,7 @@ body,
   background-color: #a3be8c;
 }
 
-.Cell.active.invalid:hover {
-  cursor: not-allowed;
-}
-
+.Cell.active.invalid:hover,
 .Cell.inactive:hover {
   cursor: not-allowed;
 }
