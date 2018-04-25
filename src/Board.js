@@ -7,24 +7,20 @@ const Board = ({
                  noAddress: NO_ADDRESS,
                  onPlaceMark
                }) => (
-  board ? (
-    <div className="Board">
-      {board.map((cells, i) => (
-        cells.map((address, j) => (
-          <Cell
-            key={j}
-            active={active}
-            address={address}
-            accounts={accounts}
-            noAddress={NO_ADDRESS}
-            onPlaceMark={() => onPlaceMark(i, j)}
-          />
-        ))
-      ))}
-    </div>
-  ) : (
-    null
-  )
+  <div className="Board">
+    {board.map((cells, i) => (
+      cells.map((address, j) => (
+        <Cell
+          key={j}
+          active={active}
+          address={address}
+          accounts={accounts}
+          noAddress={NO_ADDRESS}
+          onPlaceMark={() => onPlaceMark(i, j)}
+        />
+      ))
+    ))}
+  </div>
 );
 
 export default Board;
