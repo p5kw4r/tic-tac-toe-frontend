@@ -271,22 +271,21 @@ class App extends Component {
             path={`/game/:gameId`}
             render={({ match: { params: { gameId } } }) => {
               const game = games[gameId];
+              if (!game) {
+                return <Logo />;
+              }
               return (
-                game ? (
-                  <Game
-                    game={game}
-                    games={games}
-                    accounts={accounts}
-                    balances={balances}
-                    noAddress={NO_ADDRESS}
-                    info={info}
-                    onCreateGame={() => this.openConfig()}
-                    onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
-                    onToggleInfo={() => this.toggleInfo()}
-                  />
-                ) : (
-                  <Logo />
-                )
+                <Game
+                  game={game}
+                  games={games}
+                  accounts={accounts}
+                  balances={balances}
+                  noAddress={NO_ADDRESS}
+                  info={info}
+                  onCreateGame={() => this.openConfig()}
+                  onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
+                  onToggleInfo={() => this.toggleInfo()}
+                />
               );
             }}
           />

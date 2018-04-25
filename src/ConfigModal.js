@@ -10,7 +10,12 @@ import {
   ModalHeader
 } from 'reactstrap';
 
-const ConfigModal = ({ config: { isOpen, betSize }, onClose, onChangeBetSize, onCreateGame }) => (
+const ConfigModal = ({
+                       config: { isOpen, betSize },
+                       onClose,
+                       onChangeBetSize,
+                       onCreateGame
+                     }) => (
   <div className="ConfigModal">
     <Modal isOpen={isOpen} backdrop="static">
       <ModalHeader toggle={() => onClose()}>Game Config</ModalHeader>

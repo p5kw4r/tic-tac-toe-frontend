@@ -26,8 +26,14 @@ class NavBar extends Component {
   }
 
   render() {
+    const {
+      games,
+      info: { isOpen: isInfoOpen },
+      onCreateGame,
+      onToggleInfo
+    } = this.props;
     const { isOpen } = this.state;
-    const { games, info: { isOpen: isInfoOpen }, onCreateGame, onToggleInfo } = this.props;
+
     return (
       <div className="NavBar">
         <Navbar fixed="top" color="light" light expand="md">
