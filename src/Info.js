@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'reactstrap';
 
 const Info = ({ activePlayer, accounts, balances }) => (
-  <div className="Accounts mt-5">
+  <div className="Info mt-5">
     <Table responsive>
       <thead>
       <tr>
