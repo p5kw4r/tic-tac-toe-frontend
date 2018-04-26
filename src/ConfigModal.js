@@ -23,34 +23,22 @@ const ConfigModal = ({
     <Modal isOpen={isOpen} backdrop="static">
       <ModalHeader toggle={() => onClose()}>Game Config</ModalHeader>
       <ModalBody>
-        <FormGroup>
-          <Label>Player X</Label>
-          <Input
-            type="select"
-            value={players[0]}
-            onChange={({ target: { value } }) => onChangePlayer(value, 0)}
-          >
-            {accounts.map((account) => (
-              players[1] !== account && (
-                <option key={account}>{account}</option>
-              )
-            ))}
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label>Player Y</Label>
-          <Input
-            type="select"
-            value={players[1]}
-            onChange={({ target: { value } }) => onChangePlayer(value, 1)}
-          >
-            {accounts.map((account) => (
-              players[0] !== account && (
-                <option key={account}>{account}</option>
-              )
-            ))}
-          </Input>
-        </FormGroup>
+        {Object.keys(players).map((i) => (
+          <FormGroup key={players[i]}>
+            <Label>{i === '0' ? 'Player X' : 'Player Y'}</Label>
+            <Input
+              type="select"
+              value={players[i]}
+              onChange={({ target: { value } }) => onChangePlayer(value, i)}
+            >
+              {accounts.map((account) => (
+                players[i === '0' ? '1' : '0'] !== account && (
+                  <option key={account}>{account}</option>
+                )
+              ))}
+            </Input>
+          </FormGroup>
+        ))}
         <FormGroup>
           <Label>Bet Size</Label>
           <Input
