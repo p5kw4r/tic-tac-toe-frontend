@@ -32,7 +32,7 @@ const ConfigModal = ({
               onChange={({ target: { value } }) => onChangePlayer(value, i)}
             >
               {accounts.map((account) => (
-                players[i === '0' ? '1' : '0'] !== account && (
+                account !== players[i === '0' ? '1' : '0'] && (
                   <option key={account}>{account}</option>
                 )
               ))}
