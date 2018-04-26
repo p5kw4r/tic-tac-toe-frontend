@@ -149,17 +149,15 @@ class App extends Component {
   async updateBalances(gameId) {
     const { games, web3: { eth: { getBalance }, utils: { fromWei } } } = this.state;
     const { players } = games[gameId];
-    const balance1 = await getBalance(players[0]);
-    const balance2 = await getBalance(players[1]);
+    let balances = players.map((player) => getBalance(player));
+    balances = await Promise.all(balances);
+    balances = balances.map((balance) => fromWei(balance, 'ether'));
     this.setState(({ games }) => ({
       games: {
         ...games,
         [gameId]: {
           ...games[gameId],
-          balances: [
-            fromWei(balance1, 'ether'),
-            fromWei(balance2, 'ether')
-          ]
+          balances
         }
       }
     }));
