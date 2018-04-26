@@ -85,7 +85,7 @@ class App extends Component {
         }
       }
     }));
-    await this.updateBalances(gameId);
+    this.updateBalances(gameId);
     this.joinGame(gameId, players[1]);
   }
 
