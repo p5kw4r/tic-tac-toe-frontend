@@ -5,7 +5,7 @@ import { abi, networks } from './TicTacToe.json';
 import Game from './Game';
 import AlertModal from './AlertModal';
 import ConfigModal from './ConfigModal';
-import Logo from './Logo';
+import Splash from './Splash';
 import './App.css';
 
 const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -309,7 +309,7 @@ class App extends Component {
             render={({ match: { params: { gameId } } }) => {
               const game = games[gameId];
               if (!game) {
-                return <Logo />;
+                return <Splash />;
               }
               return (
                 <Game
@@ -324,7 +324,7 @@ class App extends Component {
               );
             }}
           />
-          <Route component={Logo} />
+          <Route component={Splash} />
         </Switch>
       </div>
     );

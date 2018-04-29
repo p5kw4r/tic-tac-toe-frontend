@@ -13,7 +13,7 @@ body,
   align-items: center;
 }
 
-.Logo {
+.Splash {
   height: 100%;
   width: 100%;
   background-color: #f8f9fa;
@@ -22,7 +22,7 @@ body,
   align-items: center;
 }
 
-.Logo img {
+.Splash img {
   animation: Logo-spin infinite 20s linear;
   width: 900px;
 }
