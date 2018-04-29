@@ -7,36 +7,37 @@ import Board from './Board';
 const Game = ({
                 games,
                 game,
-                game: { activePlayer, players, balances },
                 noAddress: NO_ADDRESS,
                 info,
-                info: { isOpen },
                 onCreateGame,
                 onPlaceMark,
                 onGetBalance,
                 onToggleInfo,
-              }) => (
-  <div className="Game">
-    <NavBar
-      games={games}
-      info={info}
-      onCreateGame={() => onCreateGame()}
-      onToggleInfo={() => onToggleInfo()}
-    />
-    <Board
-      game={game}
-      players={players}
-      noAddress={NO_ADDRESS}
-      onPlaceMark={(row, col) => onPlaceMark(row, col)}
-    />
-    <Collapse isOpen={isOpen}>
-      <Info
-        activePlayer={activePlayer}
-        players={players}
-        balances={balances}
+              }) => {
+  const { activePlayer, players, balances} = game;
+  const { isOpen } = info;
+  return (
+    <div className="Game">
+      <NavBar
+        games={games}
+        info={info}
+        onCreateGame={() => onCreateGame()}
+        onToggleInfo={() => onToggleInfo()}
       />
-    </Collapse>
-  </div>
-);
+      <Board
+        game={game}
+        noAddress={NO_ADDRESS}
+        onPlaceMark={(row, col) => onPlaceMark(row, col)}
+      />
+      <Collapse isOpen={isOpen}>
+        <Info
+          activePlayer={activePlayer}
+          players={players}
+          balances={balances}
+        />
+      </Collapse>
+    </div>
+  );
+};
 
 export default Game;

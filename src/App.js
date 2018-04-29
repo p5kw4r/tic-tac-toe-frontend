@@ -278,7 +278,8 @@ class App extends Component {
   }
 
   render() {
-    const { accounts, games, config, config: { players }, alert, info } = this.state;
+    const { accounts, games, config, alert, info } = this.state;
+    const { players } = config;
     return (
       <div className="App">
         <AlertModal
