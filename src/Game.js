@@ -14,7 +14,7 @@ const Game = ({
                 onGetBalance,
                 onToggleInfo,
               }) => {
-  const { activePlayer, players, balances} = game;
+  const { activePlayer, players, balances } = game;
   const { isOpen } = info;
   return (
     <div className="Game">
