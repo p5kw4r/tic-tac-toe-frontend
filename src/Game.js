@@ -14,7 +14,6 @@ const Game = ({
                 onGetBalance,
                 onToggleInfo,
               }) => {
-  const { activePlayer, players, balances } = game;
   const { isOpen } = info;
   return (
     <div className="Game">
@@ -30,11 +29,7 @@ const Game = ({
         onPlaceMark={(row, col) => onPlaceMark(row, col)}
       />
       <Collapse isOpen={isOpen}>
-        <Info
-          activePlayer={activePlayer}
-          players={players}
-          balances={balances}
-        />
+        <Info game={game} />
       </Collapse>
     </div>
   );

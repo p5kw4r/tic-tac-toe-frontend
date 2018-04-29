@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'reactstrap';
 
-const Info = ({ activePlayer, players, balances }) => (
+const Info = ({ game: { activePlayer, players, balances } }) => (
   <div className="Info mt-5 no-select">
     <Table responsive>
       <thead>
