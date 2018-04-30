@@ -33,12 +33,12 @@ const Cell = ({
                 noAddress: NO_ADDRESS,
                 onPlaceMark
               }) => (
-  <div
+  <td
     className={`Cell no-select ${validity(address, NO_ADDRESS)} ${state(active)}`}
     onClick={() => onPlaceMark()}
   >
     {mark(address, players)}
-  </div>
+  </td>
 );
 
 export default Cell;

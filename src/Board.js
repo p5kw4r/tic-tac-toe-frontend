@@ -7,18 +7,24 @@ const Board = ({
                  onPlaceMark
                }) => (
   <div className="Board">
-    {board.map((cells, i) => (
-      cells.map((address, j) => (
-        <Cell
-          key={j}
-          active={active}
-          address={address}
-          players={players}
-          noAddress={NO_ADDRESS}
-          onPlaceMark={() => onPlaceMark(i, j)}
-        />
-      ))
-    ))}
+    <table>
+      <tbody>
+        {board.map((cells, i) => (
+          <tr key={i}>
+            {cells.map((address, j) => (
+              <Cell
+                key={j}
+                active={active}
+                address={address}
+                players={players}
+                noAddress={NO_ADDRESS}
+                onPlaceMark={() => onPlaceMark(i, j)}
+              />
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </div>
 );
 

@@ -44,23 +44,12 @@ body,
   flex-wrap: wrap;
 }
 
-.Board {
-  width: 600px;
-  height: 600px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
 .Cell {
   height: 200px;
   width: 200px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  border: 5px solid black;
+  text-align: center;
   font-size: 5em;
+  border: 5px solid black;
 }
 
 .Cell.active.valid:hover {
