@@ -33,9 +33,9 @@ class NavDropdown extends React.Component {
               <DropdownItem
                 key={gameId}
                 value={gameId}
-                active={gameId === url.replace('/game/', '')}
+                active={gameId === url.replace('/g/', '')}
                 onClick={({ currentTarget: { value: gameId } }) => (
-                  history.push(`/game/${gameId}`)
+                  history.push(`/g/${gameId}`)
                 )}
               >
                 {`Game ${gameId}`}
