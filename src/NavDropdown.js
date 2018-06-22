@@ -6,6 +6,7 @@ import {
   DropdownMenu,
   DropdownToggle
 } from 'reactstrap';
+import { URL_GAME_PATH } from './constants';
 
 class NavDropdown extends React.Component {
   constructor(props) {
@@ -33,9 +34,9 @@ class NavDropdown extends React.Component {
               <DropdownItem
                 key={gameId}
                 value={gameId}
-                active={gameId === url.replace('/g/', '')}
+                active={gameId === url.replace(`/${URL_GAME_PATH}/`, '')}
                 onClick={({ currentTarget: { value: gameId } }) => (
-                  history.push(`/g/${gameId}`)
+                  history.push(`/${URL_GAME_PATH}/${gameId}`)
                 )}
               >
                 {`Game ${gameId}`}

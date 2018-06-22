@@ -17,7 +17,6 @@ const Board = ({
                 active={active}
                 address={address}
                 players={players}
-                noAddress={NO_ADDRESS}
                 onPlaceMark={() => onPlaceMark(i, j)}
               />
             ))}

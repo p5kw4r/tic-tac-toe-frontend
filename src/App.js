@@ -6,11 +6,12 @@ import Game from './Game';
 import AlertModal from './AlertModal';
 import ConfigModal from './ConfigModal';
 import Splash from './Splash';
+import { NO_ADDRESS, INDEX_PLAYER_X, INDEX_PLAYER_O, PLAYER_X, PLAYER_O, URL_GAME_PATH} from './constants';
 import './App.css';
 
-const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const INITIAL_BET_SIZE = '0.1';
 const GAS_LIMIT = 300000;
+const ETHER = 'ether';
 
 // workaround to extract contract address from json interface (only needed
 // during development) once factory contract is deployed to production it will
@@ -18,6 +19,13 @@ const GAS_LIMIT = 300000;
 const NETWORK_IDS = Object.keys(networks);
 const LAST_INDEX = NETWORK_IDS.length - 1;
 const ADDRESS = networks[NETWORK_IDS[LAST_INDEX]].address;
+const PORT = '8545';
+
+const EVENT_GAME_CREATED = 'GameCreated';
+const EVENT_GAME_ACTIVE = 'GameActive';
+const EVENT_GAME_MOVE = 'GameMove';
+const EVENT_GAME_OVER_WIN = 'GameOverWin';
+const EVENT_GAME_OVER_DRAW = 'GameOverDraw';
 
 class App extends Component {
   constructor(props) {
@@ -34,7 +42,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+    const web3 = new Web3(new Web3.providers.WebsocketProvider(`ws://localhost:${PORT}`));
     const contract = new web3.eth.Contract(abi, ADDRESS, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     await Promise.all([
@@ -50,20 +58,20 @@ class App extends Component {
 
   handleEvent({ event: name, returnValues: values }) {
     switch (name) {
-      case 'GameCreated':
+      case EVENT_GAME_CREATED:
         this.handleGameCreated(values);
         break;
-      case 'GameActive':
+      case EVENT_GAME_ACTIVE:
         this.handleGameActive(values);
         break;
-      case 'GameMove':
+      case EVENT_GAME_MOVE:
         this.handleGameMove(values);
         break;
-      case 'GameOverWin':
+      case EVENT_GAME_OVER_WIN:
         const winner = this.resolveWinner(values);
         this.handleGameOver(values, `${winner} has won this game.`);
         break;
-      case 'GameOverDraw':
+      case EVENT_GAME_OVER_DRAW:
         this.handleGameOver(values, 'There was no winner.');
         break;
       default:
@@ -79,8 +87,8 @@ class App extends Component {
         [gameId]: {
           ...games[gameId],
           players: [
-            players[0],
-            players[1]
+            players[INDEX_PLAYER_X],
+            players[INDEX_PLAYER_O]
           ]
         }
       }
@@ -90,7 +98,7 @@ class App extends Component {
   }
 
   handleGameActive({ gameId }) {
-    this.navigateTo(`/g/${gameId}`);
+    this.navigateTo(`/${URL_GAME_PATH}/${gameId}`);
     this.updateBalances(gameId);
     this.setState(({ games }) => ({
       games: {
@@ -138,8 +146,8 @@ class App extends Component {
       config: {
         betSize: INITIAL_BET_SIZE,
         players: {
-          0: accounts[0],
-          1: accounts[1]
+          [INDEX_PLAYER_X]: accounts[INDEX_PLAYER_X],
+          [INDEX_PLAYER_O]: accounts[INDEX_PLAYER_O]
         }
       },
       accounts
@@ -151,7 +159,7 @@ class App extends Component {
     const { players } = games[gameId];
     let balances = players.map((player) => getBalance(player));
     balances = await Promise.all(balances);
-    balances = balances.map((balance) => fromWei(balance, 'ether'));
+    balances = balances.map((balance) => fromWei(balance, ETHER));
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -170,8 +178,8 @@ class App extends Component {
       web3: { utils: { toWei } }
     } = this.state;
     createGame().send({
-      from: players[0],
-      value: toWei(betSize, 'ether')
+      from: players[INDEX_PLAYER_X],
+      value: toWei(betSize, ETHER)
     });
   }
 
@@ -183,7 +191,7 @@ class App extends Component {
     } = this.state;
     joinGame(gameId).send({
       from: account,
-      value: toWei(betSize, 'ether')
+      value: toWei(betSize, ETHER)
     });
   }
 
@@ -205,10 +213,10 @@ class App extends Component {
   resolveWinner({ gameId, winner }) {
     const { games } = this.state;
     const { players } = games[gameId];
-    if (winner === players[0]) {
-      return 'Player X';
+    if (winner === players[INDEX_PLAYER_O]) {
+      return PLAYER_X;
     } else {
-      return 'Player O';
+      return PLAYER_O;
     }
   }
 
@@ -305,7 +313,7 @@ class App extends Component {
         )}
         <Switch>
           <Route
-            path={`/g/:gameId`}
+            path={`/${URL_GAME_PATH}/:gameId`}
             render={({ match: { params: { gameId } } }) => {
               const game = games[gameId];
               if (!game) {
@@ -315,7 +323,6 @@ class App extends Component {
                 <Game
                   game={game}
                   games={games}
-                  noAddress={NO_ADDRESS}
                   info={info}
                   onCreateGame={() => this.openConfig()}
                   onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}

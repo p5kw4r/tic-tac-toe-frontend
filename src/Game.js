@@ -7,7 +7,6 @@ import Board from './Board';
 const Game = ({
   games,
   game,
-  noAddress: NO_ADDRESS,
   info,
   onCreateGame,
   onPlaceMark,
@@ -25,7 +24,6 @@ const Game = ({
       />
       <Board
         game={game}
-        noAddress={NO_ADDRESS}
         onPlaceMark={(row, col) => onPlaceMark(row, col)}
       />
       <Collapse isOpen={isOpen}>

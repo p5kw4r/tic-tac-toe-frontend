@@ -11,6 +11,13 @@ import {
   ModalHeader
 } from 'reactstrap';
 
+const INDEX_PLAYER_X = 0;
+const INDEX_PLAYER_O = 1;
+const PLAYER_X = 'Player X';
+const PLAYER_O = 'Player O';
+
+const indexOfOpponent = (i) => (i === `${INDEX_PLAYER_X}` ? INDEX_PLAYER_O : INDEX_PLAYER_X);
+
 const ConfigModal = ({
  accounts,
  config: { isOpen, betSize, players },
@@ -25,14 +32,14 @@ const ConfigModal = ({
       <ModalBody>
         {Object.keys(players).map((i) => (
           <FormGroup key={players[i]}>
-            <Label>{i === '0' ? 'Player X' : 'Player Y'}</Label>
+            <Label>{i === `${INDEX_PLAYER_X}` ? PLAYER_X : PLAYER_O}</Label>
             <Input
               type="select"
               value={players[i]}
               onChange={({ target: { value } }) => onChangePlayer(value, i)}
             >
               {accounts.map((account, j) => (
-                account !== players[i === '0' ? '1' : '0'] && (
+                account !== players[`${indexOfOpponent(i)}`] && (
                   <option key={account} value={account}>
                     {`Account ${j + 1}`}
                   </option>

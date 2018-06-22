@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table } from 'reactstrap';
+import { INDEX_PLAYER_X, PLAYER_X, PLAYER_O } from './constants';
 
 const Info = ({ game: { activePlayer, players, balances } }) => (
   <div className="Info mt-5 no-select">
@@ -17,7 +18,7 @@ const Info = ({ game: { activePlayer, players, balances } }) => (
         <tr key={players[i]}>
           <td>{players[i] === activePlayer && <i className="fa fa-play" />}</td>
           <th scope="row">{i + 1}</th>
-          <td>{i === 0 ? 'Player X' : 'Player O'}</td>
+          <td>{i === INDEX_PLAYER_X ? PLAYER_X : PLAYER_O}</td>
           <td>{balance}</td>
         </tr>
       ))}
