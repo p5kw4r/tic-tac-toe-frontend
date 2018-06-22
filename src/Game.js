@@ -5,15 +5,15 @@ import Info from './Info';
 import Board from './Board';
 
 const Game = ({
-                games,
-                game,
-                noAddress: NO_ADDRESS,
-                info,
-                onCreateGame,
-                onPlaceMark,
-                onGetBalance,
-                onToggleInfo,
-              }) => {
+  games,
+  game,
+  noAddress: NO_ADDRESS,
+  info,
+  onCreateGame,
+  onPlaceMark,
+  onGetBalance,
+  onToggleInfo,
+}) => {
   const { isOpen } = info;
   return (
     <div className="Game">

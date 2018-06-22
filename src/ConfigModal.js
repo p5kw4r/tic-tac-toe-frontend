@@ -12,13 +12,13 @@ import {
 } from 'reactstrap';
 
 const ConfigModal = ({
-                       accounts,
-                       config: { isOpen, betSize, players },
-                       onClose,
-                       onChangeBetSize,
-                       onChangePlayer,
-                       onCreateGame
-                     }) => (
+ accounts,
+ config: { isOpen, betSize, players },
+ onClose,
+ onChangeBetSize,
+ onChangePlayer,
+ onCreateGame
+}) => (
   <div className="ConfigModal">
     <Modal isOpen={isOpen} backdrop="static">
       <ModalHeader toggle={() => onClose()}>Game Config</ModalHeader>
