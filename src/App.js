@@ -219,7 +219,7 @@ class App extends Component {
   resolveWinner({ gameId, winner }) {
     const { games } = this.state;
     const { players } = games[gameId];
-    if (winner === players[INDEX_PLAYER_O]) {
+    if (winner === players[INDEX_PLAYER_X]) {
       return PLAYER_X;
     } else {
       return PLAYER_O;
