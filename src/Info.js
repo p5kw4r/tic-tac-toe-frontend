@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'reactstrap';
-import { INDEX_PLAYER_X, PLAYER_X, PLAYER_O } from './constants';
+import { INDEX_PLAYER_X, PLAYER_X, PLAYER_O } from './App';
 
 const Info = ({ game: { activePlayer, players, balances } }) => (
   <div className="Info mt-5 no-select">

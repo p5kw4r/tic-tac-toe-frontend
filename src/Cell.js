@@ -1,5 +1,5 @@
 import React from 'react';
-import { NO_ADDRESS, INDEX_PLAYER_X, INDEX_PLAYER_O } from './constants';
+import { NO_ADDRESS, INDEX_PLAYER_X, INDEX_PLAYER_O } from './App';
 
 const CLASS_VALID = 'valid';
 const CLASS_INVALID = 'invalid';

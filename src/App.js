@@ -6,7 +6,6 @@ import Game from './Game';
 import AlertModal from './AlertModal';
 import ConfigModal from './ConfigModal';
 import Splash from './Splash';
-import { NO_ADDRESS, INDEX_PLAYER_X, INDEX_PLAYER_O, PLAYER_X, PLAYER_O, URL_GAME_PATH} from './constants';
 import './App.css';
 
 const INITIAL_BET_SIZE = '0.1';
@@ -26,6 +25,13 @@ const EVENT_GAME_ACTIVE = 'GameActive';
 const EVENT_GAME_MOVE = 'GameMove';
 const EVENT_GAME_OVER_WIN = 'GameOverWin';
 const EVENT_GAME_OVER_DRAW = 'GameOverDraw';
+
+export const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const INDEX_PLAYER_X = 0;
+export const INDEX_PLAYER_O = 1;
+export const PLAYER_X = 'Player X';
+export const PLAYER_O = 'Player O';
+export const URL_GAME_PATH = 'g';
 
 class App extends Component {
   constructor(props) {

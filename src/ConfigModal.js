@@ -10,13 +10,11 @@ import {
   ModalFooter,
   ModalHeader
 } from 'reactstrap';
+import { INDEX_PLAYER_X, INDEX_PLAYER_O, PLAYER_X, PLAYER_O } from './App';
 
-const INDEX_PLAYER_X = 0;
-const INDEX_PLAYER_O = 1;
-const PLAYER_X = 'Player X';
-const PLAYER_O = 'Player O';
-
-const indexOfOpponent = (i) => (i === `${INDEX_PLAYER_X}` ? INDEX_PLAYER_O : INDEX_PLAYER_X);
+const indexOfOpponent = (i) => (
+  i === `${INDEX_PLAYER_X}` ? INDEX_PLAYER_O : INDEX_PLAYER_X
+);
 
 const ConfigModal = ({
  accounts,

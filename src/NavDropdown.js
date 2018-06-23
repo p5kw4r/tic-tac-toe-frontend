@@ -6,7 +6,7 @@ import {
   DropdownMenu,
   DropdownToggle
 } from 'reactstrap';
-import { URL_GAME_PATH } from './constants';
+import { URL_GAME_PATH } from './App';
 
 class NavDropdown extends React.Component {
   constructor(props) {
