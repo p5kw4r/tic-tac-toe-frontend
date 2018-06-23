@@ -2,9 +2,9 @@ import React from 'react';
 import Cell from './Cell';
 
 const Board = ({
- game: { active, board, players },
- noAddress: NO_ADDRESS,
- onPlaceMark
+  game: { active, board, players },
+  noAddress: NO_ADDRESS,
+  onPlaceMark
 }) => (
   <div className="Board">
     <table>

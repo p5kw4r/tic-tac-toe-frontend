@@ -17,12 +17,12 @@ const indexOfOpponent = (i) => (
 );
 
 const ConfigModal = ({
- accounts,
- config: { isOpen, betSize, players },
- onClose,
- onChangeBetSize,
- onChangePlayer,
- onCreateGame
+  accounts,
+  config: { isOpen, betSize, players },
+  onClose,
+  onChangeBetSize,
+  onChangePlayer,
+  onCreateGame
 }) => (
   <div className="ConfigModal">
     <Modal isOpen={isOpen} backdrop="static">
