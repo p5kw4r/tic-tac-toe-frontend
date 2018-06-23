@@ -48,7 +48,8 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const web3 = new Web3(new Web3.providers.WebsocketProvider(`ws://localhost:${PORT}`));
+    const provider = new Web3.providers.WebsocketProvider(`ws://localhost:${PORT}`);
+    const web3 = new Web3(provider);
     const contract = new web3.eth.Contract(abi, ADDRESS, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     await Promise.all([
@@ -221,9 +222,8 @@ class App extends Component {
     const { players } = games[gameId];
     if (winner === players[INDEX_PLAYER_X]) {
       return PLAYER_X;
-    } else {
-      return PLAYER_O;
     }
+    return PLAYER_O;
   }
 
   openAlert(message) {

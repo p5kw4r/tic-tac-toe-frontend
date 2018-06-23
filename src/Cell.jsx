@@ -9,18 +9,29 @@ const SYMBOL_PLAYER_X = 'X';
 const SYMBOL_PLAYER_O = 'O';
 const SYMBOL_EMPTY = '';
 
-const validity = (address, NO_ADDRESS) => {
-  return address === NO_ADDRESS ? CLASS_VALID : CLASS_INVALID;
+const validity = (address) => {
+  if (address === NO_ADDRESS) {
+    return CLASS_VALID;
+  }
+  return CLASS_INVALID;
 };
 
 const state = (active) => {
-  return active ? CLASS_ACTIVE : CLASS_INACTIVE;
+  if (active) {
+    return CLASS_ACTIVE;
+  }
+  return CLASS_INACTIVE;
 };
 
 const mark = (address, players) => {
-  return address === players[INDEX_PLAYER_X] ? SYMBOL_PLAYER_X
-    : address === players[INDEX_PLAYER_O] ? SYMBOL_PLAYER_O
-      : SYMBOL_EMPTY;
+  const playerX = players[INDEX_PLAYER_X];
+  const playerO = players[INDEX_PLAYER_O];
+  if (address === playerX) {
+    return SYMBOL_PLAYER_X;
+  } else if (address === playerO) {
+    return SYMBOL_PLAYER_O;
+  }
+  return SYMBOL_EMPTY;
 };
 
 const Cell = ({
@@ -30,7 +41,7 @@ const Cell = ({
   onPlaceMark
 }) => (
   <td
-    className={`Cell no-select ${validity(address, NO_ADDRESS)} ${state(active)}`}
+    className={`Cell no-select ${validity(address)} ${state(active)}`}
     onClick={() => onPlaceMark()}
   >
     {mark(address, players)}

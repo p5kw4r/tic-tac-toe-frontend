@@ -12,9 +12,19 @@ import {
 } from 'reactstrap';
 import { INDEX_PLAYER_X, INDEX_PLAYER_O, PLAYER_X, PLAYER_O } from './App';
 
-const indexOfOpponent = (i) => (
-  i === `${INDEX_PLAYER_X}` ? INDEX_PLAYER_O : INDEX_PLAYER_X
-);
+const indexOpponent = (i) => {
+  if (i === `${INDEX_PLAYER_X}`) {
+    return INDEX_PLAYER_O;
+  }
+  return INDEX_PLAYER_X;
+};
+
+const playerName = (i) => {
+  if (i === `${INDEX_PLAYER_X}`) {
+    return PLAYER_X;
+  }
+  return PLAYER_O;
+};
 
 const ConfigModal = ({
   accounts,
@@ -30,19 +40,20 @@ const ConfigModal = ({
       <ModalBody>
         {Object.keys(players).map((i) => (
           <FormGroup key={players[i]}>
-            <Label>{i === `${INDEX_PLAYER_X}` ? PLAYER_X : PLAYER_O}</Label>
+            <Label>{playerName(i)}</Label>
             <Input
               type="select"
               value={players[i]}
               onChange={({ target: { value } }) => onChangePlayer(value, i)}
             >
-              {accounts.map((account, j) => (
-                account !== players[`${indexOfOpponent(i)}`] && (
+              {accounts.map((account, j) => {
+                const opponent = players[`${indexOpponent(i)}`];
+                return account !== opponent && (
                   <option key={account} value={account}>
                     {`Account ${j + 1}`}
                   </option>
-                )
-              ))}
+                );
+              })}
             </Input>
           </FormGroup>
         ))}
@@ -55,7 +66,7 @@ const ConfigModal = ({
             value={betSize}
             onChange={({ target: { value } }) => onChangeBetSize(value)}
           />
-          <FormText>Amount is specified in ether (ETH).</FormText>
+          <FormText>Amount in ether (ETH).</FormText>
         </FormGroup>
       </ModalBody>
       <ModalFooter>

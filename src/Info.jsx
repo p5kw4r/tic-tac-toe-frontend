@@ -2,6 +2,13 @@ import React from 'react';
 import { Table } from 'reactstrap';
 import { INDEX_PLAYER_X, PLAYER_X, PLAYER_O } from './App';
 
+const playerName = (i) => {
+  if (i === INDEX_PLAYER_X) {
+    return PLAYER_X;
+  }
+  return PLAYER_O;
+};
+
 const Info = ({ game: { activePlayer, players, balances } }) => (
   <div className="Info mt-5 no-select">
     <Table responsive>
@@ -16,9 +23,13 @@ const Info = ({ game: { activePlayer, players, balances } }) => (
       <tbody>
       {balances.map((balance, i) => (
         <tr key={players[i]}>
-          <td>{players[i] === activePlayer && <i className="fa fa-play" />}</td>
+          <td>
+            {players[i] === activePlayer && (
+              <i className="fa fa-play" />
+            )}
+          </td>
           <th scope="row">{i + 1}</th>
-          <td>{i === INDEX_PLAYER_X ? PLAYER_X : PLAYER_O}</td>
+          <td>{playerName(i)}</td>
           <td>{balance}</td>
         </tr>
       ))}
