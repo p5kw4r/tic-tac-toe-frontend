@@ -21,11 +21,11 @@ const LAST_INDEX = NETWORK_IDS.length - 1;
 const ADDRESS = networks[NETWORK_IDS[LAST_INDEX]].address;
 const PORT = '8545';
 
-const EVENT_GAME_CREATED = 'GameCreated';
-const EVENT_GAME_ACTIVE = 'GameActive';
-const EVENT_GAME_MOVE = 'GameMove';
-const EVENT_GAME_OVER_WIN = 'GameOverWin';
-const EVENT_GAME_OVER_DRAW = 'GameOverDraw';
+const GAME_CREATED_EVENT = 'GameCreated';
+const GAME_ACTIVE_EVENT = 'GameActive';
+const GAME_MOVE_EVENT = 'GameMove';
+const GAME_WIN_EVENT = 'GameWin';
+const GAME_DRAW_EVENT = 'GameDraw';
 
 export const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const INDEX_PLAYER_X = 0;
@@ -78,20 +78,20 @@ class App extends Component {
   handleEvent({ event, returnValues: values }) {
     this.updateBalances(values);
     switch (event) {
-      case EVENT_GAME_CREATED:
+      case GAME_CREATED_EVENT:
         this.handleGameCreated(values);
         break;
-      case EVENT_GAME_ACTIVE:
+      case GAME_ACTIVE_EVENT:
         this.handleGameActive(values);
         break;
-      case EVENT_GAME_MOVE:
+      case GAME_MOVE_EVENT:
         this.handleGameMove(values);
         break;
-      case EVENT_GAME_OVER_WIN:
+      case GAME_WIN_EVENT:
         const winner = this.resolveWinner(values);
         this.handleGameOver(values, `${winner} has won this game.`);
         break;
-      case EVENT_GAME_OVER_DRAW:
+      case GAME_DRAW_EVENT:
         this.handleGameOver(values, 'There was no winner.');
         break;
       default:
