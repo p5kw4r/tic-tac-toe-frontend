@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
-import { abi, networks } from './TicTacToe.json';
+import { abi as ABI, networks as NETWORKS } from './TicTacToe.json';
 import Game from './Game';
 import AlertModal from './AlertModal';
 import ConfigModal from './ConfigModal';
@@ -16,10 +16,10 @@ const ETHER = 'ether';
 // workaround to extract contract address from json interface (only needed
 // during development) once factory contract is deployed to production it will
 // have a fixed address
-const NETWORK_IDS = Object.keys(networks);
+const NETWORK_IDS = Object.keys(NETWORKS);
 const LAST_INDEX = NETWORK_IDS.length - 1;
 const LAST_ID = NETWORK_IDS[LAST_INDEX];
-const { address: ADDRESS } = networks[LAST_ID];
+const { address: ADDRESS } = NETWORKS[LAST_ID];
 const PORT = '8545';
 
 const GAME_CREATED_EVENT = 'GameCreated';
@@ -62,7 +62,7 @@ class App extends Component {
   async componentDidMount() {
     const provider = new Web3.providers.WebsocketProvider(`ws://localhost:${PORT}`);
     const web3 = new Web3(provider);
-    const contract = new web3.eth.Contract(abi, ADDRESS, { gas: GAS_LIMIT });
+    const contract = new web3.eth.Contract(ABI, ADDRESS, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     await Promise.all([
       this.setState({
