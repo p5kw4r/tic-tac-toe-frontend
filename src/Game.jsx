@@ -14,7 +14,7 @@ const Game = ({
   },
   games,
   isInfoOpen,
-  onCreateGame,
+  onOpenGameConfig,
   onPlaceMark,
   onToggleInfo
 }) => {
@@ -24,7 +24,7 @@ const Game = ({
       <NavBar
         games={games}
         isInfoOpen={isInfoOpen}
-        onCreateGame={() => onCreateGame()}
+        onOpenGameConfig={() => onOpenGameConfig()}
         onToggleInfo={() => onToggleInfo()}
       />
       <Board
@@ -59,7 +59,7 @@ Game.propTypes = {
     }).isRequired
   ).isRequired,
   isInfoOpen: PropTypes.bool.isRequired,
-  onCreateGame: PropTypes.func.isRequired,
+  onOpenGameConfig: PropTypes.func.isRequired,
   onPlaceMark: PropTypes.func.isRequired,
   onToggleInfo: PropTypes.func.isRequired
 };

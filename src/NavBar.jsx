@@ -30,7 +30,7 @@ class NavBar extends Component {
     const {
       games,
       isInfoOpen,
-      onCreateGame,
+      onOpenGameConfig,
       onToggleInfo
     } = this.props;
     const { isOpen } = this.state;
@@ -58,7 +58,7 @@ class NavBar extends Component {
                   <NavLink
                     className="no-select"
                     tag="span"
-                    onClick={() => onCreateGame()}
+                    onClick={() => onOpenGameConfig()}
                   >
                     New Game
                   </NavLink>
@@ -88,7 +88,7 @@ NavBar.propTypes = {
     }).isRequired
   ).isRequired,
   isInfoOpen: PropTypes.bool.isRequired,
-  onCreateGame: PropTypes.func.isRequired,
+  onOpenGameConfig: PropTypes.func.isRequired,
   onToggleInfo: PropTypes.func.isRequired
 };
 

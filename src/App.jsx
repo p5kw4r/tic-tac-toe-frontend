@@ -163,6 +163,11 @@ class App extends Component {
     }));
   }
 
+  navigateTo(path) {
+    const { history } = this.props;
+    history.push(path);
+  }
+
   async handleGameMove({ gameId, board, activePlayer }) {
     this.setState(({ games }) => ({
       games: {
@@ -193,6 +198,7 @@ class App extends Component {
   async getAccounts({ eth: { getAccounts } }) {
     const accounts = await getAccounts();
     this.setState(({ config }) => ({
+      accounts,
       config: {
         ...config,
         players: {
@@ -200,7 +206,6 @@ class App extends Component {
           [INDEX_PLAYER_O]: accounts[INDEX_PLAYER_O]
         }
       },
-      accounts
     }));
   }
 
@@ -264,11 +269,6 @@ class App extends Component {
         from: activePlayer
       });
     }
-  }
-
-  navigateTo(path) {
-    const { history } = this.props;
-    history.push(path);
   }
 
   resolveWinner({ gameId, winner }) {
@@ -350,7 +350,7 @@ class App extends Component {
         <AlertModal
           alert={alert}
           onClose={() => this.closeAlert()}
-          onCreateGame={() => {
+          onOpenGameConfig={() => {
             this.closeAlert();
             this.openConfig();
           }}
@@ -370,7 +370,8 @@ class App extends Component {
           <Route
             path={`/${URL_GAME_PATH}/:gameId`}
             render={({ match: { params: { gameId } } }) => {
-              if (!games[gameId]) {
+              const game = games[gameId];
+              if (!game) {
                 return <Splash />;
               }
               return (
@@ -378,7 +379,7 @@ class App extends Component {
                   balances={balances}
                   games={games}
                   isInfoOpen={isInfoOpen}
-                  onCreateGame={() => this.openConfig()}
+                  onOpenGameConfig={() => this.openConfig()}
                   onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
                   onToggleInfo={() => this.toggleInfo()}
                 />
