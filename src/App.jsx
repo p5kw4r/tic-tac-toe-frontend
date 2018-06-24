@@ -35,6 +35,8 @@ export const PLAYER_X_NAME = 'Player X';
 export const PLAYER_O_NAME = 'Player O';
 export const URL_GAME_PATH = 'g';
 
+const URL_GAME_ID_PARAM = ':gameId';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -371,7 +373,7 @@ class App extends Component {
         />
         <Switch>
           <Route
-            path={`/${URL_GAME_PATH}/:gameId`}
+            path={`/${URL_GAME_PATH}/${URL_GAME_ID_PARAM}`}
             render={({ match: { params: { gameId } } }) => {
               const game = games[gameId];
               if (!game) {
