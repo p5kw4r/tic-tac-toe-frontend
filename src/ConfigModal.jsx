@@ -11,7 +11,7 @@ import {
   ModalFooter,
   ModalHeader
 } from 'reactstrap';
-import { PLAYER_X_ID, PLAYER_O_ID, PLAYER_X, PLAYER_O } from './App';
+import { PLAYER_X_ID, PLAYER_O_ID, PLAYER_X_NAME, PLAYER_O_NAME } from './App';
 
 const ConfigModal = ({
   accounts,
@@ -102,9 +102,9 @@ const indexOpponent = (playerId) => {
 
 const playerName = (playerId) => {
   if (playerId === `${PLAYER_X_ID}`) {
-    return PLAYER_X;
+    return PLAYER_X_NAME;
   }
-  return PLAYER_O;
+  return PLAYER_O_NAME;
 };
 
 ConfigModal.propTypes = {

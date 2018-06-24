@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, Table } from 'reactstrap';
-import { PLAYER_X_ID, PLAYER_X, PLAYER_O } from './App';
+import { PLAYER_X_ID, PLAYER_X_NAME, PLAYER_O_NAME } from './App';
 
 const Info = ({
   balances,
@@ -43,9 +43,9 @@ const Info = ({
 
 const playerName = (playerId) => {
   if (playerId === PLAYER_X_ID) {
-    return PLAYER_X;
+    return PLAYER_X_NAME;
   }
-  return PLAYER_O;
+  return PLAYER_O_NAME;
 };
 
 Info.propTypes = {

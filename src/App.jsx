@@ -30,8 +30,8 @@ const GAME_DRAW_EVENT = 'GameDraw';
 export const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const PLAYER_X_ID = 0;
 export const PLAYER_O_ID = 1;
-export const PLAYER_X = 'Player X';
-export const PLAYER_O = 'Player O';
+export const PLAYER_X_NAME = 'Player X';
+export const PLAYER_O_NAME = 'Player O';
 export const URL_GAME_PATH = 'g';
 
 class App extends Component {
@@ -274,9 +274,9 @@ class App extends Component {
     const { games } = this.state;
     const { players } = games[gameId];
     if (winner === players[PLAYER_X_ID]) {
-      return PLAYER_X;
+      return PLAYER_X_NAME;
     }
-    return PLAYER_O;
+    return PLAYER_O_NAME;
   }
 
   openAlert(message) {
