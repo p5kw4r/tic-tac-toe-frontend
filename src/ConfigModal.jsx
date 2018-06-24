@@ -11,7 +11,7 @@ import {
   ModalFooter,
   ModalHeader
 } from 'reactstrap';
-import { INDEX_PLAYER_X, INDEX_PLAYER_O, PLAYER_X, PLAYER_O } from './App';
+import { PLAYER_X_ID, PLAYER_O_ID, PLAYER_X, PLAYER_O } from './App';
 
 const ConfigModal = ({
   accounts,
@@ -34,24 +34,24 @@ const ConfigModal = ({
         Game Config
       </ModalHeader>
       <ModalBody>
-        {Object.keys(players).map((i) => (
-          <FormGroup key={players[i]}>
+        {Object.keys(players).map((playerId) => (
+          <FormGroup key={players[playerId]}>
             <Label>
-              {playerName(i)}
+              {playerName(playerId)}
             </Label>
             <Input
               type="select"
-              value={players[i]}
-              onChange={({ target: { value } }) => onChangePlayer(value, i)}
+              value={players[playerId]}
+              onChange={({ target: { value } }) => onChangePlayer(value, playerId)}
             >
-              {accounts.map((account, j) => {
-                const opponent = players[`${indexOpponent(i)}`];
+              {accounts.map((account, accountId) => {
+                const opponent = players[`${indexOpponent(accountId)}`];
                 return account !== opponent && (
                   <option
                     key={account}
                     value={account}
                   >
-                    {`Account ${j + 1}`}
+                    {`Account ${accountId + 1}`}
                   </option>
                 );
               })}
@@ -93,15 +93,15 @@ const ConfigModal = ({
   </div>
 );
 
-const indexOpponent = (i) => {
-  if (i === `${INDEX_PLAYER_X}`) {
-    return INDEX_PLAYER_O;
+const indexOpponent = (playerId) => {
+  if (playerId === `${PLAYER_X_ID}`) {
+    return PLAYER_O_ID;
   }
-  return INDEX_PLAYER_X;
+  return PLAYER_X_ID;
 };
 
-const playerName = (i) => {
-  if (i === `${INDEX_PLAYER_X}`) {
+const playerName = (playerId) => {
+  if (playerId === `${PLAYER_X_ID}`) {
     return PLAYER_X;
   }
   return PLAYER_O;

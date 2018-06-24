@@ -13,15 +13,15 @@ const Board = ({
   <div className="Board">
     <table>
       <tbody>
-        {board.map((cells, i) => (
-          <tr key={i}>
-            {cells.map((address, j) => (
+        {board.map((cells, row) => (
+          <tr key={row}>
+            {cells.map((address, col) => (
               <Cell
-                key={j}
+                key={col}
                 active={active}
                 address={address}
                 players={players}
-                onPlaceMark={() => onPlaceMark(i, j)}
+                onPlaceMark={() => onPlaceMark(row, col)}
               />
             ))}
           </tr>

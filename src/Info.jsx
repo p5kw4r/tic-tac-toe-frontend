@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, Table } from 'reactstrap';
-import { INDEX_PLAYER_X, PLAYER_X, PLAYER_O } from './App';
+import { PLAYER_X_ID, PLAYER_X, PLAYER_O } from './App';
 
 const Info = ({
   balances,
@@ -23,15 +23,15 @@ const Info = ({
         </tr>
         </thead>
         <tbody>
-          {players.map((player, i) => (
+          {players.map((player, playerId) => (
             <tr key={player}>
               <td>
                 {player === activePlayer && (
                   <i className="fa fa-play" />
                 )}
               </td>
-              <th scope="row">{i + 1}</th>
-              <td>{playerName(i)}</td>
+              <th scope="row">{playerId + 1}</th>
+              <td>{playerName(playerId)}</td>
               <td>{balances[player]}</td>
             </tr>
           ))}
@@ -41,8 +41,8 @@ const Info = ({
   </Collapse>
 );
 
-const playerName = (i) => {
-  if (i === INDEX_PLAYER_X) {
+const playerName = (playerId) => {
+  if (playerId === PLAYER_X_ID) {
     return PLAYER_X;
   }
   return PLAYER_O;

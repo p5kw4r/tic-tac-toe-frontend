@@ -9,7 +9,7 @@ import ConfigModal from './ConfigModal';
 import Splash from './Splash';
 import './App.css';
 
-const INITIAL_BET_SIZE = '0.1';
+const DEFAULT_BET_SIZE = '0.1';
 const GAS_LIMIT = 300000;
 const ETHER = 'ether';
 
@@ -28,8 +28,8 @@ const GAME_WIN_EVENT = 'GameWin';
 const GAME_DRAW_EVENT = 'GameDraw';
 
 export const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
-export const INDEX_PLAYER_X = 0;
-export const INDEX_PLAYER_O = 1;
+export const PLAYER_X_ID = 0;
+export const PLAYER_O_ID = 1;
 export const PLAYER_X = 'Player X';
 export const PLAYER_O = 'Player O';
 export const URL_GAME_PATH = 'g';
@@ -45,7 +45,7 @@ class App extends Component {
       balances: {},
       config: {
         isOpen: false,
-        betSize: INITIAL_BET_SIZE,
+        betSize: DEFAULT_BET_SIZE,
         players: {}
       },
       alert: {
@@ -140,8 +140,8 @@ class App extends Component {
           ...games[gameId],
           active: false,
           players: [
-            players[INDEX_PLAYER_X],
-            players[INDEX_PLAYER_O]
+            players[PLAYER_X_ID],
+            players[PLAYER_O_ID]
           ]
         }
       }
@@ -201,8 +201,8 @@ class App extends Component {
       config: {
         ...config,
         players: {
-          [INDEX_PLAYER_X]: accounts[INDEX_PLAYER_X],
-          [INDEX_PLAYER_O]: accounts[INDEX_PLAYER_O]
+          [PLAYER_X_ID]: accounts[PLAYER_X_ID],
+          [PLAYER_O_ID]: accounts[PLAYER_O_ID]
         }
       },
     }));
@@ -226,7 +226,7 @@ class App extends Component {
       }
     } = this.state;
     createGame().send({
-      from: players[INDEX_PLAYER_X],
+      from: players[PLAYER_X_ID],
       value: toWei(betSize, ETHER)
     });
   }
@@ -273,7 +273,7 @@ class App extends Component {
   winner({ gameId, winner }) {
     const { games } = this.state;
     const { players } = games[gameId];
-    if (winner === players[INDEX_PLAYER_X]) {
+    if (winner === players[PLAYER_X_ID]) {
       return PLAYER_X;
     }
     return PLAYER_O;
