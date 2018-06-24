@@ -12,6 +12,9 @@ import {
 } from 'reactstrap';
 import NavDropdown from './NavDropdown';
 
+const INFO_HIDE = 'Hide Info';
+const INFO_SHOW = 'Show Info';
+
 class NavBar extends Component {
   constructor(props) {
     super(props);
@@ -64,7 +67,7 @@ class NavBar extends Component {
                     tag="span"
                     onClick={() => onToggleInfo()}
                   >
-                    {isInfoOpen ? 'Hide Info' : 'Show Info'}
+                    {infoText(isInfoOpen)}
                   </NavLink>
                 </NavItem>
                 <NavDropdown games={games} />
@@ -85,6 +88,13 @@ class NavBar extends Component {
     );
   }
 }
+
+const infoText = (isOpen) => {
+  if (isOpen) {
+    return INFO_HIDE;
+  }
+  return INFO_SHOW;
+};
 
 NavBar.propTypes = {
   games: PropTypes.objectOf(

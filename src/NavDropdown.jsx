@@ -50,20 +50,24 @@ class NavDropdown extends React.Component {
           Select Game
         </DropdownToggle>
         <DropdownMenu>
-          {Object.keys(games).map((gameId) => (
-            games[gameId].active && (
-              <DropdownItem
-                key={gameId}
-                value={gameId}
-                active={gameId === activeGameId}
-                onClick={({ currentTarget: { value: gameId } }) => (
-                  history.push(`/${URL_GAME_PATH}/${gameId}`)
-                )}
-              >
-                {`Game ${gameId}`}
-              </DropdownItem>
-            )
-          ))}
+          {Object.keys(games).map((gameId) => {
+            const game = games[gameId];
+            const { active } = game;
+            return (
+              active && (
+                <DropdownItem
+                  key={gameId}
+                  value={gameId}
+                  active={gameId === activeGameId}
+                  onClick={({ currentTarget: { value: gameId } }) => (
+                    history.push(`/${URL_GAME_PATH}/${gameId}`)
+                  )}
+                >
+                  {`Game ${gameId}`}
+                </DropdownItem>
+              )
+            );
+          })}
         </DropdownMenu>
       </Dropdown>
     );

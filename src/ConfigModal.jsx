@@ -24,76 +24,89 @@ const ConfigModal = ({
   onChangeBetSize,
   onChangePlayer,
   onCreateGame
-}) => (
-  <div className="ConfigModal">
-    <Modal
-      isOpen={isOpen}
-      backdrop="static"
-    >
-      <ModalHeader toggle={() => onClose()}>
-        Game Config
-      </ModalHeader>
-      <ModalBody>
-        {Object.keys(players).map((playerId) => (
-          <FormGroup key={players[playerId]}>
+}) => {
+  const playerIds = Object.keys(players);
+  return (
+    <div className="ConfigModal">
+      <Modal
+        isOpen={isOpen}
+        backdrop="static"
+      >
+        <ModalHeader toggle={() => onClose()}>
+          Game Config
+        </ModalHeader>
+        <ModalBody>
+          {playerIds.map((playerId) => {
+            const player = players[playerId];
+            return (
+              <FormGroup key={player}>
+                <Label>
+                  {playerName(playerId)}
+                </Label>
+                <Input
+                  type="select"
+                  value={player}
+                  onChange={({ target: { value } }) => onChangePlayer(value, playerId)}
+                >
+                  {accounts.map((account, accountId) => (
+                    !isOpponent(account, players, playerId) && (
+                      <option
+                        key={account}
+                        value={account}
+                      >
+                        {`Account ${accountId + 1}`}
+                      </option>
+                    )
+                  ))}
+                </Input>
+              </FormGroup>
+            );
+          })}
+          <FormGroup>
             <Label>
-              {playerName(playerId)}
+              Bet Size
             </Label>
             <Input
-              type="select"
-              value={players[playerId]}
-              onChange={({ target: { value } }) => onChangePlayer(value, playerId)}
-            >
-              {accounts.map((account, accountId) => {
-                const opponent = players[`${indexOpponent(playerId)}`];
-                return account !== opponent && (
-                  <option
-                    key={account}
-                    value={account}
-                  >
-                    {`Account ${accountId + 1}`}
-                  </option>
-                );
-              })}
-            </Input>
+              type="number"
+              step={0.1}
+              min={0}
+              value={betSize}
+              onChange={({ target: { value } }) => onChangeBetSize(value)}
+            />
+            <FormText>
+              Amount in ether (ETH).
+            </FormText>
           </FormGroup>
-        ))}
-        <FormGroup>
-          <Label>
-            Bet Size
-          </Label>
-          <Input
-            type="number"
-            step={0.1}
-            min={0}
-            value={betSize}
-            onChange={({ target: { value } }) => onChangeBetSize(value)}
-          />
-          <FormText>
-            Amount in ether (ETH).
-          </FormText>
-        </FormGroup>
-      </ModalBody>
-      <ModalFooter>
-        <Button
-          outline
-          onClick={() => onClose()}
-        >
-          Cancel
-        </Button>
-        <Button
-          outline
-          color="primary"
-          onClick={() => onCreateGame()}
-        >
-          Create Game
-        </Button>
-      </ModalFooter>
-    </Modal>
-  </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            outline
+            onClick={() => onClose()}
+          >
+            Cancel
+          </Button>
+          <Button
+            outline
+            color="primary"
+            onClick={() => onCreateGame()}
+          >
+            Create Game
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
+};
+
+const isOpponent = (account, players, playerId) => (
+  account === opponent(players, playerId)
 );
 
-const indexOpponent = (playerId) => {
+const opponent = (players, playerId) => (
+  players[`${opponentId(playerId)}`]
+);
+
+const opponentId = (playerId) => {
   if (playerId === `${PLAYER_X_ID}`) {
     return PLAYER_O_ID;
   }

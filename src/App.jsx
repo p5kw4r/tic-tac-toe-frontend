@@ -262,8 +262,10 @@ class App extends Component {
         }
       }
     } = this.state;
-    const { active, board, activePlayer } = games[gameId];
-    if (active && board[row][col] === NO_ADDRESS) {
+    const game = games[gameId];
+    const { active, board, activePlayer } = game;
+    const cell = board[row][col];
+    if (isValidMove(active, cell)) {
       placeMark(gameId, row, col).send({
         from: activePlayer
       });
@@ -273,7 +275,8 @@ class App extends Component {
   winner({ gameId, winner }) {
     const { games } = this.state;
     const { players } = games[gameId];
-    if (winner === players[PLAYER_X_ID]) {
+    const playerX = players[PLAYER_X_ID];
+    if (playerX === winner) {
       return PLAYER_X_NAME;
     }
     return PLAYER_O_NAME;
@@ -330,13 +333,13 @@ class App extends Component {
     }));
   }
 
-  changePlayer(player, i) {
+  changePlayer(player, playerId) {
     this.setState(({ config, config: { players } }) => ({
       config: {
         ...config,
         players: {
           ...players,
-          [i]: player
+          [playerId]: player
         }
       }
     }));
@@ -391,6 +394,10 @@ class App extends Component {
     );
   }
 }
+
+const isValidMove = (active, cell) => (
+  active && cell === NO_ADDRESS
+);
 
 App.propTypes = {
   history: PropTypes.shape({
