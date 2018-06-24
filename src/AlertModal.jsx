@@ -18,7 +18,9 @@ const AlertModal = ({
       <ModalHeader toggle={() => onClose()}>
         Game Over
       </ModalHeader>
-      <ModalBody>{message}</ModalBody>
+      <ModalBody>
+        {message}
+      </ModalBody>
       <ModalFooter>
         <Button
           outline
