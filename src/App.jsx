@@ -88,8 +88,7 @@ class App extends Component {
         this.handleGameMove(values);
         break;
       case GAME_WIN_EVENT:
-        const winner = this.resolveWinner(values);
-        this.handleGameOver(values, `${winner} has won this game.`);
+        this.handleGameOver(values, `${this.winner(values)} has won this game.`);
         break;
       case GAME_DRAW_EVENT:
         this.handleGameOver(values, 'There was no winner.');
@@ -271,7 +270,7 @@ class App extends Component {
     }
   }
 
-  resolveWinner({ gameId, winner }) {
+  winner({ gameId, winner }) {
     const { games } = this.state;
     const { players } = games[gameId];
     if (winner === players[INDEX_PLAYER_X]) {
