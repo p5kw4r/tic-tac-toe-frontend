@@ -11,12 +11,26 @@ const AlertModal = ({
   onOpenGameConfig
 }) => (
   <div className="AlertModal">
-    <Modal isOpen={isOpen} backdrop="static">
-      <ModalHeader toggle={() => onClose()}>Game Over</ModalHeader>
+    <Modal
+      isOpen={isOpen}
+      backdrop="static"
+    >
+      <ModalHeader toggle={() => onClose()}>
+        Game Over
+      </ModalHeader>
       <ModalBody>{message}</ModalBody>
       <ModalFooter>
-        <Button outline onClick={() => onClose()}>Cancel</Button>
-        <Button outline color="primary" onClick={() => onOpenGameConfig()}>
+        <Button
+          outline
+          onClick={() => onClose()}
+        >
+          Cancel
+        </Button>
+        <Button
+          outline
+          color="primary"
+          onClick={() => onOpenGameConfig()}
+        >
           New Game
         </Button>
       </ModalFooter>

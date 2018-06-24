@@ -36,14 +36,28 @@ class NavBar extends Component {
     const { isOpen } = this.state;
     return (
       <div className="NavBar">
-        <Navbar fixed="top" color="light" light expand="md">
+        <Navbar
+          fixed="top"
+          color="light"
+          light
+          expand="md"
+        >
           <Container>
-            <NavbarBrand className="no-select" tag="span">
+            <NavbarBrand
+              className="no-select"
+              tag="span"
+            >
               TicTacToe DApp
             </NavbarBrand>
             <NavbarToggler onClick={() => this.toggle()} />
-            <Collapse isOpen={isOpen} navbar>
-              <Nav className="ml-auto" navbar>
+            <Collapse
+              isOpen={isOpen}
+              navbar
+            >
+              <Nav
+                className="ml-auto"
+                navbar
+              >
                 <NavItem>
                   <NavLink
                     className="no-select"

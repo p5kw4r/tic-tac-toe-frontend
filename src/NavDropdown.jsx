@@ -35,8 +35,18 @@ class NavDropdown extends React.Component {
     } = this.props;
     const { isOpen } = this.state;
     return (
-      <Dropdown nav inNavbar isOpen={isOpen} toggle={() => this.toggle()}>
-        <DropdownToggle className="no-select" tag="span" nav caret>
+      <Dropdown
+        nav
+        inNavbar
+        isOpen={isOpen}
+        toggle={() => this.toggle()}
+      >
+        <DropdownToggle
+          className="no-select"
+          tag="span"
+          nav
+          caret
+        >
           Select Game
         </DropdownToggle>
         <DropdownMenu>
