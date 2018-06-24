@@ -45,7 +45,7 @@ const ConfigModal = ({
               onChange={({ target: { value } }) => onChangePlayer(value, playerId)}
             >
               {accounts.map((account, accountId) => {
-                const opponent = players[`${indexOpponent(accountId)}`];
+                const opponent = players[`${indexOpponent(playerId)}`];
                 return account !== opponent && (
                   <option
                     key={account}
