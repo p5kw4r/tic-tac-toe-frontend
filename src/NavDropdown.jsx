@@ -34,6 +34,7 @@ class NavDropdown extends React.Component {
       history
     } = this.props;
     const { isOpen } = this.state;
+    const gameIds = Object.keys(games);
     return (
       <Dropdown
         nav
@@ -50,7 +51,7 @@ class NavDropdown extends React.Component {
           Select Game
         </DropdownToggle>
         <DropdownMenu>
-          {Object.keys(games).map((gameId) => {
+          {gameIds.map((gameId) => {
             const game = games[gameId];
             const { active } = game;
             return (
