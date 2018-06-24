@@ -37,12 +37,23 @@ export const PLAYER_O_NAME = 'Player O';
 export const GAME_URL_PATH = 'g';
 const GAME_ID_URL_PARAM = ':gameId';
 
+const provider = new Web3.providers.WebsocketProvider(`ws://localhost:${PORT}`);
+const web3 = new Web3(provider);
+const contract = new web3.eth.Contract(ABI, ADDRESS, { gas: GAS_LIMIT });
+
+const {
+  methods: { createGame, joinGame, placeMark },
+  events: { allEvents }
+} = contract;
+const {
+  eth: { getAccounts, getBalance },
+  utils: { fromWei, toWei }
+} = web3;
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      web3: {},
-      contract: {},
       games: {},
       accounts: [],
       balances: {},
@@ -60,21 +71,12 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const provider = new Web3.providers.WebsocketProvider(`ws://localhost:${PORT}`);
-    const web3 = new Web3(provider);
-    const contract = new web3.eth.Contract(ABI, ADDRESS, { gas: GAS_LIMIT });
-    this.subscribeToEvents(contract);
-    await Promise.all([
-      this.setState({
-        web3,
-        contract
-      }),
-      this.getAccounts(web3)
-    ]);
+    this.subscribeToEvents();
+    await this.getAccounts();
     this.createGame();
   }
 
-  subscribeToEvents({ events: { allEvents } }) {
+  subscribeToEvents() {
     allEvents({}, (error, event) => this.handleEvent(event));
   }
 
@@ -111,16 +113,6 @@ class App extends Component {
   }
 
   async updateBalance(player) {
-    const {
-      web3: {
-        eth: {
-          getBalance
-        },
-        utils: {
-          fromWei
-        }
-      }
-    } = this.state;
     const balance = await getBalance(player);
     this.setState(({ balances }) => ({
       balances: {
@@ -149,7 +141,7 @@ class App extends Component {
         }
       }
     }));
-    this.joinGame(gameId, players[1]);
+    this.joinGame(gameId, players[PLAYER_O_INDEX]);
   }
 
   handleGameActive({ gameId }) {
@@ -197,7 +189,7 @@ class App extends Component {
     }));
   }
 
-  async getAccounts({ eth: { getAccounts } }) {
+  async getAccounts() {
     const accounts = await getAccounts();
     this.setState(({ config }) => ({
       accounts,
@@ -216,16 +208,6 @@ class App extends Component {
       config: {
         betSize,
         players
-      },
-      contract: {
-        methods: {
-          createGame
-        }
-      },
-      web3: {
-        utils: {
-          toWei
-        }
       }
     } = this.state;
     createGame().send({
@@ -238,16 +220,6 @@ class App extends Component {
     const {
       config: {
         betSize
-      },
-      contract: {
-        methods: {
-          joinGame
-        }
-      },
-      web3: {
-        utils: {
-          toWei
-        }
       }
     } = this.state;
     joinGame(gameId).send({
@@ -257,16 +229,13 @@ class App extends Component {
   }
 
   placeMark(gameId, row, col) {
-    const {
-      games,
-      contract: {
-        methods: {
-          placeMark
-        }
-      }
-    } = this.state;
+    const { games } = this.state;
     const game = games[gameId];
-    const { active, board, activePlayer } = game;
+    const {
+      active,
+      board,
+      activePlayer
+    } = game;
     const cell = board[row][col];
     if (isValidMove(active, cell)) {
       placeMark(gameId, row, col).send({
