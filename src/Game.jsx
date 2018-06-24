@@ -5,6 +5,7 @@ import Info from './Info';
 import Board from './Board';
 
 const Game = ({
+  balances,
   games,
   game,
   isInfoOpen,
@@ -23,19 +24,23 @@ const Game = ({
       game={game}
       onPlaceMark={(row, col) => onPlaceMark(row, col)}
     />
-    <Info isOpen={isInfoOpen} game={game} />
+    <Info
+      isOpen={isInfoOpen}
+      balances={balances}
+      game={game}
+    />
   </div>
 );
 
 
 Game.propTypes = {
+  balances: PropTypes.objectOf(
+    PropTypes.string.isRequired
+  ).isRequired,
   games: PropTypes.object.isRequired,
   game: PropTypes.shape({
     active: PropTypes.bool.isRequired,
     activePlayer: PropTypes.string.isRequired,
-    balances: PropTypes.arrayOf(
-      PropTypes.string.isRequired
-    ).isRequired,
     board: PropTypes.arrayOf(
       PropTypes.arrayOf(
         PropTypes.string.isRequired

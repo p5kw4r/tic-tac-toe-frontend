@@ -42,6 +42,7 @@ class App extends Component {
       contract: {},
       games: {},
       accounts: [],
+      balances: {},
       config: {
         isOpen: false,
         betSize: INITIAL_BET_SIZE,
@@ -72,6 +73,7 @@ class App extends Component {
   }
 
   handleEvent({ event: name, returnValues: values }) {
+    this.updateBalances(values);
     switch (name) {
       case EVENT_GAME_CREATED:
         this.handleGameCreated(values);
@@ -94,6 +96,26 @@ class App extends Component {
     }
   }
 
+  async updateBalances({ gameId }) {
+    const { games } = this.state;
+    const game = games[gameId];
+    if (game) {
+      const { players } = game;
+      players.map((player) => this.updateBalance(player));
+    }
+  }
+
+  async updateBalance(player) {
+    const { web3: { eth: { getBalance }, utils: { fromWei } } } = this.state;
+    const balance = await getBalance(player);
+    this.setState(({ balances }) => ({
+      balances: {
+        ...balances,
+        [player]: fromWei(balance)
+      }
+    }));
+  }
+
   async handleGameCreated({ gameId }) {
     const { config: { players } } = this.state;
     await this.setState(({ games }) => ({
@@ -109,13 +131,11 @@ class App extends Component {
         }
       }
     }));
-    this.updateBalances(gameId);
     this.joinGame(gameId, players[1]);
   }
 
   handleGameActive({ gameId }) {
     this.navigateTo(`/${URL_GAME_PATH}/${gameId}`);
-    this.updateBalances(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -128,7 +148,6 @@ class App extends Component {
   }
 
   async handleGameMove({ gameId, board, activePlayer }) {
-    this.updateBalances(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -143,7 +162,6 @@ class App extends Component {
 
   handleGameOver({ gameId, board }, message) {
     this.openAlert(message);
-    this.updateBalances(gameId);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -167,23 +185,6 @@ class App extends Component {
         }
       },
       accounts
-    }));
-  }
-
-  async updateBalances(gameId) {
-    const { games, web3: { eth: { getBalance }, utils: { fromWei } } } = this.state;
-    const { players } = games[gameId];
-    let balances = players.map((player) => getBalance(player));
-    balances = await Promise.all(balances);
-    balances = balances.map((balance) => fromWei(balance, ETHER));
-    this.setState(({ games }) => ({
-      games: {
-        ...games,
-        [gameId]: {
-          ...games[gameId],
-          balances
-        }
-      }
     }));
   }
 
@@ -299,7 +300,7 @@ class App extends Component {
   }
 
   render() {
-    const { accounts, games, config, alert, isInfoOpen } = this.state;
+    const { accounts, balances, games, config, alert, isInfoOpen } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -331,6 +332,7 @@ class App extends Component {
               }
               return (
                 <Game
+                  balances={balances}
                   game={game}
                   games={games}
                   isInfoOpen={isInfoOpen}
