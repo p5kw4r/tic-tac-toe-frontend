@@ -33,9 +33,9 @@ export const PLAYER_X_INDEX = 0;
 export const PLAYER_O_INDEX = 1;
 export const PLAYER_X_NAME = 'Player X';
 export const PLAYER_O_NAME = 'Player O';
-export const URL_GAME_PATH = 'g';
+export const GAME_URL_PATH = 'g';
 
-const URL_GAME_ID_PARAM = ':gameId';
+const GAME_ID_URL_PARAM = ':gameId';
 
 class App extends Component {
   constructor(props) {
@@ -153,7 +153,7 @@ class App extends Component {
   }
 
   handleGameActive({ gameId }) {
-    this.navigateTo(`/${URL_GAME_PATH}/${gameId}`);
+    this.navigateTo(`/${GAME_URL_PATH}/${gameId}`);
     this.setState(({ games }) => ({
       games: {
         ...games,
@@ -373,7 +373,7 @@ class App extends Component {
         />
         <Switch>
           <Route
-            path={`/${URL_GAME_PATH}/${URL_GAME_ID_PARAM}`}
+            path={`/${GAME_URL_PATH}/${GAME_ID_URL_PARAM}`}
             render={({ match: { params: { gameId } } }) => {
               const game = games[gameId];
               if (!game) {
