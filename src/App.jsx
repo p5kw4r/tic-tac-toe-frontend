@@ -37,6 +37,9 @@ export const PLAYER_O_NAME = 'Player O';
 export const GAME_URL_PATH = 'g';
 const GAME_ID_URL_PARAM = ':gameId';
 
+const WIN_MESSAGE = 'has won this game.';
+const DRAW_MESSAGE = 'There was no winner.';
+
 const provider = new Web3.providers.WebsocketProvider(`ws://localhost:${PORT}`);
 const web3 = new Web3(provider);
 const contract = new web3.eth.Contract(ABI, ADDRESS, { gas: GAS_LIMIT });
@@ -93,10 +96,10 @@ class App extends Component {
         this.handleGameMove(values);
         break;
       case GAME_WIN_EVENT:
-        this.handleGameOver(values, `${this.winner(values)} has won this game.`);
+        this.handleGameOver(values, `${this.winner(values)} ${WIN_MESSAGE}`);
         break;
       case GAME_DRAW_EVENT:
-        this.handleGameOver(values, 'There was no winner.');
+        this.handleGameOver(values, DRAW_MESSAGE);
         break;
       default:
         break;
@@ -123,11 +126,7 @@ class App extends Component {
   }
 
   async handleGameCreated({ gameId }) {
-    const {
-      config: {
-        players
-      }
-    } = this.state;
+    const { config: { players } } = this.state;
     await this.setState(({ games }) => ({
       games: {
         ...games,
@@ -204,12 +203,7 @@ class App extends Component {
   }
 
   createGame() {
-    const {
-      config: {
-        betSize,
-        players
-      }
-    } = this.state;
+    const { config: { betSize, players } } = this.state;
     createGame().send({
       from: players[PLAYER_X_INDEX],
       value: toWei(betSize, ETHER)
@@ -217,11 +211,7 @@ class App extends Component {
   }
 
   joinGame(gameId, account) {
-    const {
-      config: {
-        betSize
-      }
-    } = this.state;
+    const { config: { betSize } } = this.state;
     joinGame(gameId).send({
       from: account,
       value: toWei(betSize, ETHER)
@@ -231,11 +221,7 @@ class App extends Component {
   placeMark(gameId, row, col) {
     const { games } = this.state;
     const game = games[gameId];
-    const {
-      active,
-      board,
-      activePlayer
-    } = game;
+    const { active, board, activePlayer } = game;
     const cell = board[row][col];
     if (isValidMove(active, cell)) {
       placeMark(gameId, row, col).send({
