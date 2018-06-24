@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
 import { abi as ABI, networks as NETWORKS } from './TicTacToe.json';
 import Game from './Game';
@@ -318,7 +318,14 @@ class App extends Component {
   }
 
   render() {
-    const { accounts, balances, games, config, alert, isInfoOpen } = this.state;
+    const {
+      accounts,
+      balances,
+      games,
+      config,
+      alert,
+      isInfoOpen
+    } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -340,28 +347,25 @@ class App extends Component {
             this.createGame();
           }}
         />
-        <Switch>
-          <Route
-            path={`/${GAME_URL_PATH}/${GAME_ID_URL_PARAM}`}
-            render={({ match: { params: { gameId } } }) => {
-              const game = games[gameId];
-              if (!game) {
-                return <Splash />;
-              }
-              return (
-                <Game
-                  balances={balances}
-                  games={games}
-                  isInfoOpen={isInfoOpen}
-                  onOpenGameConfig={() => this.openConfig()}
-                  onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
-                  onToggleInfo={() => this.toggleInfo()}
-                />
-              );
-            }}
-          />
-          <Route component={Splash} />
-        </Switch>
+        <Route
+          path={`/${GAME_URL_PATH}/${GAME_ID_URL_PARAM}`}
+          render={({ match: { params: { gameId } } }) => {
+            const game = games[gameId];
+            if (!game) {
+              return <Splash />;
+            }
+            return (
+              <Game
+                balances={balances}
+                games={games}
+                isInfoOpen={isInfoOpen}
+                onOpenGameConfig={() => this.openConfig()}
+                onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
+                onToggleInfo={() => this.toggleInfo()}
+              />
+            );
+          }}
+        />
       </div>
     );
   }
