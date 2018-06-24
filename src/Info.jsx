@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
 import { INDEX_PLAYER_X, PLAYER_X, PLAYER_O } from './App';
 
@@ -37,5 +38,17 @@ const Info = ({ game: { activePlayer, players, balances } }) => (
     </Table>
   </div>
 );
+
+Info.propTypes = {
+  game: PropTypes.shape({
+    activePlayer: PropTypes.string.isRequired,
+    players: PropTypes.arrayOf(
+      PropTypes.string.isRequired
+    ).isRequired,
+    balances: PropTypes.arrayOf(
+      PropTypes.string.isRequired
+    ).isRequired
+  }).isRequired
+};
 
 export default Info;

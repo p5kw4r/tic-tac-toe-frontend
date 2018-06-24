@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
 import { abi, networks } from './TicTacToe.json';
@@ -41,9 +42,18 @@ class App extends Component {
       contract: {},
       games: {},
       accounts: [],
-      config: {},
-      alert: {},
-      info: { isOpen: true }
+      config: {
+        isOpen: false,
+        betSize: INITIAL_BET_SIZE,
+        players: {}
+      },
+      alert: {
+        isOpen: false,
+        message: ''
+      },
+      info: {
+        isOpen: true
+      }
     };
   }
 
@@ -93,6 +103,7 @@ class App extends Component {
         ...games,
         [gameId]: {
           ...games[gameId],
+          active: false,
           players: [
             players[INDEX_PLAYER_X],
             players[INDEX_PLAYER_O]
@@ -149,16 +160,16 @@ class App extends Component {
 
   async getAccounts({ eth: { getAccounts } }) {
     const accounts = await getAccounts();
-    this.setState({
+    this.setState(({ config }) => ({
       config: {
-        betSize: INITIAL_BET_SIZE,
+        ...config,
         players: {
           [INDEX_PLAYER_X]: accounts[INDEX_PLAYER_X],
           [INDEX_PLAYER_O]: accounts[INDEX_PLAYER_O]
         }
       },
       accounts
-    });
+    }));
   }
 
   async updateBalances(gameId) {
@@ -293,7 +304,6 @@ class App extends Component {
 
   render() {
     const { accounts, games, config, alert, info } = this.state;
-    const { players } = config;
     return (
       <div className="App">
         <AlertModal
@@ -304,19 +314,17 @@ class App extends Component {
             this.openConfig();
           }}
         />
-        {players && (
-          <ConfigModal
-            accounts={accounts}
-            config={config}
-            onChangeBetSize={(betSize) => this.changeBetSize(betSize)}
-            onChangePlayer={(player, i) => this.changePlayer(player, i)}
-            onClose={() => this.closeConfig()}
-            onCreateGame={() => {
-              this.closeConfig();
-              this.createGame();
-            }}
-          />
-        )}
+        <ConfigModal
+          accounts={accounts}
+          config={config}
+          onChangeBetSize={(betSize) => this.changeBetSize(betSize)}
+          onChangePlayer={(player, i) => this.changePlayer(player, i)}
+          onClose={() => this.closeConfig()}
+          onCreateGame={() => {
+            this.closeConfig();
+            this.createGame();
+          }}
+        />
         <Switch>
           <Route
             path={`/${URL_GAME_PATH}/:gameId`}
@@ -343,5 +351,11 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
+};
 
 export default withRouter(App);

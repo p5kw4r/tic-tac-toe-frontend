@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   FormGroup,
@@ -78,5 +79,22 @@ const ConfigModal = ({
     </Modal>
   </div>
 );
+
+ConfigModal.propTypes = {
+  accounts: PropTypes.arrayOf(
+    PropTypes.string.isRequired
+  ).isRequired,
+  config: PropTypes.shape({
+    isOpen: PropTypes.bool.isRequired,
+    betSize: PropTypes.string.isRequired,
+    players: PropTypes.objectOf(
+      PropTypes.string.isRequired
+    ).isRequired
+  }).isRequired,
+  onClose: PropTypes.func.isRequired,
+  onChangeBetSize: PropTypes.func.isRequired,
+  onChangePlayer: PropTypes.func.isRequired,
+  onCreateGame: PropTypes.func.isRequired
+};
 
 export default ConfigModal;

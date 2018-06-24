@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Container,
   Collapse,
@@ -70,5 +71,14 @@ class NavBar extends Component {
     );
   }
 }
+
+NavBar.propTypes = {
+  games: PropTypes.object.isRequired,
+  info: PropTypes.shape({
+    isOpen: PropTypes.bool.isRequired
+  }).isRequired,
+  onCreateGame: PropTypes.func.isRequired,
+  onToggleInfo: PropTypes.func.isRequired
+};
 
 export default NavBar;

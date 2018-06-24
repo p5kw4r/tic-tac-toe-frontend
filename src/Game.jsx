@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Collapse } from 'reactstrap';
 import NavBar from './NavBar';
 import Info from './Info';
@@ -10,7 +11,6 @@ const Game = ({
   info,
   onCreateGame,
   onPlaceMark,
-  onGetBalance,
   onToggleInfo,
 }) => {
   const { isOpen } = info;
@@ -31,6 +31,31 @@ const Game = ({
       </Collapse>
     </div>
   );
+};
+
+Game.propTypes = {
+  games: PropTypes.object.isRequired,
+  game: PropTypes.shape({
+    active: PropTypes.bool.isRequired,
+    activePlayer: PropTypes.string.isRequired,
+    balances: PropTypes.arrayOf(
+      PropTypes.string.isRequired
+    ).isRequired,
+    board: PropTypes.arrayOf(
+      PropTypes.arrayOf(
+        PropTypes.string.isRequired
+      ).isRequired
+    ).isRequired,
+    players: PropTypes.arrayOf(
+      PropTypes.string.isRequired
+    ).isRequired
+  }).isRequired,
+  info: PropTypes.shape({
+    isOpen: PropTypes.bool.isRequired
+  }).isRequired,
+  onCreateGame: PropTypes.func.isRequired,
+  onPlaceMark: PropTypes.func.isRequired,
+  onToggleInfo: PropTypes.func.isRequired
 };
 
 export default Game;

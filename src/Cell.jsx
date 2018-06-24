@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { NO_ADDRESS, INDEX_PLAYER_X, INDEX_PLAYER_O } from './App';
 
 const CLASS_VALID = 'valid';
@@ -47,5 +48,18 @@ const Cell = ({
     {mark(address, players)}
   </td>
 );
+
+Cell.propTypes = {
+  active: PropTypes.bool.isRequired,
+  address: PropTypes.string.isRequired,
+  players: PropTypes.arrayOf(
+    PropTypes.string.isRequired
+  ).isRequired,
+  onPlaceMark: PropTypes.func.isRequired
+};
+
+Cell.defaultProps = {
+  active: true
+};
 
 export default Cell;

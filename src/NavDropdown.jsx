@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
   Dropdown,
@@ -48,5 +49,15 @@ class NavDropdown extends React.Component {
     );
   }
 }
+
+NavDropdown.propTypes = {
+  games: PropTypes.object.isRequired,
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
+};
 
 export default withRouter(NavDropdown);

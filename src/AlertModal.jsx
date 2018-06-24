@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const AlertModal = ({ alert: { isOpen, message }, onClose, onCreateGame }) => (
@@ -15,5 +16,14 @@ const AlertModal = ({ alert: { isOpen, message }, onClose, onCreateGame }) => (
     </Modal>
   </div>
 );
+
+AlertModal.propTypes = {
+  alert: PropTypes.shape({
+    isOpen: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired
+  }).isRequired,
+  onClose: PropTypes.func.isRequired,
+  onCreateGame: PropTypes.func.isRequired
+};
 
 export default AlertModal;
