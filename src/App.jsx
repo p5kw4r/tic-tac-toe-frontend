@@ -96,7 +96,7 @@ class App extends Component {
     }
   }
 
-  async updateBalances({ gameId }) {
+  updateBalances({ gameId }) {
     const { games } = this.state;
     const game = games[gameId];
     if (game) {
