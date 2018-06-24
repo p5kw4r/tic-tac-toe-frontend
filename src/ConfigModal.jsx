@@ -11,7 +11,7 @@ import {
   ModalFooter,
   ModalHeader
 } from 'reactstrap';
-import { PLAYER_X_ID, PLAYER_O_ID, PLAYER_X_NAME, PLAYER_O_NAME } from './App';
+import { PLAYER_X_INDEX, PLAYER_O_INDEX, PLAYER_X_NAME, PLAYER_O_NAME } from './App';
 
 const ConfigModal = ({
   accounts,
@@ -25,7 +25,7 @@ const ConfigModal = ({
   onChangePlayer,
   onCreateGame
 }) => {
-  const playerIds = Object.keys(players);
+  const playerIndices = Object.keys(players);
   return (
     <div className="ConfigModal">
       <Modal
@@ -36,25 +36,25 @@ const ConfigModal = ({
           Game Config
         </ModalHeader>
         <ModalBody>
-          {playerIds.map((playerId) => {
-            const player = players[playerId];
+          {playerIndices.map((playerIndex) => {
+            const player = players[playerIndex];
             return (
               <FormGroup key={player}>
                 <Label>
-                  {playerName(playerId)}
+                  {playerName(playerIndex)}
                 </Label>
                 <Input
                   type="select"
                   value={player}
-                  onChange={({ target: { value } }) => onChangePlayer(value, playerId)}
+                  onChange={({ target: { value } }) => onChangePlayer(value, playerIndex)}
                 >
-                  {accounts.map((account, accountId) => (
-                    !isOpponent(account, players, playerId) && (
+                  {accounts.map((account, accountIndex) => (
+                    !isOpponent(account, players, playerIndex) && (
                       <option
                         key={account}
                         value={account}
                       >
-                        {`Account ${accountId + 1}`}
+                        {`Account ${accountIndex + 1}`}
                       </option>
                     )
                   ))}
@@ -98,23 +98,23 @@ const ConfigModal = ({
   );
 };
 
-const isOpponent = (account, players, playerId) => (
-  account === opponent(players, playerId)
+const isOpponent = (account, players, playerIndex) => (
+  account === opponent(players, playerIndex)
 );
 
-const opponent = (players, playerId) => (
-  players[`${opponentId(playerId)}`]
+const opponent = (players, playerIndex) => (
+  players[`${opponentId(playerIndex)}`]
 );
 
-const opponentId = (playerId) => {
-  if (playerId === `${PLAYER_X_ID}`) {
-    return PLAYER_O_ID;
+const opponentId = (playerIndex) => {
+  if (playerIndex === `${PLAYER_X_INDEX}`) {
+    return PLAYER_O_INDEX;
   }
-  return PLAYER_X_ID;
+  return PLAYER_X_INDEX;
 };
 
-const playerName = (playerId) => {
-  if (playerId === `${PLAYER_X_ID}`) {
+const playerName = (playerIndex) => {
+  if (playerIndex === `${PLAYER_X_INDEX}`) {
     return PLAYER_X_NAME;
   }
   return PLAYER_O_NAME;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NO_ADDRESS, PLAYER_X_ID, PLAYER_O_ID } from './App';
+import { NO_ADDRESS, PLAYER_X_INDEX, PLAYER_O_INDEX } from './App';
 
 const VALID_CLASS = 'valid';
 const INVALID_CLASS = 'invalid';
@@ -34,8 +34,8 @@ const state = (active) => {
 };
 
 const symbol = (address, players) => {
-  const playerX = players[PLAYER_X_ID];
-  const playerO = players[PLAYER_O_ID];
+  const playerX = players[PLAYER_X_INDEX];
+  const playerO = players[PLAYER_O_INDEX];
   if (address === playerX) {
     return PLAYER_X_SYMBOL;
   } else if (address === playerO) {

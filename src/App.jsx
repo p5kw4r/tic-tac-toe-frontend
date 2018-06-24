@@ -29,8 +29,8 @@ const GAME_WIN_EVENT = 'GameWin';
 const GAME_DRAW_EVENT = 'GameDraw';
 
 export const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
-export const PLAYER_X_ID = 0;
-export const PLAYER_O_ID = 1;
+export const PLAYER_X_INDEX = 0;
+export const PLAYER_O_INDEX = 1;
 export const PLAYER_X_NAME = 'Player X';
 export const PLAYER_O_NAME = 'Player O';
 export const URL_GAME_PATH = 'g';
@@ -143,8 +143,8 @@ class App extends Component {
           ...games[gameId],
           active: false,
           players: [
-            players[PLAYER_X_ID],
-            players[PLAYER_O_ID]
+            players[PLAYER_X_INDEX],
+            players[PLAYER_O_INDEX]
           ]
         }
       }
@@ -204,8 +204,8 @@ class App extends Component {
       config: {
         ...config,
         players: {
-          [PLAYER_X_ID]: accounts[PLAYER_X_ID],
-          [PLAYER_O_ID]: accounts[PLAYER_O_ID]
+          [PLAYER_X_INDEX]: accounts[PLAYER_X_INDEX],
+          [PLAYER_O_INDEX]: accounts[PLAYER_O_INDEX]
         }
       },
     }));
@@ -229,7 +229,7 @@ class App extends Component {
       }
     } = this.state;
     createGame().send({
-      from: players[PLAYER_X_ID],
+      from: players[PLAYER_X_INDEX],
       value: toWei(betSize, ETHER)
     });
   }
@@ -278,7 +278,7 @@ class App extends Component {
   winner({ gameId, winner }) {
     const { games } = this.state;
     const { players } = games[gameId];
-    const playerX = players[PLAYER_X_ID];
+    const playerX = players[PLAYER_X_INDEX];
     if (playerX === winner) {
       return PLAYER_X_NAME;
     }
