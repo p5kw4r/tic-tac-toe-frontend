@@ -9,6 +9,7 @@ import ConfigModal from './ConfigModal';
 import Splash from './Splash';
 import './App.css';
 
+export const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const DEFAULT_BET_SIZE = '0.1';
 const GAS_LIMIT = 300000;
 const ETHER = 'ether';
@@ -28,13 +29,12 @@ const GAME_MOVE_EVENT = 'GameMove';
 const GAME_WIN_EVENT = 'GameWin';
 const GAME_DRAW_EVENT = 'GameDraw';
 
-export const NO_ADDRESS = '0x0000000000000000000000000000000000000000';
 export const PLAYER_X_INDEX = 0;
 export const PLAYER_O_INDEX = 1;
 export const PLAYER_X_NAME = 'Player X';
 export const PLAYER_O_NAME = 'Player O';
-export const GAME_URL_PATH = 'g';
 
+export const GAME_URL_PATH = 'g';
 const GAME_ID_URL_PARAM = ':gameId';
 
 class App extends Component {
