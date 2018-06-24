@@ -364,7 +364,7 @@ class App extends Component {
           accounts={accounts}
           config={config}
           onChangeBetSize={(betSize) => this.changeBetSize(betSize)}
-          onChangePlayer={(player, i) => this.changePlayer(player, i)}
+          onChangePlayer={(player, playerIndex) => this.changePlayer(player, playerIndex)}
           onClose={() => this.closeConfig()}
           onCreateGame={() => {
             this.closeConfig();
