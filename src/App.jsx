@@ -123,7 +123,7 @@ class App extends Component {
     this.setState(({ balances }) => ({
       balances: {
         ...balances,
-        [player]: fromWei(balance)
+        [player]: fromWei(balance, ETHER)
       }
     }));
   }
