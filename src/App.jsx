@@ -18,7 +18,8 @@ const ETHER = 'ether';
 // have a fixed address
 const NETWORK_IDS = Object.keys(networks);
 const LAST_INDEX = NETWORK_IDS.length - 1;
-const ADDRESS = networks[NETWORK_IDS[LAST_INDEX]].address;
+const LAST_ID = NETWORK_IDS[LAST_INDEX];
+const { address: ADDRESS } = networks[LAST_ID];
 const PORT = '8545';
 
 const GAME_CREATED_EVENT = 'GameCreated';
