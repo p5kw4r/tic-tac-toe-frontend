@@ -127,6 +127,7 @@ class App extends Component {
 
   async handleGameCreated({ gameId }) {
     const { config: { players } } = this.state;
+    const playerO = players[PLAYER_O_INDEX];
     await this.setState(({ games }) => ({
       games: {
         ...games,
@@ -135,12 +136,12 @@ class App extends Component {
           active: false,
           players: [
             players[PLAYER_X_INDEX],
-            players[PLAYER_O_INDEX]
+            playerO
           ]
         }
       }
     }));
-    this.joinGame(gameId, players[PLAYER_O_INDEX]);
+    this.joinGame(gameId, playerO);
   }
 
   handleGameActive({ gameId }) {
