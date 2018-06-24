@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NO_ADDRESS, PLAYER_X_ID, PLAYER_O_ID } from './App';
 
-const CLASS_VALID = 'valid';
-const CLASS_INVALID = 'invalid';
-const CLASS_ACTIVE = 'active';
-const CLASS_INACTIVE = 'inactive';
-const SYMBOL_PLAYER_X = 'X';
-const SYMBOL_PLAYER_O = 'O';
-const SYMBOL_EMPTY = '';
+const VALID_CLASS = 'valid';
+const INVALID_CLASS = 'invalid';
+const ACTIVE_CLASS = 'active';
+const INACTIVE_CLASS = 'inactive';
+const PLAYER_X_SYMBOL = 'X';
+const PLAYER_O_SYMBOL = 'O';
+const NO_SYMBOL = '';
 
 const Cell = ({ active, address, players, onPlaceMark }) => (
   <td
@@ -21,27 +21,27 @@ const Cell = ({ active, address, players, onPlaceMark }) => (
 
 const validity = (address) => {
   if (address === NO_ADDRESS) {
-    return CLASS_VALID;
+    return VALID_CLASS;
   }
-  return CLASS_INVALID;
+  return INVALID_CLASS;
 };
 
 const state = (active) => {
   if (active) {
-    return CLASS_ACTIVE;
+    return ACTIVE_CLASS;
   }
-  return CLASS_INACTIVE;
+  return INACTIVE_CLASS;
 };
 
 const mark = (address, players) => {
   const playerX = players[PLAYER_X_ID];
   const playerO = players[PLAYER_O_ID];
   if (address === playerX) {
-    return SYMBOL_PLAYER_X;
+    return PLAYER_X_SYMBOL;
   } else if (address === playerO) {
-    return SYMBOL_PLAYER_O;
+    return PLAYER_O_SYMBOL;
   }
-  return SYMBOL_EMPTY;
+  return NO_SYMBOL;
 };
 
 Cell.propTypes = {
