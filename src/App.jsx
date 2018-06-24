@@ -88,6 +88,28 @@ class App extends Component {
     allEvents({}, (error, event) => this.handleEvent(event));
   }
 
+  async getAccounts() {
+    const accounts = await getAccounts();
+    this.setState(({ config }) => ({
+      accounts,
+      config: {
+        ...config,
+        players: {
+          [PLAYER_X_INDEX]: accounts[PLAYER_X_INDEX],
+          [PLAYER_O_INDEX]: accounts[PLAYER_O_INDEX]
+        }
+      },
+    }));
+  }
+
+  createGame() {
+    const { config: { betSize, players } } = this.state;
+    createGame().send({
+      from: players[PLAYER_X_INDEX],
+      value: toWei(betSize, ETHER)
+    });
+  }
+
   handleEvent({ event, returnValues: values }) {
     this.updateBalances(values);
     switch (event) {
@@ -149,6 +171,14 @@ class App extends Component {
     this.joinGame(gameId, playerO);
   }
 
+  joinGame(gameId, account) {
+    const { config: { betSize } } = this.state;
+    joinGame(gameId).send({
+      from: account,
+      value: toWei(betSize, ETHER)
+    });
+  }
+
   handleGameActive({ gameId }) {
     this.navigateTo(`/${GAME_URL_PATH}/${gameId}`);
     this.setState(({ games }) => ({
@@ -194,34 +224,14 @@ class App extends Component {
     }));
   }
 
-  async getAccounts() {
-    const accounts = await getAccounts();
-    this.setState(({ config }) => ({
-      accounts,
-      config: {
-        ...config,
-        players: {
-          [PLAYER_X_INDEX]: accounts[PLAYER_X_INDEX],
-          [PLAYER_O_INDEX]: accounts[PLAYER_O_INDEX]
-        }
-      },
-    }));
-  }
-
-  createGame() {
-    const { config: { betSize, players } } = this.state;
-    createGame().send({
-      from: players[PLAYER_X_INDEX],
-      value: toWei(betSize, ETHER)
-    });
-  }
-
-  joinGame(gameId, account) {
-    const { config: { betSize } } = this.state;
-    joinGame(gameId).send({
-      from: account,
-      value: toWei(betSize, ETHER)
-    });
+  winner({ gameId, winner }) {
+    const { games } = this.state;
+    const { players } = games[gameId];
+    const playerX = players[PLAYER_X_INDEX];
+    if (winner === playerX) {
+      return PLAYER_X_NAME;
+    }
+    return PLAYER_O_NAME;
   }
 
   placeMark(gameId, row, col) {
@@ -234,16 +244,6 @@ class App extends Component {
         from: activePlayer
       });
     }
-  }
-
-  winner({ gameId, winner }) {
-    const { games } = this.state;
-    const { players } = games[gameId];
-    const playerX = players[PLAYER_X_INDEX];
-    if (winner === playerX) {
-      return PLAYER_X_NAME;
-    }
-    return PLAYER_O_NAME;
   }
 
   openAlert(message) {
