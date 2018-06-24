@@ -15,7 +15,7 @@ const Cell = ({ active, address, players, onPlaceMark }) => (
     className={`Cell no-select ${validity(address)} ${state(active)}`}
     onClick={() => onPlaceMark()}
   >
-    {mark(address, players)}
+    {symbol(address, players)}
   </td>
 );
 
@@ -33,7 +33,7 @@ const state = (active) => {
   return INACTIVE_CLASS;
 };
 
-const mark = (address, players) => {
+const symbol = (address, players) => {
   const playerX = players[PLAYER_X_ID];
   const playerO = players[PLAYER_O_ID];
   if (address === playerX) {
