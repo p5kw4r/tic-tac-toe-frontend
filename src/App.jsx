@@ -336,13 +336,13 @@ class App extends Component {
     }));
   }
 
-  changePlayer(player, playerId) {
+  changePlayer(player, playerIndex) {
     this.setState(({ config, config: { players } }) => ({
       config: {
         ...config,
         players: {
           ...players,
-          [playerId]: player
+          [playerIndex]: player
         }
       }
     }));
