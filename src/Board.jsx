@@ -2,7 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Cell from './Cell';
 
-const Board = ({ game: { active, board, players }, onPlaceMark }) => (
+const Board = ({
+  game: {
+    active,
+    board,
+    players
+  },
+  onPlaceMark
+}) => (
   <div className="Board">
     <table>
       <tbody>

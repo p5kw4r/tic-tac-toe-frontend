@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { Collapse, Table } from 'reactstrap';
 import { INDEX_PLAYER_X, PLAYER_X, PLAYER_O } from './App';
 
-const Info = ({ balances, game: { activePlayer, players }, isOpen }) => (
+const Info = ({
+  balances,
+  game: {
+    activePlayer,
+    players
+  },
+  isOpen
+}) => (
   <Collapse isOpen={isOpen}>
     <div className="Info mt-5 no-select">
       <Table responsive>

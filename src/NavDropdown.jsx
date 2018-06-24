@@ -12,7 +12,9 @@ import { URL_GAME_PATH } from './App';
 class NavDropdown extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { isOpen: false };
+    this.state = {
+      isOpen: false
+    };
   }
 
   toggle() {
@@ -22,7 +24,15 @@ class NavDropdown extends React.Component {
   }
 
   render() {
-    const { games, match: { url }, history } = this.props;
+    const {
+      games,
+      match: {
+        params: {
+          gameId: activeGameId
+        }
+      },
+      history
+    } = this.props;
     const { isOpen } = this.state;
     return (
       <Dropdown nav inNavbar isOpen={isOpen} toggle={() => this.toggle()}>
@@ -35,7 +45,7 @@ class NavDropdown extends React.Component {
               <DropdownItem
                 key={gameId}
                 value={gameId}
-                active={gameId === url.replace(`/${URL_GAME_PATH}/`, '')}
+                active={gameId === activeGameId}
                 onClick={({ currentTarget: { value: gameId } }) => (
                   history.push(`/${URL_GAME_PATH}/${gameId}`)
                 )}
@@ -51,9 +61,24 @@ class NavDropdown extends React.Component {
 }
 
 NavDropdown.propTypes = {
-  games: PropTypes.object.isRequired,
+  games: PropTypes.objectOf(
+    PropTypes.shape({
+      active: PropTypes.bool.isRequired,
+      activePlayer: PropTypes.string,
+      board: PropTypes.arrayOf(
+        PropTypes.arrayOf(
+          PropTypes.string.isRequired
+        ).isRequired
+      ),
+      players: PropTypes.arrayOf(
+        PropTypes.string.isRequired
+      ).isRequired
+    }).isRequired
+  ).isRequired,
   match: PropTypes.shape({
-    url: PropTypes.string.isRequired
+    params: PropTypes.shape({
+      gameId: PropTypes.string.isRequired
+    }).isRequired
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired

@@ -62,7 +62,10 @@ class App extends Component {
     const contract = new web3.eth.Contract(abi, ADDRESS, { gas: GAS_LIMIT });
     this.subscribeToEvents(contract);
     await Promise.all([
-      this.setState({ web3, contract }),
+      this.setState({
+        web3,
+        contract
+      }),
       this.getAccounts(web3)
     ]);
     this.createGame();
@@ -72,9 +75,9 @@ class App extends Component {
     allEvents({}, (error, event) => this.handleEvent(event));
   }
 
-  handleEvent({ event: name, returnValues: values }) {
+  handleEvent({ event, returnValues: values }) {
     this.updateBalances(values);
-    switch (name) {
+    switch (event) {
       case EVENT_GAME_CREATED:
         this.handleGameCreated(values);
         break;
@@ -106,7 +109,16 @@ class App extends Component {
   }
 
   async updateBalance(player) {
-    const { web3: { eth: { getBalance }, utils: { fromWei } } } = this.state;
+    const {
+      web3: {
+        eth: {
+          getBalance
+        },
+        utils: {
+          fromWei
+        }
+      }
+    } = this.state;
     const balance = await getBalance(player);
     this.setState(({ balances }) => ({
       balances: {
@@ -117,7 +129,11 @@ class App extends Component {
   }
 
   async handleGameCreated({ gameId }) {
-    const { config: { players } } = this.state;
+    const {
+      config: {
+        players
+      }
+    } = this.state;
     await this.setState(({ games }) => ({
       games: {
         ...games,
@@ -190,9 +206,20 @@ class App extends Component {
 
   createGame() {
     const {
-      config: { betSize, players },
-      contract: { methods: { createGame } },
-      web3: { utils: { toWei } }
+      config: {
+        betSize,
+        players
+      },
+      contract: {
+        methods: {
+          createGame
+        }
+      },
+      web3: {
+        utils: {
+          toWei
+        }
+      }
     } = this.state;
     createGame().send({
       from: players[INDEX_PLAYER_X],
@@ -202,9 +229,19 @@ class App extends Component {
 
   joinGame(gameId, account) {
     const {
-      config: { betSize },
-      contract: { methods: { joinGame } },
-      web3: { utils: { toWei } }
+      config: {
+        betSize
+      },
+      contract: {
+        methods: {
+          joinGame
+        }
+      },
+      web3: {
+        utils: {
+          toWei
+        }
+      }
     } = this.state;
     joinGame(gameId).send({
       from: account,
@@ -213,7 +250,14 @@ class App extends Component {
   }
 
   placeMark(gameId, row, col) {
-    const { games, contract: { methods: { placeMark } } } = this.state;
+    const {
+      games,
+      contract: {
+        methods: {
+          placeMark
+        }
+      }
+    } = this.state;
     const { active, board, activePlayer } = games[gameId];
     if (active && board[row][col] === NO_ADDRESS) {
       placeMark(gameId, row, col).send({
@@ -326,14 +370,12 @@ class App extends Component {
           <Route
             path={`/${URL_GAME_PATH}/:gameId`}
             render={({ match: { params: { gameId } } }) => {
-              const game = games[gameId];
-              if (!game) {
+              if (!games[gameId]) {
                 return <Splash />;
               }
               return (
                 <Game
                   balances={balances}
-                  game={game}
                   games={games}
                   isInfoOpen={isInfoOpen}
                   onCreateGame={() => this.openConfig()}

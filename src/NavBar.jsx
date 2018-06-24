@@ -73,7 +73,20 @@ class NavBar extends Component {
 }
 
 NavBar.propTypes = {
-  games: PropTypes.object.isRequired,
+  games: PropTypes.objectOf(
+    PropTypes.shape({
+      active: PropTypes.bool.isRequired,
+      activePlayer: PropTypes.string,
+      board: PropTypes.arrayOf(
+        PropTypes.arrayOf(
+          PropTypes.string.isRequired
+        ).isRequired
+      ),
+      players: PropTypes.arrayOf(
+        PropTypes.string.isRequired
+      ).isRequired
+    }).isRequired
+  ).isRequired,
   isInfoOpen: PropTypes.bool.isRequired,
   onCreateGame: PropTypes.func.isRequired,
   onToggleInfo: PropTypes.func.isRequired
