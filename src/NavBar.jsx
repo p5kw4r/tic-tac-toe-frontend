@@ -29,7 +29,7 @@ class NavBar extends Component {
   render() {
     const {
       games,
-      info: { isOpen: isInfoOpen },
+      isInfoOpen,
       onCreateGame,
       onToggleInfo
     } = this.props;
@@ -74,9 +74,7 @@ class NavBar extends Component {
 
 NavBar.propTypes = {
   games: PropTypes.object.isRequired,
-  info: PropTypes.shape({
-    isOpen: PropTypes.bool.isRequired
-  }).isRequired,
+  isInfoOpen: PropTypes.bool.isRequired,
   onCreateGame: PropTypes.func.isRequired,
   onToggleInfo: PropTypes.func.isRequired
 };

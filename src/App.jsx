@@ -51,9 +51,7 @@ class App extends Component {
         isOpen: false,
         message: ''
       },
-      info: {
-        isOpen: true
-      }
+      isInfoOpen: true
     };
   }
 
@@ -256,10 +254,8 @@ class App extends Component {
   }
 
   toggleInfo() {
-    this.setState(({ info: { isOpen } }) => ({
-      info: {
-        isOpen: !isOpen
-      }
+    this.setState(({ isInfoOpen }) => ({
+      isInfoOpen: !isInfoOpen
     }));
   }
 
@@ -303,7 +299,7 @@ class App extends Component {
   }
 
   render() {
-    const { accounts, games, config, alert, info } = this.state;
+    const { accounts, games, config, alert, isInfoOpen } = this.state;
     return (
       <div className="App">
         <AlertModal
@@ -337,7 +333,7 @@ class App extends Component {
                 <Game
                   game={game}
                   games={games}
-                  info={info}
+                  isInfoOpen={isInfoOpen}
                   onCreateGame={() => this.openConfig()}
                   onPlaceMark={(row, col) => this.placeMark(gameId, row, col)}
                   onToggleInfo={() => this.toggleInfo()}

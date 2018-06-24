@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse } from 'reactstrap';
 import NavBar from './NavBar';
 import Info from './Info';
 import Board from './Board';
@@ -8,30 +7,26 @@ import Board from './Board';
 const Game = ({
   games,
   game,
-  info,
+  isInfoOpen,
   onCreateGame,
   onPlaceMark,
-  onToggleInfo,
-}) => {
-  const { isOpen } = info;
-  return (
-    <div className="Game">
-      <NavBar
-        games={games}
-        info={info}
-        onCreateGame={() => onCreateGame()}
-        onToggleInfo={() => onToggleInfo()}
-      />
-      <Board
-        game={game}
-        onPlaceMark={(row, col) => onPlaceMark(row, col)}
-      />
-      <Collapse isOpen={isOpen}>
-        <Info game={game} />
-      </Collapse>
-    </div>
-  );
-};
+  onToggleInfo
+}) => (
+  <div className="Game">
+    <NavBar
+      games={games}
+      isInfoOpen={isInfoOpen}
+      onCreateGame={() => onCreateGame()}
+      onToggleInfo={() => onToggleInfo()}
+    />
+    <Board
+      game={game}
+      onPlaceMark={(row, col) => onPlaceMark(row, col)}
+    />
+    <Info isOpen={isInfoOpen} game={game} />
+  </div>
+);
+
 
 Game.propTypes = {
   games: PropTypes.object.isRequired,
@@ -50,9 +45,7 @@ Game.propTypes = {
       PropTypes.string.isRequired
     ).isRequired
   }).isRequired,
-  info: PropTypes.shape({
-    isOpen: PropTypes.bool.isRequired
-  }).isRequired,
+  isInfoOpen: PropTypes.bool.isRequired,
   onCreateGame: PropTypes.func.isRequired,
   onPlaceMark: PropTypes.func.isRequired,
   onToggleInfo: PropTypes.func.isRequired

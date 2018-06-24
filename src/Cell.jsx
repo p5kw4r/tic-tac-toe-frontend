@@ -35,12 +35,7 @@ const mark = (address, players) => {
   return SYMBOL_EMPTY;
 };
 
-const Cell = ({
-  active,
-  address,
-  players,
-  onPlaceMark
-}) => (
+const Cell = ({ active, address, players, onPlaceMark }) => (
   <td
     className={`Cell no-select ${validity(address)} ${state(active)}`}
     onClick={() => onPlaceMark()}
