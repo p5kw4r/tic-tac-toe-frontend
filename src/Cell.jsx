@@ -10,6 +10,15 @@ const SYMBOL_PLAYER_X = 'X';
 const SYMBOL_PLAYER_O = 'O';
 const SYMBOL_EMPTY = '';
 
+const Cell = ({ active, address, players, onPlaceMark }) => (
+  <td
+    className={`Cell no-select ${validity(address)} ${state(active)}`}
+    onClick={() => onPlaceMark()}
+  >
+    {mark(address, players)}
+  </td>
+);
+
 const validity = (address) => {
   if (address === NO_ADDRESS) {
     return CLASS_VALID;
@@ -34,15 +43,6 @@ const mark = (address, players) => {
   }
   return SYMBOL_EMPTY;
 };
-
-const Cell = ({ active, address, players, onPlaceMark }) => (
-  <td
-    className={`Cell no-select ${validity(address)} ${state(active)}`}
-    onClick={() => onPlaceMark()}
-  >
-    {mark(address, players)}
-  </td>
-);
 
 Cell.propTypes = {
   active: PropTypes.bool.isRequired,

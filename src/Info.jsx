@@ -3,13 +3,6 @@ import PropTypes from 'prop-types';
 import { Collapse, Table } from 'reactstrap';
 import { INDEX_PLAYER_X, PLAYER_X, PLAYER_O } from './App';
 
-const playerName = (i) => {
-  if (i === INDEX_PLAYER_X) {
-    return PLAYER_X;
-  }
-  return PLAYER_O;
-};
-
 const Info = ({ game: { activePlayer, players, balances }, isOpen }) => (
   <Collapse isOpen={isOpen}>
     <div className="Info mt-5 no-select">
@@ -40,6 +33,13 @@ const Info = ({ game: { activePlayer, players, balances }, isOpen }) => (
     </div>
   </Collapse>
 );
+
+const playerName = (i) => {
+  if (i === INDEX_PLAYER_X) {
+    return PLAYER_X;
+  }
+  return PLAYER_O;
+};
 
 Info.propTypes = {
   isOpen: PropTypes.bool.isRequired,

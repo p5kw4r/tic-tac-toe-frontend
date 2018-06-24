@@ -13,20 +13,6 @@ import {
 } from 'reactstrap';
 import { INDEX_PLAYER_X, INDEX_PLAYER_O, PLAYER_X, PLAYER_O } from './App';
 
-const indexOpponent = (i) => {
-  if (i === `${INDEX_PLAYER_X}`) {
-    return INDEX_PLAYER_O;
-  }
-  return INDEX_PLAYER_X;
-};
-
-const playerName = (i) => {
-  if (i === `${INDEX_PLAYER_X}`) {
-    return PLAYER_X;
-  }
-  return PLAYER_O;
-};
-
 const ConfigModal = ({
   accounts,
   config: { isOpen, betSize, players },
@@ -79,6 +65,20 @@ const ConfigModal = ({
     </Modal>
   </div>
 );
+
+const indexOpponent = (i) => {
+  if (i === `${INDEX_PLAYER_X}`) {
+    return INDEX_PLAYER_O;
+  }
+  return INDEX_PLAYER_X;
+};
+
+const playerName = (i) => {
+  if (i === `${INDEX_PLAYER_X}`) {
+    return PLAYER_X;
+  }
+  return PLAYER_O;
+};
 
 ConfigModal.propTypes = {
   accounts: PropTypes.arrayOf(
