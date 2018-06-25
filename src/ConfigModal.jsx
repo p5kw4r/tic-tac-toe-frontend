@@ -106,10 +106,10 @@ const isOpponent = (account, players, playerIndex) => (
 );
 
 const opponent = (players, playerIndex) => (
-  players[`${opponentId(playerIndex)}`]
+  players[`${opponentIndex(playerIndex)}`]
 );
 
-const opponentId = (playerIndex) => {
+const opponentIndex = (playerIndex) => {
   playerIndex = parseInt(playerIndex, DECIMAL_RADIX);
   return (playerIndex + 1) % NUM_PLAYERS;
 };
