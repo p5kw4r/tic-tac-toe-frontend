@@ -13,14 +13,14 @@ This project is built with:
 
 ```bash
 # install dependencies
-npm install
+yarn
 
 # serve at localhost:3000 
-npm start
+yarn start
 
 # run tests
-npm test
+yarn test
 
 # build for production
-npm run build
+yarn build
 ```
