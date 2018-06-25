@@ -11,7 +11,10 @@ import {
   ModalFooter,
   ModalHeader
 } from 'reactstrap';
-import { PLAYER_X_INDEX, PLAYER_O_INDEX, PLAYER_X_NAME, PLAYER_O_NAME } from './App';
+import { PLAYER_X_INDEX, PLAYER_X_NAME, PLAYER_O_NAME } from './App';
+
+const NUM_PLAYERS = 2;
+const DECIMAL_RADIX = 10;
 
 const ConfigModal = ({
   accounts,
@@ -107,10 +110,8 @@ const opponent = (players, playerIndex) => (
 );
 
 const opponentId = (playerIndex) => {
-  if (playerIndex === `${PLAYER_X_INDEX}`) {
-    return PLAYER_O_INDEX;
-  }
-  return PLAYER_X_INDEX;
+  playerIndex = parseInt(playerIndex, DECIMAL_RADIX);
+  return (playerIndex + 1) % NUM_PLAYERS;
 };
 
 const playerName = (playerIndex) => {
