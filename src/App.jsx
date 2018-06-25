@@ -152,10 +152,10 @@ class App extends Component {
     }));
   }
 
-  async handleGameCreated({ gameId }) {
+  handleGameCreated({ gameId }) {
     const { config: { players } } = this.state;
     const playerO = players[PLAYER_O_INDEX];
-    await this.setState(({ games }) => ({
+    this.setState(({ games }) => ({
       games: {
         ...games,
         [gameId]: {
@@ -197,7 +197,7 @@ class App extends Component {
     history.push(path);
   }
 
-  async handleGameMove({ gameId, board, activePlayer }) {
+  handleGameMove({ gameId, board, activePlayer }) {
     this.setState(({ games }) => ({
       games: {
         ...games,
