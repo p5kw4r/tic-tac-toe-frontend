@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, withRouter } from 'react-router-dom';
 import Web3 from 'web3';
-import { abi as ABI, networks as NETWORKS } from './TicTacToe.json';
+import { abi as ABI, networks } from './TicTacToe.json';
 import Game from './Game';
 import AlertModal from './AlertModal';
 import ConfigModal from './ConfigModal';
@@ -14,13 +14,18 @@ const DEFAULT_BET_SIZE = '0.1';
 const GAS_LIMIT = 300000;
 const ETHER = 'ether';
 
-// workaround to extract contract address from json interface (only needed
-// during development) once factory contract is deployed to production it will
-// have a fixed address
-const NETWORK_IDS = Object.keys(NETWORKS);
-const LAST_INDEX = NETWORK_IDS.length - 1;
-const LAST_ID = NETWORK_IDS[LAST_INDEX];
-const { address: ADDRESS } = NETWORKS[LAST_ID];
+const contractAddress = (networks) => {
+  // workaround to extract contract address from json interface (only needed
+  // during development) once factory contract is deployed to production it will
+  // have a fixed address
+  const networkIds = Object.keys(networks);
+  const lastIndex = networkIds.length - 1;
+  const lastId = networkIds[lastIndex];
+  const { address } = networks[lastId];
+  return address;
+};
+
+const ADDRESS = contractAddress(networks);
 const PORT = '8545';
 
 const GAME_CREATED_EVENT = 'GameCreated';
@@ -36,6 +41,9 @@ export const PLAYER_O_NAME = 'Player O';
 
 export const GAME_URL_PATH = 'g';
 const GAME_ID_URL_PARAM = ':gameId';
+
+const WIN_MESSAGE = 'has won this game.';
+const DRAW_MESSAGE = 'There was no winner.';
 
 const provider = new Web3.providers.WebsocketProvider(`ws://localhost:${PORT}`);
 const web3 = new Web3(provider);
@@ -80,6 +88,28 @@ class App extends Component {
     allEvents({}, (error, event) => this.handleEvent(event));
   }
 
+  async getAccounts() {
+    const accounts = await getAccounts();
+    this.setState(({ config }) => ({
+      accounts,
+      config: {
+        ...config,
+        players: {
+          [PLAYER_X_INDEX]: accounts[PLAYER_X_INDEX],
+          [PLAYER_O_INDEX]: accounts[PLAYER_O_INDEX]
+        }
+      },
+    }));
+  }
+
+  createGame() {
+    const { config: { betSize, players } } = this.state;
+    createGame().send({
+      from: players[PLAYER_X_INDEX],
+      value: toWei(betSize, ETHER)
+    });
+  }
+
   handleEvent({ event, returnValues: values }) {
     this.updateBalances(values);
     switch (event) {
@@ -93,10 +123,10 @@ class App extends Component {
         this.handleGameMove(values);
         break;
       case GAME_WIN_EVENT:
-        this.handleGameOver(values, `${this.winner(values)} has won this game.`);
+        this.handleGameOver(values, `${this.winner(values)} ${WIN_MESSAGE}`);
         break;
       case GAME_DRAW_EVENT:
-        this.handleGameOver(values, 'There was no winner.');
+        this.handleGameOver(values, DRAW_MESSAGE);
         break;
       default:
         break;
@@ -123,11 +153,8 @@ class App extends Component {
   }
 
   async handleGameCreated({ gameId }) {
-    const {
-      config: {
-        players
-      }
-    } = this.state;
+    const { config: { players } } = this.state;
+    const playerO = players[PLAYER_O_INDEX];
     await this.setState(({ games }) => ({
       games: {
         ...games,
@@ -136,12 +163,20 @@ class App extends Component {
           active: false,
           players: [
             players[PLAYER_X_INDEX],
-            players[PLAYER_O_INDEX]
+            playerO
           ]
         }
       }
     }));
-    this.joinGame(gameId, players[PLAYER_O_INDEX]);
+    this.joinGame(gameId, playerO);
+  }
+
+  joinGame(gameId, account) {
+    const { config: { betSize } } = this.state;
+    joinGame(gameId).send({
+      from: account,
+      value: toWei(betSize, ETHER)
+    });
   }
 
   handleGameActive({ gameId }) {
@@ -189,61 +224,6 @@ class App extends Component {
     }));
   }
 
-  async getAccounts() {
-    const accounts = await getAccounts();
-    this.setState(({ config }) => ({
-      accounts,
-      config: {
-        ...config,
-        players: {
-          [PLAYER_X_INDEX]: accounts[PLAYER_X_INDEX],
-          [PLAYER_O_INDEX]: accounts[PLAYER_O_INDEX]
-        }
-      },
-    }));
-  }
-
-  createGame() {
-    const {
-      config: {
-        betSize,
-        players
-      }
-    } = this.state;
-    createGame().send({
-      from: players[PLAYER_X_INDEX],
-      value: toWei(betSize, ETHER)
-    });
-  }
-
-  joinGame(gameId, account) {
-    const {
-      config: {
-        betSize
-      }
-    } = this.state;
-    joinGame(gameId).send({
-      from: account,
-      value: toWei(betSize, ETHER)
-    });
-  }
-
-  placeMark(gameId, row, col) {
-    const { games } = this.state;
-    const game = games[gameId];
-    const {
-      active,
-      board,
-      activePlayer
-    } = game;
-    const cell = board[row][col];
-    if (isValidMove(active, cell)) {
-      placeMark(gameId, row, col).send({
-        from: activePlayer
-      });
-    }
-  }
-
   winner({ gameId, winner }) {
     const { games } = this.state;
     const { players } = games[gameId];
@@ -252,6 +232,18 @@ class App extends Component {
       return PLAYER_X_NAME;
     }
     return PLAYER_O_NAME;
+  }
+
+  placeMark(gameId, row, col) {
+    const { games } = this.state;
+    const game = games[gameId];
+    const { active, board, activePlayer } = game;
+    const cell = board[row][col];
+    if (isValidMove(active, cell)) {
+      placeMark(gameId, row, col).send({
+        from: activePlayer
+      });
+    }
   }
 
   openAlert(message) {
