@@ -6,6 +6,7 @@ const VALID_CLASS = 'valid';
 const INVALID_CLASS = 'invalid';
 const ACTIVE_CLASS = 'active';
 const INACTIVE_CLASS = 'inactive';
+
 const PLAYER_X_SYMBOL = 'X';
 const PLAYER_O_SYMBOL = 'O';
 const NO_SYMBOL = '';
