@@ -1,6 +1,6 @@
 # Tic Tac Toe DApp
 
-![screenshot](https://user-images.githubusercontent.com/25278658/38198211-1c703956-368c-11e8-8c8e-a07913c66141.png)
+![screenshot](https://user-images.githubusercontent.com/25278658/41843863-db3446ec-786e-11e8-9b9a-3867c9c5d3aa.png)
 
 ## Dependencies
 
