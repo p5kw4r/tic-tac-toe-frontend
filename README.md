@@ -14,23 +14,23 @@ This project is built with:
 Install dependencies:
 
 ```bash
-yarn
+$ yarn
 ```
 
 Serve at http://localhost:3000:
 
 ```bash
-yarn start
+$ yarn start
 ```
 
 Run tests:
 
 ```bash
-yarn test
+$ yarn test
 ```
 
 Build for production:
 
 ```bash
-yarn build
+$ yarn build
 ```
