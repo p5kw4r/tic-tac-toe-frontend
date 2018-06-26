@@ -11,16 +11,26 @@ This project is built with:
 
 ## Setup
 
+Install dependencies:
+
 ```bash
-# install dependencies
 yarn
+```
 
-# serve at localhost:3000 
+Serve at http://localhost:3000:
+
+```bash
 yarn start
+```
 
-# run tests
+Run tests:
+
+```bash
 yarn test
+```
 
-# build for production
+Build for production:
+
+```bash
 yarn build
 ```
